@@ -1,0 +1,15 @@
+input[type="text"] {
+	width: 60%;
+}
+
+.preview-image {
+	display: none;
+}
+
+.preview-image img {
+	width: 200px;
+	height: 200px;
+	display: block;
+	background-color: grey;
+	margin: 20px 0;
+}

@@ -1,0 +1,71 @@
+.notification-bottom {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	z-index: 9999;
+	width: 100%;
+	color: #ffffff;
+	background-color: rgba(26,35,126,.7);
+	border-top: 4px solid #303F9F;
+}
+
+.notification-bottom.success {
+	background-color: rgb(240,255,236);
+	border-color: rgb(95,121,82);
+	color: rgb(95,121,82);
+}
+
+.notification-bottom.info {
+	background-color: rgb(222,255,255);
+	border-color: rgb(69,127,170);
+	color: rgb(69,127,170);
+}
+
+.notification-bottom.error {
+	background-color: rgb(255,221,214);
+	border-color: rgb(183,67,69);
+	color: rgb(183,67,69);
+}
+
+.notification-bottom.success .description {
+	color: rgb(155,176,145);
+}
+
+.notification-bottom.info .description {
+	color: rgb(149,184,204);
+}
+
+.notification-bottom.error .description {
+	color: rgb(193,125,124);
+}
+
+.notification-bottom-inner {
+	padding: 70px 0;
+}
+
+.notification-bottom .close-btn {
+	position: absolute;
+	top: -22px;
+	right: 50px;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	border-radius: 50px;
+	color: #ffffff;
+	font-size: 40px;
+	text-align: center;
+	background-color: rgb(183,67,69);
+	cursor: pointer;
+}
+
+.notification-bottom.success .close-btn {
+	background-color: rgb(95,121,82);
+}
+
+.notification-bottom.info .close-btn {
+	background-color: rgb(69,127,170);
+}
+
+.notification-bottom.error .close-btn {
+	background-color: rgb(183,67,69);
+}

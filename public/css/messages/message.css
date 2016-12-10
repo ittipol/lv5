@@ -1,0 +1,11 @@
+.message .title {
+	font-size: 50px;
+}
+
+.message .description {
+	font-size: 25px;
+}
+
+.message-inner {
+	padding: 240px 0;
+}

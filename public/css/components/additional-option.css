@@ -1,0 +1,44 @@
+.additional-option {
+  width: 35px;
+  height: 35px;
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  display: inline-block;
+  z-index: 9999;
+}
+
+.additional-option:hover {
+	border: 1px solid #cfcfcf;
+}
+
+.additional-option.active {
+  border: 1px solid #cfcfcf;
+}
+
+.additional-option .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 4px;
+  background-color: rgb(90,90,90);
+  margin: 5px auto;
+}
+
+.additional-option .additional-option-items {
+  position: absolute;
+  right: 20px;
+  top: 7px;
+  background-color: #ffffff;
+  border: 1px solid #cfcfcf;
+  z-index: 9999;
+  display: none;
+}
+
+.additional-option .additional-option-items > a {
+  color: #000000;
+  padding: 10px;
+  display: block;
+}
+
+.additional-option .additional-option-items > a:hover {
+  background-color: #eaeaea;
+}

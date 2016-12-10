@@ -1,0 +1,89 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('logout',function(){
+  Auth::logout();
+  Session::flush();
+  return redirect('/');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('safe_image/{file}', 'StaticFileController@serveImages');
+  Route::get('avatar', 'StaticFileController@avatar');
+});
+
+Route::get('/','HomeController@landing');
+Route::get('home','HomeController@index');
+
+// Account
+Route::get('account','UserController@account');
+
+
+// Login
+Route::get('login','UserController@login');
+Route::post('login','UserController@auth');
+
+
+// Register
+Route::get('register','UserController@registerForm')->middleware('guest');
+Route::post('register','UserController@registerAdd')->middleware('guest');
+
+// Story
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('story/add','StoryController@formAdd');
+  Route::post('story/add','StoryController@add');
+});
+
+
+// Advertising
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('ad/add','AdvertisingController@formAdd');
+  Route::post('ad/add','AdvertisingController@add');
+});
+
+
+// shopping
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('shopping/add','ShoppingController@formAdd');
+  Route::post('shopping/add','ShoppingController@add');
+});
+
+
+// Job
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('job/add','JobController@formAdd');
+  Route::post('job/add','JobController@add');
+});
+
+
+// Company
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('company/list','CompanyController@listView');
+  Route::get('company/add','CompanyController@formAdd');;
+  Route::post('company/add','CompanyController@add');
+});
+
+
+// Department
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('department/list/{company_id}','DepartmentController@listView');
+  Route::get('department/add/{company_id}','DepartmentController@formAdd');
+  Route::post('department/add/{company_id}','DepartmentController@add');
+});
+
+// Matches /api/{route} URL
+Route::group(['prefix' => 'api', 'middleware' => 'auth'], function () {
+  // Route::get('api/get_sub_district/{districtId}', 'ApiController@GetSubDistrict');
+  Route::get('get_sub_district/{districtId}', 'ApiController@GetSubDistrict');
+});
+

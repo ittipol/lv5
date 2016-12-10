@@ -1,0 +1,110 @@
+.card-container {
+	padding: 20px 0;
+}
+
+.card-container .card {
+
+}
+
+.card {
+  height: 380px;
+  background-color: #ffffff;
+  padding: 0;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 8px 1px #a0a0a0;
+  position: relative;
+}
+
+.card .image-tile {
+	width: 100%;
+	height: 215px;
+	position: relative;
+	background-color: #9E9E9E;
+	border-bottom: 1px solid #0D47A1;
+	overflow: hidden;
+}
+
+.card .image-tile .filter{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(60,60,60,.5);
+}
+
+.card .image-tile .title {
+	width: 100%;
+	font-size: 22px;
+	color: #000000;
+  /*background-color: rgba(20,20,20,.5);*/
+  background-color: #ffffff;
+	position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px 20px;
+}
+
+.card .image-tile .image {
+	height: 100%;
+	width: 100%;
+	background-size: 110%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.card .image-tile img {
+	width: 100%;
+	height: 100%;
+}
+
+.card .inner {
+	padding: 20px;
+}
+
+.card .description {
+	height: 40px;
+}
+
+.card .button-group {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	padding: 0 20px;
+}
+
+.card .button-group > a {
+	color: #0D47A1;
+	font-size: 18px;
+	margin-right: 10px;
+	background-color: transparent;
+	line-height: 50px;
+	float: left;
+}
+
+.card .button-group > .additional-option {
+	float: right;
+	margin: 8px 0;
+}
+
+.card.medium {
+	height: 265px;
+}
+
+.card.medium .image-tile .title {
+	font-size: 22px;
+}
+
+.card.small {
+	height: 132px;
+}
+
+.card.small .image-tile {
+	height: 80px;
+}
+
+.card.small .image-tile .title {
+	font-size: 22px;
+}
