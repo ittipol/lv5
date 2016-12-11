@@ -16,6 +16,7 @@ use App\Models\District;
 use App\Models\Address;
 use App\Models\Wiki;
 use App\library\message;
+use App\library\string;
 use Auth;
 use Redirect;
 use Session;
@@ -25,7 +26,36 @@ class DepartmentController extends Controller
 
   public function listView($companyId = null) {
 
-    dd('sss');
+    $string = new String;
+
+    $companyHasDepartments = Company::find($companyId)->companyHasDepartments;
+
+    $departments = array();
+
+    foreach ($companyHasDepartments as $value) {
+
+      if($value->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()){
+
+        $department = $value->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()->department;
+        $image = $department->imageUrl();
+
+        $departments[] = array(
+          'id' => $department->id,
+          'name' => $department->name,
+          'description' => $string->subString($department->description,120),
+          'business_type' => $department->business_type,
+          // 'image' => !empty($image) ? $image : '/images/no-img.png',
+          'image' => $image,
+        );
+
+      }
+
+    }
+
+    $this->data = array(
+      'companyName' => Company::find($companyId)->name,
+      'departments' => $departments
+    );
 
     return $this->view('pages.department.list');
   }

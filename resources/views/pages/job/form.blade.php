@@ -1,6 +1,6 @@
 @extends('layouts.default')
 @section('content')
-
+ราคาโลละ 230 ~ 250 บาท
 <div>
   <div class="container">
     <h2>ลงประกาศงาน</h2>

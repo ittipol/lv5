@@ -23,6 +23,10 @@ class Company extends Model
     return $this->hasMany('App\Models\CompanyHasDepartment','company_id','id');
   }
 
+  public function companyHasPeople() {
+    return $this->hasMany('App\Models\PersonHasCompany','company_id','id');
+  }
+
   public function createImageFolder() {
 
     $coverFolder = storage_path($this->imageDirPath).'/'.$this->attributes['id'].'/cover';

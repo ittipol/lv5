@@ -43,7 +43,7 @@ class Image extends Model
     if(File::exists($path)){
       $path = '/safe_image/'.$this->name;
     }else{
-      $path = '/images/no-img.png';
+      $path = $this->noImagePath;
     }
 
     return $path;

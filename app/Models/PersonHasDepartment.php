@@ -13,4 +13,9 @@ class PersonHasDepartment extends Model
   public function __construct() {  
     parent::__construct();
   }
+
+  public function department() {
+    return $this->hasOne('App\Models\Department','id','department_id');
+  }
+
 }

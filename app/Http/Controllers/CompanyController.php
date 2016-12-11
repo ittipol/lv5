@@ -31,20 +31,20 @@ class CompanyController extends Controller
     // Get company
     $personHasCompany = PersonHasCompany::where('person_id','=',Session::get('Person.id'))->get();
 
-    // Get images
-
     $companies = array();
     foreach ($personHasCompany as $value) {
 
-      $image = $value->company->images();
+      $company = $value->company;
+      $image = $company->imageUrl();
 
       $companies[] = array(
-        'id' => $value->company->id,
-        'name' => $value->company->name,
-        'description' => $string->subString($value->company->description,120),
-        'business_type' => $value->company->business_type,
-        'total_department' => $value->company->companyHasDepartments->count(),
-        'image' => !empty($image->first()) ? $image->first()->getImageUrl() : '/images/no-img.png',
+        'id' => $company->id,
+        'name' => $company->name,
+        'description' => $string->subString($company->description,120),
+        'business_type' => $company->business_type,
+        'total_department' => $company->companyHasDepartments->count(),
+        // 'image' => !empty($image) ? $image : '/images/no-img.png',
+        'image' => $image,
         // 'totalImage' => $image->count()
       );
     }

@@ -25,4 +25,12 @@ class PersonHasCompany extends Model
     return $this->hasOne('App\Models\Company','id','company_id');
   }
 
+  public function person() {
+    return $this->hasOne('App\Models\Person','id','person_id');
+  }
+
+  public function personHasDepartments() {
+    return $this->hasMany('App\Models\PersonHasDepartment','person_id','person_id');
+  }
+
 }

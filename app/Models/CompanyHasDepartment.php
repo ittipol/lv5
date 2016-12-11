@@ -17,4 +17,8 @@ class CompanyHasDepartment extends Model
   public function department() {
     return $this->hasOne('App\Models\Department','id');
   }
+
+  public function departmentHasPeople() {
+    return $this->hasMany('App\Models\PersonHasDepartment','department_id','department_id');
+  }
 }

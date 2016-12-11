@@ -2,6 +2,11 @@ body {
 	background-color: #ffffff;
 }
 
+/*body > main {
+	position: relative;
+	z-index: 9999;
+}*/
+
 .primary-bar {
 	width: 100%;
 	height: 80px;

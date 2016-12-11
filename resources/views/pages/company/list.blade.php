@@ -1,12 +1,6 @@
 @extends('layouts.default')
 @section('content')
 
-<div>
-<div class="container">
-<h2>ร้านค้าหรือสถานประกอบการของคุณ</h2>
-</div>
-</div>
-
 <div class="container">
   <h2>ร้านค้าหรือสถานประกอบการของคุณ</h2>
 
@@ -45,9 +39,25 @@
 
 </div>
 
+<div id="confirmDialog" style="display:none;">
+
+  <p>สติ๊กเกอร์ที่คุณเลือก</p>
+  <div id="stickerSelectedList" class="container-fluid">
+    <div class="row">
+    </div>
+  </div>
+</div>
+
+<a class="floating-button" href="#confirmDialog" rel="modal:open"></a>
+
 <script type="text/javascript">
   $(document).ready(function(){
     AdditionalOption.load();
+
+    // var top = ($(window).height() - $('.modal-menu-dialog').height()) / 2;
+    // var left = ($(window).width() - $('.modal-menu-dialog').width()) / 2;
+    // $('.modal-menu-dialog').css({top: top + 'px', left: left + 'px', display: 'block'});
+
   });
 </script>
 
