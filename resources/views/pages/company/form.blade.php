@@ -2,7 +2,16 @@
 @section('content')
 
 <div class="container">
-  <h2>ร้านค้าหรือสถานประกอบการ</h2>
+  
+  <div class="row">
+    <div class="container-header">
+      <div class="col-lg-6">
+        <div class="title">
+          ร้านค้าหรือสถานประกอบการ
+        </div>
+      </div>
+    </div>
+  </div>
 
   <?php if(!empty($errors->all())): ?>
     <div class="form-error-messages">
@@ -18,7 +27,12 @@
   <?php endif; ?>
 
   <?php
-    echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
+    // echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
+    echo  Form::model($company->getAttributes(), [
+      'method' => 'PATCH',
+      'route' => ['company.edit', $company->id],
+      'enctype' => 'multipart/form-data'
+    ]);
   ?>
 
   <div class="form-section">
@@ -84,9 +98,19 @@
 
       <div class="form-row">
       <?php 
-        echo Form::label('mobile_phone', 'เบอร์โทรศัพท์');
-        echo Form::text('mobile_phone', null, array(
+        echo Form::label('phone_number', 'เบอร์โทรศัพท์');
+        echo Form::text('phone_number', null, array(
           'placeholder' => 'เบอร์โทรศัพท์',
+          'autocomplete' => 'off'
+        ));
+      ?>
+      </div>
+
+      <div class="form-row">
+      <?php
+        echo Form::label('website', 'เว็บไซต์');
+        echo Form::text('website', null, array(
+          'placeholder' => 'เว็บไซต์',
           'autocomplete' => 'off'
         ));
       ?>
@@ -104,8 +128,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('fb', 'Facebook');
-        echo Form::text('fb', null, array(
+        echo Form::label('facebook', 'Facebook');
+        echo Form::text('facebook', null, array(
           'placeholder' => 'Facebook',
           'autocomplete' => 'off'
         ));

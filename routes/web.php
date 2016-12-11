@@ -69,8 +69,15 @@ Route::group(['middleware' => 'auth'], function () {
 // Company
 Route::group(['middleware' => 'auth'], function () {
   Route::get('company/list','CompanyController@listView');
+
   Route::get('company/add','CompanyController@formAdd');;
   Route::post('company/add','CompanyController@add');
+
+  Route::get('company/edit/{company_id}','CompanyController@formEdit');
+  Route::patch('company/edit/{company_id}',[
+    'as' => 'company.edit',
+    'uses' => 'CompanyController@edit'
+  ]);
 });
 
 

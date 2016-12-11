@@ -6,7 +6,7 @@
 	height: 60px;
 	border-radius: 60px;
 	background-color: #2196F3;
-	box-shadow: 2px 2px 8px 1px #a0a0a0;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 	cursor: pointer;
 }
 

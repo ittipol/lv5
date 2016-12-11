@@ -31,7 +31,7 @@ FloatingMenu.bind = function() {
       setTimeout(function(){
         FloatingMenu.allowed = true;
         FloatingMenu.displayed = true;
-      },500);
+      },350);
 
     }
 
@@ -47,7 +47,7 @@ FloatingMenu.bind = function() {
       setTimeout(function(){
         FloatingMenu.allowed = true;
         FloatingMenu.displayed = false;
-      },500);
+      },350);
     }
   });
 }

@@ -122,9 +122,10 @@ class DepartmentController extends Controller
       $companyHasDepartment->save();
 
       $options = array(
-        'data' => $department['attributes'],
+        'data' => $department->getAttributes(),
       );
-
+ 
+      //
       $company = Company::where('id','=',$companyId)->first();
       $options['data'] = array_merge($options['data'],array(
         '_companyName' => $company->name,

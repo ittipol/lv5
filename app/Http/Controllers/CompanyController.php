@@ -121,7 +121,7 @@ class CompanyController extends Controller
       }
 
       $options = array(
-        'data' => $company['attributes'],
+        'data' => $company->getAttributes(),
         'tags' => $tags
       );
 
@@ -154,8 +154,28 @@ class CompanyController extends Controller
 
   }
 
-  public function formEdit() {
+  public function formEdit($companyId) {
     
+    $company = Company::find($companyId);
+
+    $districtRecords = District::all();
+
+    $districts = array();
+    foreach ($districtRecords as $district) {
+      $districts[$district->id] = $district->name;
+    }
+
+    $this->data = array(
+      'company' => $company,
+      'districts' => $districts
+    );
+
+    return $this->view('pages.company.form');
+
+  }
+
+  public function edit(CompanyRequest $request,$companyId) {
+
   }
 
   public function dataView() {

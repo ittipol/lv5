@@ -3,12 +3,16 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-lg-6">
-      <h2>ร้านค้าหรือสถานประกอบการของคุณ</h2>
-    </div>
+    <div class="container-header">
+      <div class="col-lg-6">
+        <div class="title">
+          ร้านค้าหรือสถานประกอบการ
+        </div>
+      </div>
 
-    <div class="col-lg-6">
-      <a href="{{URL::to('company/add')}}" class="button pull-right">เพิ่มร้านหค้าหรือสถาประกอบการ</a>
+      <div class="col-lg-6">
+        <a href="{{URL::to('company/add')}}" class="button pull-right">เพิ่มร้านหค้าหรือสถาประกอบการ</a>
+      </div>
     </div>
   </div>
 
@@ -34,9 +38,9 @@
               <a href="{{URL::to('company/report/<?php echo $company['id']; ?>')}}">รายชื่อผู้สมัครงาน</a>
             </div>
           </div>
-          <a href="{{URL::to('company/view')}}">แสดงเพิ่มเติม</a>
-          <a href="{{URL::to('company/edit')}}">แก้ไข</a>
-          <a href="{{URL::to('company/delete')}}">ลบ</a>
+          <a href="{{URL::to('company/view')}}/<?php echo $company['id']; ?>">แสดงเพิ่มเติม</a>
+          <a href="{{URL::to('company/edit')}}/<?php echo $company['id']; ?>">แก้ไข</a>
+          <a href="{{URL::to('company/delete')}}/<?php echo $company['id']; ?>">ลบ</a>
         </div>
       </div>
     </div>
@@ -47,20 +51,9 @@
 
 </div>
 
-<div class="floating-button">
-  <div class="dot"></div>
-  <div class="dot"></div>
-  <div class="dot"></div>
-</div>
-
-<div id="overlay_menu" class="overlay-menu">
-  <a href="{{URL::to('company/add')}}">เพิ่มร้านหค้าหรือสถาประกอบการ</a>
-</div>
-
 <script type="text/javascript">
   $(document).ready(function(){
     AdditionalOption.load();
-    FloatingMenu.load();
   });
 </script>
 
