@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
 
       // Update your AppServiceProvider by adding a view composer to the boot method and using '*' to share it with all views
       view()->composer('*', function($view){
-          $viewName = str_replace('.', '/', $view->getName());dd($viewName);
+          $viewName = str_replace('.', '/', $view->getName());
           view()->share('cssPath', 'css/'.$viewName.'.css'); 
           view()->share('jsPath', 'js/'.$viewName.'.js'); 
       });

@@ -58,22 +58,22 @@ body {
 }
 
 a:hover {
-	color: #ffffff;
+	color: #000000;
 	text-decoration: none;
 }
 
 a:link {
-    color: #ffffff;
+    color: #000000;
     text-decoration: none;
 }
 
 a:visited {
-    color: #ffffff;
+    color: #000000;
     text-decoration: none;
 }
 
 a:active {
-    color: #ffffff;
+    color: #000000;
     text-decoration: none;
 }
 

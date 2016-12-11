@@ -8,6 +8,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/forms/item_images.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/district.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/tag.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/components/floating-menu.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>
 
@@ -19,7 +20,6 @@
 <link rel="stylesheet" href="{{ URL::asset('css/jquery.modal.css') }}" /><link rel="stylesheet" href="{{ URL::asset('css/core.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/map.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/messages/message.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/modal-dialog/modal-dialog.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/layouts/header.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/layouts/footer.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/notification-bottom.css') }}" />
@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/components/tag.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/card.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/button.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/components/modal.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/additional-option.css') }}" />
 
 <?php if(file_exists($cssPath)): ?>

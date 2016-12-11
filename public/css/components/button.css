@@ -1,9 +1,19 @@
 .floating-button {
 	position: fixed;
 	bottom: 120px;
-	right: 120px;
+	right: 220px;
 	width: 60px;
 	height: 60px;
 	border-radius: 60px;
 	background-color: #2196F3;
+	box-shadow: 2px 2px 8px 1px #a0a0a0;
+	cursor: pointer;
+}
+
+.floating-button .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+  background-color: #ffffff;
+  margin: 10px auto;
 }

@@ -2,7 +2,15 @@
 @section('content')
 
 <div class="container">
-  <h2>ร้านค้าหรือสถานประกอบการของคุณ</h2>
+  <div class="row">
+    <div class="col-lg-6">
+      <h2>ร้านค้าหรือสถานประกอบการของคุณ</h2>
+    </div>
+
+    <div class="col-lg-6">
+      <a href="{{URL::to('company/add')}}" class="button pull-right">เพิ่มร้านหค้าหรือสถาประกอบการ</a>
+    </div>
+  </div>
 
   <div class="card-container row">
 
@@ -15,7 +23,7 @@
           <div class="title"><?php echo $company['name']; ?></div>
         </div>
         <div class="button-group clear-fix">
-          <div href="javascript:void(0)" class="additional-option">
+          <div class="additional-option">
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
@@ -39,25 +47,20 @@
 
 </div>
 
-<div id="confirmDialog" style="display:none;">
-
-  <p>สติ๊กเกอร์ที่คุณเลือก</p>
-  <div id="stickerSelectedList" class="container-fluid">
-    <div class="row">
-    </div>
-  </div>
+<div class="floating-button">
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
 </div>
 
-<a class="floating-button" href="#confirmDialog" rel="modal:open"></a>
+<div id="overlay_menu" class="overlay-menu">
+  <a href="{{URL::to('company/add')}}">เพิ่มร้านหค้าหรือสถาประกอบการ</a>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function(){
     AdditionalOption.load();
-
-    // var top = ($(window).height() - $('.modal-menu-dialog').height()) / 2;
-    // var left = ($(window).width() - $('.modal-menu-dialog').width()) / 2;
-    // $('.modal-menu-dialog').css({top: top + 'px', left: left + 'px', display: 'block'});
-
+    FloatingMenu.load();
   });
 </script>
 

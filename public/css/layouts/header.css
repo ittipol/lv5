@@ -24,6 +24,21 @@
 	background-color: transparent;
 }
 
+.header a:hover {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.header a:link {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.header a:visited {
+    color: #ffffff;
+    text-decoration: none;
+}
+
 .header-inner {
 	/*width: 63%;*/
 	height: 100%;

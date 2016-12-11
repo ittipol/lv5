@@ -53,13 +53,12 @@ select {
 }
 
 form .title {
-	font-size: 20px;
+	font-size: 18px;
 	/*border-bottom: 2px solid #1976D2;*/
 	position: relative;
 	background-color: #1976D2;
 	color: #fff;
-	padding: 12px 12px 12px 26px;
-	/* border-radius: 50px 0 0 50px; */
+	padding: 10px 10px 10px 24px;
 }
 
 /*form .title::before {
