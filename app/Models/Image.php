@@ -12,28 +12,16 @@ class Image extends Model
   protected $table = 'images';
   protected $fillable = ['model','model_id','alias','name'];
   public $timestamps  = false;
-  public $imageMaxSize = 3145728; 
+  public $maxFileSize = 3145728; 
+  public $allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg']; 
 
   public function __construct() {  
     parent::__construct();
   }
 
   public function generateFileName($model,$image) {
-
-    // $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    // $codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
-    $codeAlphabet = "0123456789";
-
-    $name = '';
-    $len = strlen($codeAlphabet);
-
-    for ($i = 0; $i < 15; $i++) {
-      $name .= $codeAlphabet[rand(0,$len-1)];
-    };
-
-    $name = time().'_'.$name.'_'.$model->id.'_'.$image->getSize();
-
-    return $name.'.'.$image->getClientOriginalExtension();  
+    $code = time().'_'.$this->generateCode().'_'.$model->id.'_'.$image->getSize();
+    return $code.'.'.$image->getClientOriginalExtension();  
   }
 
   public function getImageUrl() {
@@ -62,20 +50,23 @@ class Image extends Model
   }
 
   public function saveImages($model,$images) {
+
     foreach ($images as $image) {
-      $this->model = $model->modelName;
-      $this->model_id = $model->id;
-      $this->name = $this->generateFileName($model,$image);
-      if($this->save()){
-        $this->saveImage($model,$image,$this->name);
+      $imageModel = new Image;
+      $imageModel->model = $model->modelName;
+      $imageModel->model_id = $model->id;
+      $imageModel->name = $imageModel->generateFileName($model,$image);
+      if($imageModel->save()){
+        $imageModel->saveImage($model,$image,$imageModel->name);
       }
     }
+    
     return true;
   }
 
   public function saveImage($model,$image,$filename) {
 
-    if($image->getSize() <= $this->imageMaxSize){
+    if($this->checkMaxSize($image->getSize()) && $this->checkType($image->getMimeType())) {
 
       $image->move(storage_path($model->imageDirPath).$this->attributes['model_id'].'/images', $filename);
 
@@ -86,6 +77,20 @@ class Image extends Model
 
     return false;
 
+  }
+
+  public function checkMaxSize($size) {
+    if($size <= $this->maxFileSize) {
+      return true;
+    }
+    return false;
+  }
+
+  public function checkType($type) {
+    if (in_array($type, $this->allowedFileTypes)) {
+      return true;
+    }
+    return false;
   }
 
 }

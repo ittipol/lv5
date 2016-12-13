@@ -14,6 +14,10 @@ class Tagging extends Model
     parent::__construct();
   }
 
+  public function tag() {
+    return $this->hasOne('App\Models\Tag','id','tag_id');
+  }
+
   public function checkRecordExist($model,$modelId,$tagId) {
     return $this->where([
       ['model','=',$model],
@@ -22,13 +26,31 @@ class Tagging extends Model
     ])->count() ? true : false;
   }
 
-  public function checkAndSave($model,$modelId,$tagId) {
-    if(!$this->checkRecordExist($model,$modelId,$tagId)) {
-      $this->model = $model;
-      $this->model_id = $modelId;
-      $this->tag_id = $tagId;
-      $this->save();
+  public function checkAndSave($model,$modelId,$tags) {
+    foreach ($tags as $tagId => $tag) {
+      if(!$this->checkRecordExist($model,$modelId,$tagId)) {
+        $this->_save($model,$modelId,$tagId);
+      }
     }
+  }
+
+  public function deleteAndSave($model,$modelId,$tags) {
+    // Delete first
+    $this->where([
+      ['model','=',$model],
+      ['model_id','=',$modelId],
+    ])->delete();
+    foreach ($tags as $tagId => $tag) {
+      $this->_save($model,$modelId,$tagId);
+    }
+  }
+
+  private function _save($model,$modelId,$tagId) {
+    $tagging = new Tagging;
+    $tagging->model = $model;
+    $tagging->model_id = $modelId;
+    $tagging->tag_id = $tagId;
+    $tagging->save();
   }
 
 }

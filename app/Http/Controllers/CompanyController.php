@@ -69,7 +69,7 @@ class CompanyController extends Controller
       'districts' => $districts,
     );
 
-    return $this->view('pages.company.form');
+    return $this->view('pages.company.form.add');
   }
 
   public function add(CompanyRequest $request) {
@@ -114,11 +114,11 @@ class CompanyController extends Controller
         $tags = $tag->saveTags($request->input('tags'));
       }
 
-      // Tagging
-      foreach ($tags as $tagId => $tag) {
-        $tagging = new Tagging;
-        $tagging->checkAndSave($businessType->modelName,$businessType->id,$tagId);
-      }
+      $tagging = new Tagging;
+      // Company Tagging
+      $tagging->deleteAndSave($company->modelName,$company->id,$tags);
+      // Bussiness type Tagging
+      $tagging->checkAndSave($businessType->modelName,$businessType->id,$tags);
 
       $options = array(
         'data' => $company->getAttributes(),
@@ -165,12 +165,38 @@ class CompanyController extends Controller
       $districts[$district->id] = $district->name;
     }
 
+    // Get Address
+    $address = $company->address();
+    // Get Images
+    $images = $company->images();
+
+    $_images = array();
+    foreach ($images as $image) {
+      $_images[] = array(
+        'name' => $image->getImageUrl()
+      );
+    }
+
+    // Get Tag
+    $tags = $company->tags(true);
+
+    $_tags = array();
+    foreach ($tags as $tag) {
+      $_tags[] = array(
+        'id' =>  $tag['id'],
+        'name' =>  $tag['name']
+      );
+    }
+
     $this->data = array(
       'company' => $company,
-      'districts' => $districts
+      'address' => $address,
+      'imageJson' => json_encode($_images),
+      'tagJson' => json_encode($_tags),
+      'districts' => $districts,
     );
 
-    return $this->view('pages.company.form');
+    return $this->view('pages.company.form.edit');
 
   }
 

@@ -14,6 +14,7 @@ class Model extends _Model
   public $alias;
   public $disk;
   public $imageDirPath;
+  public $tempFileDir = 'tmp/';
   public $noImagePath = '/images/no-img.png';
 
   public function __construct(array $attributes = []) { 
@@ -22,6 +23,32 @@ class Model extends _Model
     $this->modelName = class_basename(get_class($this));
     $this->alias = $this->disk = strtolower($this->modelName);
     $this->imageDirPath = 'app/public/'.$this->disk.'/';
+  }
+
+  public function includeRelatedData($models = array()) {
+
+    foreach ($models as $model) {
+
+      $class = 'App\Models\\'.$model;
+
+      $modelData = $class::where([
+        ['model','=',$this->modelName],
+        ['model_id','=',$this->id]
+      ])->get();
+    
+      $temp = array();
+      foreach ($modelData as $key => $value) {
+        $temp[] = $value->getAttributes();
+      }
+
+      if(count($temp) == 1){
+        $this[$model] = $temp[0];
+      }else{
+        $this[$model] = $temp;
+      }
+
+    }
+
   }
 
   public function address() {
@@ -56,15 +83,24 @@ class Model extends _Model
     return !empty($url) ? $url : false;
   }
 
-  public function images() {
+  public function images($getAttributes = false) {
     if(!empty($this->id)){
       $images = Image::where([
         ['model','=',$this->modelName],
         ['model_id','=',$this->id]
       ])->get();
 
-      return !empty($images->count()) ? $images : false;
-
+      if(!empty($images->count())){
+        if($getAttributes){
+          $imagesData = array();
+          foreach ($images as $image) {
+            $imagesData[] = $image->getAttributes();
+          }
+          return $imagesData;
+        }else{
+          return $images;
+        }
+      }
     }
     return false;
   }
@@ -80,6 +116,52 @@ class Model extends _Model
     }
 
     return !empty($urls) ? $urls : false;
+  }
+
+  public function tags($getAttributes = false) {
+    $taggings = Tagging::where([
+      ['model','=',$this->modelName],
+      ['model_id','=',$this->id]
+    ])->get();
+
+    $tags = array();
+
+    if($getAttributes){
+      foreach ($taggings as $tagging) {
+        $tags[] = $tagging->tag->getAttributes();
+      }
+    }else{
+      foreach ($taggings as $tagging) {
+        $tags[] = $tagging->tag;
+      }
+    }
+
+    return $tags;
+  }
+
+  // public function deleteReletedData() {
+  //   $this->where([
+  //     ['model','=',$this->modelName],
+  //     ['model_id','=',$this->id],
+  //   ])->delete();
+  // }
+
+  protected function generateCode() {
+    // hash('sha256',$image->name);
+
+    // $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // $codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
+    $codeAlphabet = "0123456789";
+
+    $code = '';
+    $len = strlen($codeAlphabet);
+
+    for ($i = 0; $i < 15; $i++) {
+      $code .= $codeAlphabet[rand(0,$len-1)];
+    };
+
+    return $code;
+
   }
 
 }

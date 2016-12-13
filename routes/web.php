@@ -91,6 +91,11 @@ Route::group(['middleware' => 'auth'], function () {
 // Matches /api/{route} URL
 Route::group(['prefix' => 'api', 'middleware' => 'auth'], function () {
   // Route::get('api/get_sub_district/{districtId}', 'ApiController@GetSubDistrict');
-  Route::get('get_sub_district/{districtId}', 'ApiController@GetSubDistrict');
+  Route::post('get_sub_district/{districtId}', 'ApiController@GetSubDistrict');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+  Route::post('upload_image', 'ApiController@uploadTempImage');
+  Route::post('delete_image', 'ApiController@deleteTempImage');
 });
 

@@ -18,10 +18,13 @@ District.bind = function(){
 
 District.getSubDistrict = function(districtId){
 
+  var CSRF_TOKEN = $('input[name="_token"]').val();        
+
 	var request = $.ajax({
     url: "/api/get_sub_district/"+districtId,
-    type: "get",
-    // data: serializedData
+    type: "post",
+    data: {_token:CSRF_TOKEN},
+    dataType:'json'
   });
 
   // Callback handler that will be called on success

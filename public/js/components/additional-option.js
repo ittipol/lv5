@@ -15,7 +15,7 @@ AdditionalOption.bind = function(){
     },500);
   });
 
-  $(document).on('click','body',function(){
+  $(document).on('click',function(){
     if(AdditionalOption._this != null){
       $(AdditionalOption._this).find('.additional-option-items').fadeOut(220);
       AdditionalOption._this = null;

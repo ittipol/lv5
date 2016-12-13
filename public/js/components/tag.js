@@ -7,11 +7,20 @@ var Tag = {
 	dataName: 'tags'
 }
 
-Tag.load = function(){
+Tag.load = function(tagJson){
+
 	Tag.init();
 	Tag.bind();
 	Tag.crateTagList();
 	Tag.crateInputTagField();
+
+	if (typeof tagJson != 'undefined') {
+		var _tags = JSON.parse(tagJson);
+		for (var i = 0; i < _tags.length; i++) {
+			Tag.createTagChip(_tags[i]['name']);
+		}
+	}
+
 }
 
 Tag.init = function(){

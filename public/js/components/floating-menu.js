@@ -37,7 +37,7 @@ FloatingMenu.bind = function() {
 
   });
 
-  $(document).on('click','body',function(){
+  $(document).on('click',function(){
     if(FloatingMenu.displayed){
 
       FloatingMenu.allowed = false;
