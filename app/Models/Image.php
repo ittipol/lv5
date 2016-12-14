@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Model;
+use App\Models\TempFile;
+use App\library\Token;
 use Auth;
 use Storage;
 use File;
@@ -20,7 +22,7 @@ class Image extends Model
   }
 
   public function generateFileName($model,$image) {
-    $code = time().'_'.$this->generateCode().'_'.$model->id.'_'.$image->getSize();
+    $code = time().'_'.Token::generateNumber(15).'_'.$model->id.'_'.$image->getSize();
     return $code.'.'.$image->getClientOriginalExtension();  
   }
 
@@ -76,6 +78,55 @@ class Image extends Model
     }
 
     return false;
+
+  }
+
+  public function saveUploadImages($model,$token,$personId,$filenames) {
+    $tempFile = new TempFile;
+
+    $imageTemp = $tempFile->where([
+      ['type','=','image'],
+      ['token','=',$token],
+      ['created_by','=',$personId]
+    ]);
+
+    $images = $imageTemp->get();
+
+    foreach ($images as $image) {
+      $filename = $image['attributes']['name'];
+
+      if(!in_array($filename, $filenames)) {
+        continue;
+      }
+
+      $path = storage_path($this->tempFileDir).$token.'/'.$filename;
+
+      if(!file_exists($path)){
+        continue;
+      }
+
+      $to = storage_path($model->imageDirPath).$model->id.'/images/'.$filename;
+
+      // move to real dir
+      File::move($path, $to);
+    
+      //
+      $imageModel = new Image;
+      $imageModel->model = $model->modelName;
+      $imageModel->model_id = $model->id;
+      $imageModel->name = $filename;
+      $imageModel->save();
+
+      //
+      // $tempFile->find($image['attributes']['id'])->delete();
+
+    }
+    
+    // remove temp dir
+    File::deleteDirectory(storage_path($this->tempFileDir).$token);
+
+    //
+    $imageTemp->delete();
 
   }
 

@@ -146,22 +146,4 @@ class Model extends _Model
   //   ])->delete();
   // }
 
-  protected function generateCode() {
-    // hash('sha256',$image->name);
-
-    // $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    // $codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
-    $codeAlphabet = "0123456789";
-
-    $code = '';
-    $len = strlen($codeAlphabet);
-
-    for ($i = 0; $i < 15; $i++) {
-      $code .= $codeAlphabet[rand(0,$len-1)];
-    };
-
-    return $code;
-
-  }
-
 }

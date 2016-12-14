@@ -47,7 +47,7 @@ class ApiController extends Controller
 
       if($tempFile->save()){
         $success = true;
-        $tempFile->uploadtempImage($image,$tempFile->type,$tempFile->name);
+        $tempFile->uploadtempImage($image,$tempFile->token,$tempFile->name);
 
         $fileName = $tempFile->name;
 
@@ -69,10 +69,10 @@ class ApiController extends Controller
     }
 
     $tempFile = new TempFile;
-    $success = $tempFile->deletetempImage('image',Input::get('filename'));
+    $success = $tempFile->deletetempImage(Input::get('_token'),Input::get('filename'));
 
     if($success){
-      $file = $tempFile->where([
+      $tempFile->where([
         ['name','=',Input::get('filename')],
         ['type','=','image'],
         ['token','=',Input::get('_token')],

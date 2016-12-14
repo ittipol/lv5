@@ -16,8 +16,11 @@ use App\Models\Lookup;
 use App\Models\Image;
 use App\Models\Wiki;
 use App\Models\Tag;
+use App\Models\TempFile;
 use App\library\message;
 use App\library\string;
+use App\library\service;
+use App\library\token;
 use Auth;
 use Redirect;
 use Session;
@@ -25,6 +28,9 @@ use Session;
 class CompanyController extends Controller
 {
   public function listView() {
+
+    // พนักงานประจำ
+    // พนักงานสัญญาจ้าง
 
     $string = new String;
 
@@ -58,6 +64,8 @@ class CompanyController extends Controller
 
   public function formAdd() {
 
+    $action = app('request')->route()->getAction();
+
     $districtRecords = District::all();
 
     $districts = array();
@@ -66,6 +74,7 @@ class CompanyController extends Controller
     }
 
     $this->data = array(
+      'formToken' => Token::generateFormToken('Company','add',Session::get('Person.id')),
       'districts' => $districts,
     );
 
@@ -76,6 +85,9 @@ class CompanyController extends Controller
 
     $company = new Company;
     $company->fill($request->all());
+
+    $service = new Service;
+    $company->ip_address = $service->ipAddress();
     $company->created_by = Auth::user()->id;
 
     // save
@@ -85,9 +97,9 @@ class CompanyController extends Controller
       $company->createImageFolder();
 
       // save company image
-      if(!empty($request->file('images'))){
-        $imageModel = new Image;
-        $imageModel->saveImages($company,$request->file('images'));
+      if(!empty($request->get('filenames'))){
+        $image = new Image;
+        $image->saveUploadImages($company,$request->get('_token'),Session::get('Person.id'),$request->get('filenames'));
       }
 
       // Add person to company

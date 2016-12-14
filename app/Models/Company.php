@@ -7,7 +7,7 @@ use App\Models\Model;
 class Company extends Model
 {
   public $table = 'companies';
-  protected $fillable = ['name','description','business_type','phone_number','email','website','facebook','instagram','line','created_by'];
+  protected $fillable = ['name','description','business_type','phone_number','email','website','facebook','instagram','line','ip_address','created_by'];
   public $timestamps  = false;
   public $lookupFormat = array(
     'keyword' => '{{name}}',

@@ -7,7 +7,8 @@ var Images = {
 	runningNumber: 0,
 	imagesPlaced: [],
 	filenames: [], 
-	defaultImage: '/images/add_images2.svg'
+	defaultImage: '/images/add_images2.svg',
+	allowedClick: true
 }
 
 Images.load = function(imageJson){
@@ -64,8 +65,6 @@ Images.preview = function(input){
 		var CSRF_TOKEN = $('input[name="_token"]').val();    
 		var proceed = true;
 
-		$(parent).parent().find('.status').css('width','0%');
-
 		if(!window.File && window.FileReader && window.FileList && window.Blob){ //if browser doesn't supports File API
 		  alert("Your browser does not support new File API! Please upgrade.");
 			proceed = false;
@@ -76,16 +75,8 @@ Images.preview = function(input){
 		  var reader = new FileReader();
 
 		  reader.onload = function (e) {
-		  	// parent.find('a').css('display','block');
-		  	parent.find('img').css('display','block').attr('src', e.target.result);
 
-		  	// if(Images.imagesPlaced.indexOf(input.getAttribute('id')) < 0){
-		  	// 	Images.imagesPlaced.push(input.getAttribute('id'));
-
-		  	// 	if(Images.index < Images.limit){
-		  	// 		Images.index = Images.createUploader(Images.index);
-		  	// 	}
-		  	// }
+		  	parent.find('img').css('display','none').attr('src', e.target.result);
 
 		  	if(Images.checkImageType(mimeType) && Images.checkImageSize(fileSize)) {
 		  		parent.css('borderColor','#E0E0E0');
@@ -95,6 +86,7 @@ Images.preview = function(input){
 		  		parent.find('.error-message').css('display','block').text('ไม่รองรับรูปภาพนี้');
 		  		parent.find('input[type="hidden"]').remove();
 		  		parent.find('input').val('');
+		  		parent.find('img').fadeIn(1000);
 		  	}
 
 		  }
@@ -120,6 +112,9 @@ Images.preview = function(input){
 }
 
 Image.uploadImage = function(parent,input,formData) {
+
+	var id = input.getAttribute('id');
+
 	var request = $.ajax({
     url: "/upload_image",
     type: "POST",
@@ -128,6 +123,10 @@ Image.uploadImage = function(parent,input,formData) {
     contentType: false,
     cache: false,
     processData:false,
+    beforeSend: function( xhr ) {
+    	$(parent).parent().find('.status').css('width','0%');
+    	parent.parent().find('.progress-bar').css('display','block');
+    },
     mimeType:"multipart/form-data",
     xhr: function(){
     	//upload Progress
@@ -141,7 +140,7 @@ Image.uploadImage = function(parent,input,formData) {
     				percent = Math.ceil(position / total * 100);
     			}
     			//update progressbar
-    			$(parent).parent().find('.status').css('width',percent +'%');
+    			parent.parent().find('.status').css('width',percent +'%');
     		}, true);
     	}
     	return xhr;
@@ -151,16 +150,22 @@ Image.uploadImage = function(parent,input,formData) {
   request.done(function (response, textStatus, jqXHR){
 
   	if(response.success){
+
+  		input.remove();
+
+  		parent.css('cursor','default');
+  		parent.find('img').fadeIn(450);
   		parent.find('a').css('display','block');
+  		parent.parent().find('.progress-bar').css('display','none');
 
-  		var input = document.createElement('input');
-		  input.setAttribute('type','hidden');
-		  input.setAttribute('name','filenames['+(Images.runningNumber-1)+']');
-		  input.setAttribute('value',response.filename);
-		  parent.append(input);
+  		var _input = document.createElement('input');
+		  _input.setAttribute('type','hidden');
+		  _input.setAttribute('name','filenames['+(Images.runningNumber-1)+']');
+		  _input.setAttribute('value',response.filename);
+		  parent.append(_input);
 
-  		if(Images.imagesPlaced.indexOf(input.getAttribute('id')) < 0){
-  			Images.imagesPlaced.push(input.getAttribute('id'));
+  		if(Images.imagesPlaced.indexOf(id) < 0){
+  			Images.imagesPlaced.push(id);
 
   			if(Images.index < Images.limit){
   				Images.index = Images.createUploader(Images.index);
@@ -182,46 +187,56 @@ Image.uploadImage = function(parent,input,formData) {
 
 Images.removePreview = function(input){
 
-	var parent = $(input).parent();  
-	parent.fadeOut(220); 
+	if(Images.allowedClick){
 
-	var data = {
-		'_token': $('input[name="_token"]').val(),
-		'filename': parent.find('input[type="hidden"]').val(),
-		'type': 'image'
-	};
+		Images.allowedClick = false;
 
-	var request = $.ajax({
-	  url: "/delete_image",
-	  type: "POST",
-	  data: data,
-	  dataType: 'json'
-	});
+		var parent = $(input).parent(); 
+		parent.fadeOut(220);  
 
-	request.done(function (response, textStatus, jqXHR){
+		var data = {
+			'_token': $('input[name="_token"]').val(),
+			'filename': parent.find('input[type="hidden"]').val(),
+			'type': 'image'
+		};
 
-		if(response.success){
-			--Images.index;
+		var request = $.ajax({
+		  url: "/delete_image",
+		  type: "POST",
+		  data: data,
+		  dataType: 'json'
+		});
 
-			if(Images.imagesPlaced.length == Images.limit){
-				Images.index = Images.createUploader(Images.index);
+		request.done(function (response, textStatus, jqXHR){
+
+			if(response.success){
+				--Images.index;
+
+				if(Images.imagesPlaced.length == Images.limit){
+					Images.index = Images.createUploader(Images.index);
+				}
+
+				var parent = $(input).parent();
+				Images.imagesPlaced.splice(Images.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
+
+				parent.parent().remove();
 			}
+			
+		});
 
-			var parent = $(input).parent();
-			Images.imagesPlaced.splice(Images.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
+		request.fail(function (jqXHR, textStatus, errorThrown){
+	    // Log the error to the console
+	    console.error(
+	        "The following error occurred: "+
+	        textStatus, errorThrown
+	    );
+	  });
 
-			parent.parent().remove();
-		}
-		
-	});
+	  request.always(function () {
+	  	Images.allowedClick = true;
+	  });
 
-	request.fail(function (jqXHR, textStatus, errorThrown){
-    // Log the error to the console
-    console.error(
-        "The following error occurred: "+
-        textStatus, errorThrown
-    );
-  });
+	}
 	
 }
 
