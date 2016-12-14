@@ -30,6 +30,8 @@
     echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
   ?>
 
+  <input type="hidden" name="form_token" value="<?php echo $formToken; ?>" >
+
   <div class="form-section">
 
     <div class="title">

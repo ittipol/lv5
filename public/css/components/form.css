@@ -179,6 +179,10 @@ label.image-label {
   cursor: pointer;
 }
 
+label.image-label.added {
+	cursor: default;
+}
+
 label.image-label input[type="file"] {
   opacity: 0;
   position: absolute;

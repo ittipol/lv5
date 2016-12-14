@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SubDistrict;
 use App\Models\Image;
 use App\Models\TempFile;
+use App\library\service;
 use Input;
 use Session;
 
@@ -34,15 +35,17 @@ class ApiController extends Controller
     $success = false;
     $fileName = '';
 
+    $service = new Service;
+    $imageModel = new Image;
+
     $image = Input::file('file');
 
-    $imageModel = new Image;
-  
     if($imageModel->checkMaxSize($image->getSize()) && $imageModel->checkType($image->getMimeType())) {
       $tempFile = new TempFile;
-      $tempFile->name = $tempFile->generateTempFileName($image);
+      $tempFile->name = $service->generateFileName($image);
       $tempFile->type = 'image';
-      $tempFile->token = Input::get('_token'); 
+      $tempFile->token = Input::get('formToken');
+      $tempFile->status = 'add'; 
       $tempFile->created_by = Session::get('Person.id');
 
       if($tempFile->save()){
@@ -68,16 +71,31 @@ class ApiController extends Controller
       exit;  //trygetRealPath detect AJAX request, simply exist if no Ajax
     }
 
-    $tempFile = new TempFile;
-    $success = $tempFile->deletetempImage(Input::get('_token'),Input::get('filename'));
+    $success = false;
 
-    if($success){
-      $tempFile->where([
-        ['name','=',Input::get('filename')],
-        ['type','=','image'],
-        ['token','=',Input::get('_token')],
-        ['created_by','=',Session::get('Person.id')]
-      ])->delete();
+    // check image already exist in image table
+    $imageModel = new Image;
+    $total = $imageModel->where('name','=',Input::get('filename'))->count();
+
+    $tempFile = new TempFile;
+
+    if($total){
+      $tempFile->name = Input::get('filename');
+      $tempFile->type = 'image';
+      $tempFile->status = 'delete';
+      $tempFile->token = Input::get('formToken');
+      $tempFile->created_by = Session::get('Person.id');
+      
+      if($tempFile->save()){
+        $success = true;
+      }
+    }else{
+      $success = $tempFile->deletetempImage(Input::get('formToken'),Input::get('filename'));
+
+      if($success){
+        $tempFile->deleteRecords(Input::get('filename'),'image','add',Input::get('formToken'),Session::get('Person.id'));
+      }
+
     }
 
     $result = array(

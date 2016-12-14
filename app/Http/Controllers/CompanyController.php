@@ -73,8 +73,16 @@ class CompanyController extends Controller
       $districts[$district->id] = $district->name;
     }
 
+    // form token
+    $formToken = Token::generateFormToken('Company','add',Session::get('Person.id'));
+
+    // clear temp dir and records
+    $tempFile = new TempFile;
+    $tempFile->deleteRecords($formToken,'image','add',Session::get('Person.id'));
+    $tempFile->deleteTempDir($formToken);
+
     $this->data = array(
-      'formToken' => Token::generateFormToken('Company','add',Session::get('Person.id')),
+      'formToken' => $formToken,
       'districts' => $districts,
     );
 
@@ -99,7 +107,7 @@ class CompanyController extends Controller
       // save company image
       if(!empty($request->get('filenames'))){
         $image = new Image;
-        $image->saveUploadImages($company,$request->get('_token'),Session::get('Person.id'),$request->get('filenames'));
+        $image->saveUploadImages($company,$request->get('form_token'),$request->get('filenames'),Session::get('Person.id'));
       }
 
       // Add person to company
@@ -185,7 +193,8 @@ class CompanyController extends Controller
     $_images = array();
     foreach ($images as $image) {
       $_images[] = array(
-        'name' => $image->getImageUrl()
+        'name' => $image['attributes']['name'],
+        'url' => $image->getImageUrl()
       );
     }
 
@@ -200,11 +209,18 @@ class CompanyController extends Controller
       );
     }
 
+    // form token
+    $formToken = Token::generateFormToken('Company','edit',Session::get('Person.id'));
+
+    $tempFile = new TempFile;
+    $tempFile->deleteRecordByToken($formToken,'image',Session::get('Person.id'));
+
     $this->data = array(
       'company' => $company,
       'address' => $address,
       'imageJson' => json_encode($_images),
       'tagJson' => json_encode($_tags),
+      'formToken' => $formToken,
       'districts' => $districts,
     );
 
@@ -214,6 +230,11 @@ class CompanyController extends Controller
 
   public function edit(CompanyRequest $request,$companyId) {
 
+    $company = Company::find($companyId);
+
+    $image = new Image;
+    $image->deleteImages($company,$request->get('form_token'),Session::get('Person.id'));
+    dd('hhh');
   }
 
   public function dataView() {

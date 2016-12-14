@@ -14,7 +14,6 @@ class Model extends _Model
   public $alias;
   public $disk;
   public $imageDirPath;
-  public $tempFileDir = 'tmp/';
   public $noImagePath = '/images/no-img.png';
 
   public function __construct(array $attributes = []) { 

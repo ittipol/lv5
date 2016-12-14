@@ -21,10 +21,10 @@ class Image extends Model
     parent::__construct();
   }
 
-  public function generateFileName($model,$image) {
-    $code = time().'_'.Token::generateNumber(15).'_'.$model->id.'_'.$image->getSize();
-    return $code.'.'.$image->getClientOriginalExtension();  
-  }
+  // public function generateFileName($image) {
+  //   $name = time().'_'.Token::generateNumber(15).'_'.$image->getSize();
+  //   return $name.'.'.$image->getClientOriginalExtension(); 
+  // }
 
   public function getImageUrl() {
     $imageDirPath = 'app/public/'.strtolower($this->model).'/';
@@ -51,46 +51,47 @@ class Image extends Model
     return base64_encode(File::get($path));
   }
 
-  public function saveImages($model,$images) {
+  // public function saveImages($model,$images) {
 
-    foreach ($images as $image) {
-      $imageModel = new Image;
-      $imageModel->model = $model->modelName;
-      $imageModel->model_id = $model->id;
-      $imageModel->name = $imageModel->generateFileName($model,$image);
-      if($imageModel->save()){
-        $imageModel->saveImage($model,$image,$imageModel->name);
-      }
-    }
+  //   foreach ($images as $image) {
+  //     $imageModel = new Image;
+  //     $imageModel->model = $model->modelName;
+  //     $imageModel->model_id = $model->id;
+  //     $imageModel->name = $imageModel->generateFileName($model,$image);
+  //     if($imageModel->save()){
+  //       $imageModel->saveImage($model,$image,$imageModel->name);
+  //     }
+  //   }
     
-    return true;
-  }
+  //   return true;
+  // }
 
-  public function saveImage($model,$image,$filename) {
+  // public function saveImage($model,$image,$filename) {
 
-    if($this->checkMaxSize($image->getSize()) && $this->checkType($image->getMimeType())) {
+  //   if($this->checkMaxSize($image->getSize()) && $this->checkType($image->getMimeType())) {
 
-      $image->move(storage_path($model->imageDirPath).$this->attributes['model_id'].'/images', $filename);
+  //     $image->move(storage_path($model->imageDirPath).$this->attributes['model_id'].'/images', $filename);
 
-      // use disk in filesystems.php
-      // Storage::disk($model->disk)->put($this->attributes['model_id'].'/images'.'/'.$filename, file_get_contents($image->getRealPath()));
-      return true;
-    }
+  //     // use disk in filesystems.php
+  //     // Storage::disk($model->disk)->put($this->attributes['model_id'].'/images'.'/'.$filename, file_get_contents($image->getRealPath()));
+  //     return true;
+  //   }
 
-    return false;
+  //   return false;
 
-  }
+  // }
 
-  public function saveUploadImages($model,$token,$personId,$filenames) {
-    $tempFile = new TempFile;
+  public function saveUploadImages($model,$token,$filenames,$personId) {
+    $tempFileModel = new TempFile;
 
-    $imageTemp = $tempFile->where([
+    $imagesTemp = $tempFileModel->where([
       ['type','=','image'],
       ['token','=',$token],
+      ['status','=','add'],
       ['created_by','=',$personId]
     ]);
 
-    $images = $imageTemp->get();
+    $images = $imagesTemp->get();
 
     foreach ($images as $image) {
       $filename = $image['attributes']['name'];
@@ -99,7 +100,7 @@ class Image extends Model
         continue;
       }
 
-      $path = storage_path($this->tempFileDir).$token.'/'.$filename;
+      $path = storage_path($tempFileModel->tempFileDir).$token.'/'.$filename;
 
       if(!file_exists($path)){
         continue;
@@ -123,10 +124,39 @@ class Image extends Model
     }
     
     // remove temp dir
-    File::deleteDirectory(storage_path($this->tempFileDir).$token);
+    $tempFileModel->deleteTempDir($token);
 
-    //
-    $imageTemp->delete();
+    // delete temp file records
+    $imagesTemp->delete();
+
+  }
+
+  public function deleteImages($model,$token,$personId) {
+
+    $tempFileModel = new TempFile;
+
+    $imagesTemp = $tempFileModel->where([
+      ['type','=','image'],
+      ['token','=',$token],
+      ['status','=','delete'],
+      ['created_by','=',$personId]
+    ]);
+
+    $images = $imagesTemp->get();
+
+    foreach ($images as $image) {
+
+      $this->where([
+        ['model','=',$model->modelName],
+        ['model_id','=',$model->id],
+        ['name','=',$image['attributes']['name']]
+      ])->delete();
+
+      File::Delete(storage_path($model->imageDirPath).$model->id.'/images/'.$image['attributes']['name']);
+    }
+
+    // delete temp file records
+    $imagesTemp->delete();
 
   }
 

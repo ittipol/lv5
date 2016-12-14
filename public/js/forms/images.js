@@ -18,32 +18,12 @@ Images.load = function(imageJson){
 	if (typeof imageJson != 'undefined') {
 		var _images = JSON.parse(imageJson);
 		for (var i = 0; i < _images.length; i++) {
-			Images.index = Images._createUploader(Image.index,_images[i]['name']);
+			Images.index = Images._createUploader(Images.index,_images[i]);
 		}
 	}
 
 	Images.index = Images.createUploader(Images.index);
 }
-
-// Images._createUploader = function(index,src){
-
-// 	var html = '';
-// 	html += '<div id="'+Images.code+'_panel_'+Images.runningNumber+'" class="image-panel">';
-// 	html += '<label id="'+Images.code+'_'+Images.runningNumber+'" class="image-label">';
-// 	html += '<input id="'+Images.code+'_image_'+Images.runningNumber+'" class="'+Images.code+'-image" name="images['+Images.runningNumber+']" type="file">';
-// 	html +=	'<img id="'+Images.code+'_preview_'+Images.runningNumber+'" class="preview-image" src="'+src+'">';
-// 	html += '<a id="'+Images.code+'_button_'+Images.runningNumber+'" href="javscript:void(0);" class="'+Images.code+'-remove-btn" style="display:block;">×</a>'
-// 	html += '<p class="error-message"></p>';
-// 	html += '</label>';
-// 	html += '</div>';
-
-// 	++Images.runningNumber;
-// 	$('#'+Images.panel).append(html);
-
-// 	return ++index;
-
-// }
-
 
 Images.bind = function(){
 
@@ -63,6 +43,7 @@ Images.preview = function(input){
 
 		var parent = $(input).parent();
 		var CSRF_TOKEN = $('input[name="_token"]').val();    
+		var formToken = $('input[name="form_token"]').val();
 		var proceed = true;
 
 		if(!window.File && window.FileReader && window.FileList && window.Blob){ //if browser doesn't supports File API
@@ -100,7 +81,8 @@ Images.preview = function(input){
 
 		if(proceed) {
 			var formData = new FormData();
-			formData.append('_token', CSRF_TOKEN);
+			formData.append('_token', CSRF_TOKEN);formToken
+			formData.append('formToken', formToken);
 			formData.append('file', input.files[0]);
 			formData.append('type', 'image');
 
@@ -111,14 +93,14 @@ Images.preview = function(input){
 
 }
 
-Image.uploadImage = function(parent,input,formData) {
+Image.uploadImage = function(parent,input,data) {
 
 	var id = input.getAttribute('id');
 
 	var request = $.ajax({
     url: "/upload_image",
     type: "POST",
-    data: formData,
+    data: data,
     dataType: 'json',
     contentType: false,
     cache: false,
@@ -153,7 +135,7 @@ Image.uploadImage = function(parent,input,formData) {
 
   		input.remove();
 
-  		parent.css('cursor','default');
+  		parent.addClass('added');
   		parent.find('img').fadeIn(450);
   		parent.find('a').css('display','block');
   		parent.parent().find('.progress-bar').css('display','none');
@@ -196,52 +178,53 @@ Images.removePreview = function(input){
 
 		var data = {
 			'_token': $('input[name="_token"]').val(),
+			'formToken': $('input[name="form_token"]').val(),
 			'filename': parent.find('input[type="hidden"]').val(),
 			'type': 'image'
 		};
 
-		var request = $.ajax({
-		  url: "/delete_image",
-		  type: "POST",
-		  data: data,
-		  dataType: 'json'
-		});
-
-		request.done(function (response, textStatus, jqXHR){
-
-			if(response.success){
-				--Images.index;
-
-				if(Images.imagesPlaced.length == Images.limit){
-					Images.index = Images.createUploader(Images.index);
-				}
-
-				var parent = $(input).parent();
-				Images.imagesPlaced.splice(Images.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
-
-				parent.parent().remove();
-			}
-			
-		});
-
-		request.fail(function (jqXHR, textStatus, errorThrown){
-	    // Log the error to the console
-	    console.error(
-	        "The following error occurred: "+
-	        textStatus, errorThrown
-	    );
-	  });
-
-	  request.always(function () {
-	  	Images.allowedClick = true;
-	  });
+		Image.deleteImage(parent,input,data);
 
 	}
 	
 }
 
-Image.deleteImage = function(parent,input,formData) {
+Image.deleteImage = function(parent,input,data) {
+	var request = $.ajax({
+	  url: "/delete_image",
+	  type: "POST",
+	  data: data,
+	  dataType: 'json'
+	});
 
+	request.done(function (response, textStatus, jqXHR){
+
+		if(response.success){
+			--Images.index;
+
+			if(Images.imagesPlaced.length == Images.limit){
+				Images.index = Images.createUploader(Images.index);
+			}
+
+			// var parent = $(input).parent();
+			Images.imagesPlaced.splice(Images.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
+
+			parent.parent().remove();
+		}
+		
+	});
+
+	request.fail(function (jqXHR, textStatus, errorThrown){
+    // Log the error to the console
+    console.error(
+        "The following error occurred: "+
+        textStatus, errorThrown
+    );
+  });
+
+  request.always(function () {
+  	Images.allowedClick = true;
+  });
 }
 
 Images.createUploader = function(index){
@@ -255,6 +238,25 @@ Images.createUploader = function(index){
 	html += '<p class="error-message"></p>';
 	html += '</label>';
 	html += '<div id="'+Images.code+'_progress+bar_'+Images.runningNumber+'" class="progress-bar"><div class="status"></div></div>'
+	html += '</div>';
+
+	++Images.runningNumber;
+	$('#'+Images.panel).append(html);
+
+	return ++index;
+
+}
+
+Images._createUploader = function(index,image){
+
+	var html = '';
+	html += '<div id="'+Images.code+'_panel_'+Images.runningNumber+'" class="image-panel">';
+	html += '<label id="'+Images.code+'_'+Images.runningNumber+'" class="image-label added">';
+	html +=	'<img id="'+Images.code+'_preview_'+Images.runningNumber+'" class="preview-image" src="'+image.url+'">';
+	html += '<a id="'+Images.code+'_button_'+Images.runningNumber+'" href="javscript:void(0);" class="'+Images.code+'-remove-btn" style="display:block;">×</a>'
+	html += '<p class="error-message"></p>';
+	html += '<input type="hidden" name="filenames['+index+']" value="'+image.name+'">'
+	html += '</label>';
 	html += '</div>';
 
 	++Images.runningNumber;

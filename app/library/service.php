@@ -2,6 +2,8 @@
 
 namespace App\library;
 
+use App\library\token;
+
 class Service
 {
   public function ipAddress() {
@@ -21,6 +23,11 @@ class Service
     else
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
+  }
+
+  public function generateFileName($file) {
+    $name = time().'_'.Token::generateNumber(15).'_'.$file->getSize();
+    return $name.'.'.$file->getClientOriginalExtension(); 
   }
 
 }
