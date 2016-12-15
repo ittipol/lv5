@@ -96,9 +96,9 @@ class Image extends Model
     foreach ($images as $image) {
       $filename = $image['attributes']['name'];
 
-      if(!in_array($filename, $filenames)) {
-        continue;
-      }
+      // if(!in_array($filename, $filenames)) {
+      //   continue;
+      // }
 
       $path = storage_path($tempFileModel->tempFileDir).$token.'/'.$filename;
 

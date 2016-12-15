@@ -167,8 +167,8 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address', 'ที่อยู่');
-          echo Form::textarea('address', null, array(
+          echo Form::label('address[address]', 'ที่อยู่');
+          echo Form::textarea('address[address]', null, array(
             'class' => 'ckeditor'
           ));
         ?>
@@ -187,10 +187,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('district_id', 'อำเภอ', array(
+          echo Form::label('address[district_id]', 'อำเภอ', array(
             'class' => 'required'
           ));
-          echo Form::select('district_id', $districts ,null, array(
+          echo Form::select('address[district_id]', $districts ,null, array(
             'id' => 'district'
           ));
         ?>
@@ -198,10 +198,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('sub_district_id', 'ตำบล', array(
+          echo Form::label('address[sub_district_id]', 'ตำบล', array(
             'class' => 'required'
           ));
-          echo Form::select('sub_district_id', array('0' => '-') , null, array(
+          echo Form::select('address[sub_district_id]', array('0' => '-') , null, array(
             'id' => 'sub_district'
           ));
         ?>
@@ -277,8 +277,8 @@
   });
 </script>
 
-<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places&callback=initAutocomplete"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"
      async defer></script>
+<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 
 @stop

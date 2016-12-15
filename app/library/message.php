@@ -42,4 +42,9 @@ class Message
     Session::flash('message.type', 'error');
   }
 
+  public function error($text = '') {
+    Session::flash('message.title', 'เกิดข้อผิดพลาด!!! '.$text);
+    Session::flash('message.type', 'error'); 
+  }
+
 }
