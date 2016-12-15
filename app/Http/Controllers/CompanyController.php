@@ -209,6 +209,21 @@ class CompanyController extends Controller
       );
     }
 
+    $company->includeRelatedData(array(
+      'Address' => array(
+        'fields' => array('address','district_id','sub_district_id','lat','lng')
+      ),
+      'Tag' => array(
+        'fields' => array('name'),
+        'options' => array(
+          'related' => 'Tagging.tag'
+        )
+      ),
+      'Image' => array(
+        'fields' => array('name')
+      )
+    ));
+
     // form token
     $formToken = Token::generateFormToken('Company','edit',Session::get('Person.id'));
 

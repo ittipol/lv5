@@ -26,27 +26,102 @@ class Model extends _Model
 
   public function includeRelatedData($models = array()) {
 
-    foreach ($models as $model) {
-
-      $class = 'App\Models\\'.$model;
-
-      $modelData = $class::where([
-        ['model','=',$this->modelName],
-        ['model_id','=',$this->id]
-      ])->get();
+    $data = $this->extract($models);
     
-      $temp = array();
-      foreach ($modelData as $key => $value) {
-        $temp[] = $value->getAttributes();
+    foreach ($data as $model => $value) {
+      $this->attributes[$model] = $value;
+    }
+
+  }
+
+  public function extract($data,$class = null) {
+
+    $__data = array();
+
+    foreach ($data as $model => $value) {
+
+      if($model == 'options') {
+        continue;
       }
 
-      if(count($temp) == 1){
-        $this[$model] = $temp[0];
-      }else{
-        $this[$model] = $temp;
+      $_class = 'App\Models\\'.$model;
+
+      if(class_exists($_class) && is_array($value)){
+
+        $_class = new $_class;
+        // extract
+        $_data = $this->extract($value,$_class);
+        // save
+        $__data[$_class->modelName] = $_data[$_class->modelName];
+
+      }
+
+      if($model == 'fields') {
+
+        $options = array();
+
+        if(!empty($data['options'])){
+          $options = $data['options'];
+        }
+
+        // get data
+        return $this->getData($value,$class,$options);
+
       }
 
     }
+
+    return $__data;
+    
+  }
+
+  public function getData($fields,$class,$options = array()) {
+
+    $data = array();
+
+    if(!empty($options['related'])){
+      $parts = explode('.', $options['related']);
+
+      if(!empty($parts[1])){
+        $relatedClass = $parts[0];
+        $relation = $parts[1];
+      }else{
+        return false;
+      }
+
+      $relatedClass = 'App\Models\\'.$relatedClass;
+      $relatedClass = new $relatedClass;
+      $records = $relatedClass->where([
+        ['model','=',$this->modelName],
+        ['model_id','=',$this->id]
+      ])->get();
+
+      foreach ($records as $key => $record) {
+        $record = $record->{$relation};
+        foreach ($fields as $field) {
+          if(isset($record['attributes'][$field])){
+            $data[$class->modelName][$key][$field] = $record['attributes'][$field];
+          }
+        }
+      }
+
+    }else{
+      $records = $class->where([
+        ['model','=',$this->modelName],
+        ['model_id','=',$this->id]
+      ])->get();
+
+      foreach ($records as $key => $record) {
+        foreach ($fields as $field) {
+          if(isset($record['attributes'][$field])){
+            $data[$class->modelName][$key][$field] = $record['attributes'][$field];
+          }
+        }
+      }
+
+    }
+    
+    return $data;
 
   }
 
