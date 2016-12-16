@@ -22,9 +22,9 @@ class StaticFileController extends Controller
       if(!empty($image)){
         // $class = 'App\Models\\'.$image->model;
         // $model = new $class;
-        // $path = storage_path($model->imageDirPath.$image->model_id.'/images/'.$image->name);
-        $imageDirPath = 'app/public/'.strtolower($image->model).'/';
-        $path = storage_path($imageDirPath.$image->model_id.'/images/'.$image->name);
+        // $path = storage_path($model->dirPath.$image->model_id.'/images/'.$image->name);
+        $dirPath = $image->storagePath.strtolower($image->model).'/';
+        $path = storage_path($dirPath.$image->model_id.'/images/'.$image->name);
       }
 
       if(!File::exists($path)){
@@ -51,7 +51,7 @@ class StaticFileController extends Controller
     public function avatar(){
 
       $user = new User;
-      $avatarPath = storage_path($user->imageDirPath.Auth::user()->id.'/avatar/avatar.jpg');
+      $avatarPath = storage_path($user->dirPath.Auth::user()->id.'/avatar/avatar.jpg');
 
       if(!File::exists($avatarPath)){
         $avatarPath = 'images/default-avatar.png';

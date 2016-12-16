@@ -18,37 +18,39 @@ class Tagging extends Model
     return $this->hasOne('App\Models\Tag','id','tag_id');
   }
 
-  public function checkRecordExist($model,$modelId,$tagId) {
+  public function checkRecordExist($model,$tagId) {
     return $this->where([
-      ['model','=',$model],
-      ['model_id','=',$modelId],
+      ['model','=',$model->modelName],
+      ['model_id','=',$model->id],
       ['tag_id','=',$tagId]
     ])->count() ? true : false;
   }
 
-  public function checkAndSave($model,$modelId,$tags) {
+  public function checkAndSave($model,$tags) {
     foreach ($tags as $tagId => $tag) {
-      if(!$this->checkRecordExist($model,$modelId,$tagId)) {
-        $this->_save($model,$modelId,$tagId);
+      if(!$this->checkRecordExist($model,$tagId)) {
+        $this->_save($model,$tagId);
       }
     }
   }
 
-  public function deleteAndSave($model,$modelId,$tags) {
-    // Delete first
+  public function clearAndSave($model,$tags) {
+    // clear old record
     $this->where([
-      ['model','=',$model],
-      ['model_id','=',$modelId],
+      ['model','=',$model->modelName],
+      ['model_id','=',$model->id],
     ])->delete();
+
+    // save
     foreach ($tags as $tagId => $tag) {
-      $this->_save($model,$modelId,$tagId);
+      $this->_save($model,$tagId);
     }
   }
 
-  private function _save($model,$modelId,$tagId) {
+  private function _save($model,$tagId) {
     $tagging = new Tagging;
-    $tagging->model = $model;
-    $tagging->model_id = $modelId;
+    $tagging->model = $model->modelName;
+    $tagging->model_id = $model->id;
     $tagging->tag_id = $tagId;
     $tagging->save();
   }

@@ -15,7 +15,8 @@ class Image extends Model
   protected $fillable = ['model','model_id','alias','name'];
   public $timestamps  = false;
   public $maxFileSize = 3145728; 
-  public $allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg']; 
+  public $allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg'];
+  public $noImagePath = '/images/no-img.png';
 
   public function __construct() {  
     parent::__construct();
@@ -27,8 +28,8 @@ class Image extends Model
   // }
 
   public function getImageUrl() {
-    $imageDirPath = 'app/public/'.strtolower($this->model).'/';
-    $path = storage_path($imageDirPath.$this->model_id.'/images/'.$this->name);
+    $dirPath = $this->storagePath.strtolower($this->model).'/';
+    $path = storage_path($dirPath.$this->model_id.'/images/'.$this->name);
 
     if(File::exists($path)){
       $path = '/safe_image/'.$this->name;
@@ -41,8 +42,8 @@ class Image extends Model
 
   public function base64Encode() {
 
-    $imageDirPath = 'image/'.strtolower($this->model).'/';
-    $path = storage_path($imageDirPath.$this->model_id.'/images/'.$this->name);
+    $dirPath = 'image/'.strtolower($this->model).'/';
+    $path = storage_path($dirPath.$this->model_id.'/images/'.$this->name);
 
     if(!File::exists($path)){
       $path = public_path('/images/no-img.png');
@@ -70,7 +71,7 @@ class Image extends Model
 
   //   if($this->checkMaxSize($image->getSize()) && $this->checkType($image->getMimeType())) {
 
-  //     $image->move(storage_path($model->imageDirPath).$this->attributes['model_id'].'/images', $filename);
+  //     $image->move(storage_path($model->dirPath).$this->attributes['model_id'].'/images', $filename);
 
   //     // use disk in filesystems.php
   //     // Storage::disk($model->disk)->put($this->attributes['model_id'].'/images'.'/'.$filename, file_get_contents($image->getRealPath()));
@@ -81,7 +82,7 @@ class Image extends Model
 
   // }
 
-  public function saveUploadImages($model,$token,$filenames,$personId) {
+  public function saveUploadImages($model,$token,$personId) {
     $tempFileModel = new TempFile;
 
     $imagesTemp = $tempFileModel->where([
@@ -106,7 +107,7 @@ class Image extends Model
         continue;
       }
 
-      $to = storage_path($model->imageDirPath).$model->id.'/images/'.$filename;
+      $to = storage_path($model->dirPath).$model->id.'/images/'.$filename;
 
       // move to real dir
       File::move($path, $to);
@@ -152,7 +153,7 @@ class Image extends Model
         ['name','=',$image['attributes']['name']]
       ])->delete();
 
-      File::Delete(storage_path($model->imageDirPath).$model->id.'/images/'.$image['attributes']['name']);
+      File::Delete(storage_path($model->dirPath).$model->id.'/images/'.$image['attributes']['name']);
     }
 
     // delete temp file records

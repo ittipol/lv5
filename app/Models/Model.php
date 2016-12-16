@@ -5,23 +5,107 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model as _Model;
 use App\Models\Image;
 use App\Models\Address;
+use App\Models\Tag;
+use App\Models\Tagging;
+use App\Models\DataRelation;
+use App\Models\Lookup;
 use Auth;
 use Session;
+use Schema;
 
 class Model extends _Model
 {
   public $modelName;
   public $alias;
   public $disk;
-  public $imageDirPath;
-  public $noImagePath = '/images/no-img.png';
+  public $storagePath = 'app/public/';
+  public $dirPath;
+  public $dirs = array();
+  // public $noImagePath = '/images/no-img.png';
+  public $createDir = false;
 
   public function __construct(array $attributes = []) { 
     parent::__construct($attributes);
     
     $this->modelName = class_basename(get_class($this));
     $this->alias = $this->disk = strtolower($this->modelName);
-    $this->imageDirPath = 'app/public/'.$this->disk.'/';
+    $this->dirPath = $this->storagePath.$this->disk.'/';
+  }
+
+  public static function boot() {
+
+    parent::boot();
+
+    // parent::saving(function($model){
+    // });
+
+    parent::saved(function($model){
+      if($model->createDir) {
+        $model->createImageFolder($model);
+      }
+    });
+  }
+
+  // public function save(array $options = []) {
+  //   // before save code 
+  //   parent::save();
+  //   // after save code
+  // }
+
+  public function createImageFolder($model) {
+    $path = storage_path($model->dirPath).'/'.$model->id;
+    if(!is_dir($path)){
+      mkdir($path,0777,true);
+    }
+
+    foreach ($this->dirs as $dir) {
+      $dirName = $path.'/'.$dir;
+      if(!is_dir($dirName)){
+        mkdir($dirName,0777,true);
+      }
+    }
+
+  }
+
+  public function saveRelatedData($input) {
+
+    if (!$this->exists) {
+      return false;
+    }
+
+    // $image = new Image;
+    // $image->saveUploadImages($this,$input['form_token'],Session::get('Person.id'));
+    // $image->deleteImages($this,$input['form_token'],Session::get('Person.id'));
+
+    // if(!empty($input['address'])) {
+    //   $address = new Address;
+    //   $address->fill($input['address']);
+    //   $address->model = $this->modelName;
+    //   $address->model_id = $this->id;
+    //   $address->save();
+    // }
+    
+    $tags = array();
+    if(!empty($input['tags'])){
+      $tag = new Tag;
+      $tags = $tag->saveTags($input['tags']);
+    }
+
+    if(!empty($tags)){
+      $tagging = new Tagging;
+      $tagging->clearAndSave($this,$tags);
+    }
+
+    // $dataRelation = new DataRelation;
+    // $dataRelation->checkAndSave();
+
+    // Add to Lookup table
+    $lookup = new Lookup;
+    $lookup->saveSpecial($this);
+
+
+
+dd('sdss');
   }
 
   public function includeRelatedData($models = array()) {
@@ -79,7 +163,7 @@ class Model extends _Model
 
     $data = array();
 
-    if(!empty($options['related'])){
+    if(!empty($class) && !empty($options['related'])){
       $parts = explode('.', $options['related']);
 
       if(!empty($parts[1])){
@@ -94,31 +178,25 @@ class Model extends _Model
       $records = $relatedClass->where([
         ['model','=',$this->modelName],
         ['model_id','=',$this->id]
-      ])->get();
+      ])->get($fields);
 
       foreach ($records as $key => $record) {
-        $record = $record->{$relation};
-        foreach ($fields as $field) {
-          if(isset($record['attributes'][$field])){
-            $data[$class->modelName][$key][$field] = $record['attributes'][$field];
-          }
-        }
+        // $record = $record->{$relation};
+        $data[$class->modelName][$key] = $record->{$relation}->getAttributes();
       }
 
-    }else{
+    }elseif(!empty($class) && Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')){
       $records = $class->where([
         ['model','=',$this->modelName],
         ['model_id','=',$this->id]
-      ])->get();
+      ])->get($fields);
 
       foreach ($records as $key => $record) {
-        foreach ($fields as $field) {
-          if(isset($record['attributes'][$field])){
-            $data[$class->modelName][$key][$field] = $record['attributes'][$field];
-          }
-        }
+        $data[$class->modelName][$key] = $record->getAttributes();
       }
 
+    }else{
+      dd($this->getTable());
     }
     
     return $data;
