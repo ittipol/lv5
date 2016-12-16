@@ -100,49 +100,41 @@ class CompanyController extends Controller
 
     // save
     if($company->save()){
-      // create folder
-      $company->createImageFolder();
 
-      // Add person to company
-      $personHasCompany = new PersonHasCompany;
-      $personHasCompany->person_id = Session::get('Person.id');
-      $personHasCompany->company_id = $company->id;
-      $role = new Role;
-      $personHasCompany->role_id = $role->getIdByalias('admin');  
-      $personHasCompany->save();
-
-      // save company image
-      if(!empty($request->get('filenames'))){
-        $image = new Image;
-        $image->saveUploadImages($company,$request->get('form_token'),$request->get('filenames'),Session::get('Person.id'));
-      }
+      $company->saveRelatedData($request->all());
+dd('xxx');
+      // // save company image
+      // if(!empty($request->get('filenames'))){
+      //   $image = new Image;
+      //   $image->saveUploadImages($company,$request->get('form_token'),$request->get('filenames'),Session::get('Person.id'));
+      // }
 
       // save address
-      $address = new Address;
-      $address->fill($request->get('address'));
-      $address->model = $company->modelName;
-      $address->model_id = $company->id;
-      $address->save();
+      // $address = new Address;
+      // $address->fill($request->get('address'));
+      // $address->model = $company->modelName;
+      // $address->model_id = $company->id;
+      // $address->save();
 
-      $tags = array();
-      if(!empty($request->get('tags'))){
-        $tag = new Tag;
-        $tags = $tag->saveTags($request->get('tags'));
-      }
+      // $tags = array();
+      // if(!empty($request->get('tags'))){
+      //   $tag = new Tag;
+      //   $tags = $tag->saveTags($request->get('tags'));
+      // }
 
       // business type
-      $businessType = new BusinessType;
-      $businessType = $businessType->checkAndSave($request->input('business_type'));
+      // $businessType = new BusinessType;
+      // $businessType = $businessType->checkAndSave($request->input('business_type'));
 
       // Company has business type
-      $companyHasBusinessType = new CompanyHasBusinessType;
-      $companyHasBusinessType->checkAndSave($company->id,$businessType->id);
+      // $companyHasBusinessType = new CompanyHasBusinessType;
+      // $companyHasBusinessType->checkAndSave($company->id,$businessType->id);
       
-      $tagging = new Tagging;
+      // $tagging = new Tagging;
       // Company Tagging
-      $tagging->deleteAndSave($company->modelName,$company->id,$tags);
+      // $tagging->deleteAndSave($company->modelName,$company->id,$tags);
       // Bussiness type Tagging
-      $tagging->checkAndSave($businessType->modelName,$businessType->id,$tags);
+      // $tagging->checkAndSave($businessType,$tags);
 
       $options = array(
         'data' => $company->getAttributes(),
@@ -192,9 +184,9 @@ class CompanyController extends Controller
     $address = $company->address();
 
     $geographic = array();
-    if(!empty($address['attributes']['lat']) && !empty($address['attributes'])) {
-      $geographic['lat'] = $address['attributes']['lat'];
-      $geographic['lng'] = $address['attributes']['lng'];
+    if(!empty($address->lat) && !empty($address->lng)) {
+      $geographic['lat'] = $address->lat;
+      $geographic['lng'] = $address->lng;
     }
 
     // Get Images
@@ -204,7 +196,7 @@ class CompanyController extends Controller
     if($images){
       foreach ($images as $image) {
         $_images[] = array(
-          'name' => $image['attributes']['name'],
+          'name' => $image->name,
           'url' => $image->getImageUrl()
         );
       }

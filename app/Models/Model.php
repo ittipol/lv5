@@ -98,14 +98,12 @@ class Model extends _Model
 
     // $dataRelation = new DataRelation;
     // $dataRelation->checkAndSave();
-
+dd('sdss');
     // Add to Lookup table
     $lookup = new Lookup;
     $lookup->saveSpecial($this);
 
 
-
-dd('sdss');
   }
 
   public function includeRelatedData($models = array()) {
@@ -163,7 +161,11 @@ dd('sdss');
 
     $data = array();
 
-    if(!empty($class) && !empty($options['related'])){
+    if(empty($class)){
+      return false;
+    }
+
+    if(!empty($options['related'])) {
       $parts = explode('.', $options['related']);
 
       if(!empty($parts[1])){
@@ -185,7 +187,7 @@ dd('sdss');
         $data[$class->modelName][$key] = $record->{$relation}->getAttributes();
       }
 
-    }elseif(!empty($class) && Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')){
+    }elseif(Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')){
       $records = $class->where([
         ['model','=',$this->modelName],
         ['model_id','=',$this->id]
@@ -195,10 +197,66 @@ dd('sdss');
         $data[$class->modelName][$key] = $record->getAttributes();
       }
 
-    }else{
-      dd($this->getTable());
+    }elseif(!empty($options['lookup'])) {
+
+      $formats = explode(':', $options['lookup']);
+
+      $records = array();
+      foreach ($formats as $format) {
+
+        $temp = array();
+
+        if(empty($records)){
+          $records = $class->getAttributes();
+        }
+
+        $_parts = explode('.', $format);
+
+        $_class = 'App\Models\\'.$_parts[0];
+        $_class = new $_class;
+
+        if(array_key_exists($_parts[2],$records)) {
+
+          $_records = $_class->where($_parts[1],'=',$records[$_parts[2]])->get();
+
+          foreach ($_records as $key => $_record) {
+            $temp[] = $_record->getAttributes();
+          }
+
+          $records = $temp;
+
+        }else{
+
+
+          foreach ($records as $key => $record) {
+
+            if(empty($record[$_parts[2]])) {
+              continue;
+            }
+
+            $_records = $_class->where($_parts[1],'=',$record[$_parts[2]])->get();
+
+            foreach ($_records as $key => $_record) {
+              $temp[] = $_record->getAttributes();
+            }
+            
+          }
+
+          $records = $temp;
+
+        }
+
+      }
+
+      $fields = explode('.', $fields);
+
+      $data = array();
+      foreach ($records as $key => $record) {
+        $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
+      }
+
     }
-    
+
     return $data;
 
   }

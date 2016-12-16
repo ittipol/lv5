@@ -12,8 +12,8 @@ class Department extends Model
 
   public $lookupFormat = array(
     'keyword' => '{{name}}',
-    'keyword_1' => '{{_companyName}}',
-    'keyword_2' => '{{_businessType}}',
+    'keyword_1' => '{{_companyName|Company:name}}',
+    'keyword_2' => '{{_businessType|Company:business_type}',
     'description' => '{{description}}',
   );
 
@@ -21,18 +21,4 @@ class Department extends Model
     parent::__construct();
   }
 
-  public function createImageFolder() {
-
-    $coverFolder = storage_path($this->imageDirPath).'/'.$this->attributes['id'].'/cover';
-    $imageFolder = storage_path($this->imageDirPath).'/'.$this->attributes['id'].'/images';
-
-    if(!is_dir($coverFolder)){
-      mkdir($coverFolder,0777,true);
-    }
-
-    if(!is_dir($imageFolder)){
-      mkdir($imageFolder,0777,true);
-    }
-    
-  }
 }
