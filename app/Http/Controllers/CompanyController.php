@@ -88,7 +88,6 @@ class CompanyController extends Controller
 
     $company = new Company;
     $company->fill($request->all());
-    $company->pageToken = $this->pageToken;
 
     // save
     if($company->save()){

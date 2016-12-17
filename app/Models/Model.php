@@ -77,6 +77,12 @@ class Model extends _Model
       }
 
       $this->relatedData[$allowed] = $attributes[$allowed];
+
+      unset($attributes[$allowed]);
+    }
+
+    if(!empty($attributes['__token'])) {
+      $this->pageToken = $attributes['__token'];
     }
 
     return parent::fill($attributes);
@@ -84,9 +90,9 @@ class Model extends _Model
   }
 
   // public function save(array $options = []) {
-  //   // before save code 
+  //   // before save 
   //   parent::save();
-  //   // after save code
+  //   // after save
   // }
 
   public function createDir($model = null) {
