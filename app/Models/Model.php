@@ -7,8 +7,10 @@ use App\Models\Image;
 use App\Models\Address;
 use App\Models\Tag;
 use App\Models\Tagging;
-use App\Models\DataRelation;
+use App\Models\WordingRelation;
 use App\Models\Lookup;
+use App\library\token;
+use App\library\service;
 use Auth;
 use Session;
 use Schema;
@@ -20,29 +22,37 @@ class Model extends _Model
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
-  public $dirs = array();
-  // public $noImagePath = '/images/no-img.png';
+  public $dirNames;
   public $createDir = false;
+  public $createLookup = false;
+  public $imageManaging = false;
 
   public function __construct(array $attributes = []) { 
+
     parent::__construct($attributes);
     
     $this->modelName = class_basename(get_class($this));
     $this->alias = $this->disk = strtolower($this->modelName);
     $this->dirPath = $this->storagePath.$this->disk.'/';
+
   }
 
   public static function boot() {
 
     parent::boot();
 
-    // parent::saving(function($model){
-    // });
+    parent::saving(function($model){
+
+      if(!$model->exists){ // new record
+        if(Schema::hasColumn($model->getTable(), 'ip_address')) {
+          $model->ip_address = Service::ipAddress();
+        }
+      }
+
+    });
 
     parent::saved(function($model){
-      if($model->createDir) {
-        $model->createImageFolder($model);
-      }
+      $company->createImageFolder($company);     
     });
   }
 
@@ -53,25 +63,36 @@ class Model extends _Model
   // }
 
   public function createImageFolder($model) {
+
+    if(!$company->createDir) {
+      return false;
+    }
+
     $path = storage_path($model->dirPath).'/'.$model->id;
     if(!is_dir($path)){
       mkdir($path,0777,true);
     }
 
-    foreach ($this->dirs as $dir) {
-      $dirName = $path.'/'.$dir;
-      if(!is_dir($dirName)){
-        mkdir($dirName,0777,true);
+    if(!empty($this->dirNames)){
+      foreach ($this->dirNames as $dir) {
+        $dirName = $path.'/'.$dir;
+        if(!is_dir($dirName)){
+          mkdir($dirName,0777,true);
+        }
       }
     }
 
   }
 
-  public function saveRelatedData($input) {
+  public function saveRelatedModelData($input) {
 
     if (!$this->exists) {
       return false;
     }
+
+    $this->saveImages();
+    $this->saveAddress();
+    $this->saveTagging();
 
     // $image = new Image;
     // $image->saveUploadImages($this,$input['form_token'],Session::get('Person.id'));
@@ -96,13 +117,25 @@ class Model extends _Model
       $tagging->clearAndSave($this,$tags);
     }
 
-    // $dataRelation = new DataRelation;
-    // $dataRelation->checkAndSave();
+    // $wordingRelation = new WordingRelation;
+    // $wordingRelation->checkAndSave();
 dd('sdss');
     // Add to Lookup table
-    $lookup = new Lookup;
-    $lookup->saveSpecial($this);
+    // $lookup = new Lookup;
+    // $lookup->saveSpecial($this);
 
+
+  }
+
+  public function saveImages($value) {
+
+  }
+
+  public function saveAddress($value) {
+
+  }
+
+  public function saveTagging($value) {
 
   }
 
@@ -349,11 +382,25 @@ dd('sdss');
     return $tags;
   }
 
-  // public function deleteReletedData() {
-  //   $this->where([
-  //     ['model','=',$this->modelName],
-  //     ['model_id','=',$this->id],
-  //   ])->delete();
-  // }
+  public function checkHasFieldModelAndModelId() {
+    if(Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public function deleteByModelNameAndModelId($model,$modelId) {
+
+    if(!Schema::hasColumn($class->getTable(), 'model') || !Schema::hasColumn($class->getTable(), 'model_id')) {
+      return false;
+    }
+
+    $this->where([
+      ['model','=',$this->modelName],
+      ['model_id','=',$this->id],
+    ])->delete();
+
+  }
 
 }

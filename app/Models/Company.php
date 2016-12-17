@@ -6,7 +6,6 @@ use App\Models\Model;
 use App\Models\PersonHasCompany;
 use App\Models\BusinessType;
 use App\Models\Role;
-use App\Models\DataRelation;
 use Session;
 
 class Company extends Model
@@ -21,7 +20,7 @@ class Company extends Model
     'description' => '{{description}}',
   );
   public $createDir = true;
-  public $dirs = array('cover','images');
+  public $dirNames = array('cover','images');
 
   public function __construct() {  
     parent::__construct();
@@ -32,7 +31,7 @@ class Company extends Model
     parent::boot();
 
     Company::saved(function($company){
-      
+dd($company);
       // Add person to company
       $personHasCompany = new PersonHasCompany;
 

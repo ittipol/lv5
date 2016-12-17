@@ -6,7 +6,7 @@ use App\library\token;
 
 class Service
 {
-  public function ipAddress() {
+  public static function ipAddress() {
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))
         $ipaddress = getenv('HTTP_CLIENT_IP');
@@ -25,7 +25,7 @@ class Service
     return $ipaddress;
   }
 
-  public function generateFileName($file) {
+  public static function generateFileName($file) {
     $name = time().'_'.Token::generateNumber(15).'_'.$file->getSize();
     return $name.'.'.$file->getClientOriginalExtension(); 
   }

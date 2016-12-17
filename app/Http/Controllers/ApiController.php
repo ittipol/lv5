@@ -35,14 +35,13 @@ class ApiController extends Controller
     $success = false;
     $fileName = '';
 
-    $service = new Service;
     $imageModel = new Image;
 
     $image = Input::file('file');
 
     if($imageModel->checkMaxSize($image->getSize()) && $imageModel->checkType($image->getMimeType())) {
       $tempFile = new TempFile;
-      $tempFile->name = $service->generateFileName($image);
+      $tempFile->name = Service::generateFileName($image);
       $tempFile->type = 'image';
       $tempFile->token = Input::get('formToken');
       $tempFile->status = 'add'; 

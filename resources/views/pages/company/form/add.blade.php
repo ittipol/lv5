@@ -30,7 +30,7 @@
     echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
   ?>
 
-  <input type="hidden" name="form_token" value="<?php echo $formToken; ?>" >
+  <input type="hidden" name="__token" value="<?php echo $__token; ?>" >
 
   <div class="form-section">
 
@@ -274,6 +274,7 @@
     District.load();
     Map.load();
     Tag.load();
+    Form.load();
   });
 </script>
 

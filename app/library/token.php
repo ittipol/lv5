@@ -3,6 +3,8 @@
 namespace App\library;
 
 use Session;
+use Route;
+use Request;
 
 class Token
 {
@@ -34,7 +36,7 @@ class Token
     return $token;
   }
 
-  public static function generateFormToken($controller,$action,$personId) {
-    return hash('sha256',$controller.$action.$personId);
+  public static function generateFormToken($personId) {
+    return hash('sha256',Route::getCurrentRoute()->getPath().$personId);
   } 
 }

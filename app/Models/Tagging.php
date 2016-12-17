@@ -36,10 +36,7 @@ class Tagging extends Model
 
   public function clearAndSave($model,$tags) {
     // clear old record
-    $this->where([
-      ['model','=',$model->modelName],
-      ['model_id','=',$model->id],
-    ])->delete();
+    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
 
     // save
     foreach ($tags as $tagId => $tag) {

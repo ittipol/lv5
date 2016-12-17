@@ -11,11 +11,11 @@ class Lookup extends Model
   protected $fillable = ['model','model_id','keyword','description','keyword_1','keyword_2','keyword_3','keyword_4'];
   public $timestamps  = false;
 
-  public function parser($model,$data = array()) {
+  private function parser($model,$data = array()) {
 
-    if(empty($model->lookupFormat)) {
-      return false;
-    }
+    // if(empty($model->lookupFormat)) {
+    //   return false;
+    // }
 
     $formats = $model->lookupFormat;
 
@@ -82,6 +82,10 @@ class Lookup extends Model
   }
 
   public function saveSpecial($model,$options = array()) {
+
+    if(empty($model->lookupFormat)) {
+      return false;
+    }
 
     $data = $model->getAttributes();
 

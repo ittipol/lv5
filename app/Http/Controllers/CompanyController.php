@@ -20,7 +20,6 @@ use App\Models\TempFile;
 use App\library\message;
 use App\library\string;
 use App\library\service;
-use App\library\token;
 use Auth;
 use Redirect;
 use Session;
@@ -73,16 +72,12 @@ class CompanyController extends Controller
       $districts[$district->id] = $district->name;
     }
 
-    // form token
-    $formToken = Token::generateFormToken('Company','add',Session::get('Person.id'));
-
     // clear temp dir and records
     $tempFile = new TempFile;
-    $tempFile->deleteRecords($formToken,'image','add',Session::get('Person.id'));
-    $tempFile->deleteTempDir($formToken);
+    $tempFile->deleteRecordByToken($this->pageToken,'add',Session::get('Person.id'));
+    $tempFile->deleteTempDir($this->pageToken);
 
     $this->data = array(
-      'formToken' => $formToken,
       'districts' => $districts,
     );
 
@@ -91,17 +86,20 @@ class CompanyController extends Controller
 
   public function add(CompanyRequest $request) {
 
+    if(empty($request->get('__token')) || ($request->get('__token') != $this->pageToken)) {
+      exit;
+    }
+
     $company = new Company;
     $company->fill($request->all());
 
     $service = new Service;
-    $company->ip_address = $service->ipAddress();
     $company->created_by = Auth::user()->id;
 
     // save
     if($company->save()){
 
-      $company->saveRelatedData($request->all());
+      $company->saveRelatedModelData($request->all());
 dd('xxx');
       // // save company image
       // if(!empty($request->get('filenames'))){

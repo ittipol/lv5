@@ -14,4 +14,17 @@ class Address extends Model
     parent::__construct();
   }
 
+  public function clearAndSave() {
+    // clear old record
+    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
+  }
+
+  // private function _save($model,$tagId) {
+  //   $tagging = new Tagging;
+  //   $tagging->model = $model->modelName;
+  //   $tagging->model_id = $model->id;
+  //   $tagging->tag_id = $tagId;
+  //   $tagging->save();
+  // }
+
 }
