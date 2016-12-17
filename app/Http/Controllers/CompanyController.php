@@ -38,9 +38,7 @@ class CompanyController extends Controller
 
     $companies = array();
     foreach ($personHasCompany as $value) {
-
       $company = $value->company;
-      $image = $company->imageUrl();
 
       $companies[] = array(
         'id' => $company->id,
@@ -48,9 +46,7 @@ class CompanyController extends Controller
         'description' => $string->subString($company->description,120),
         'business_type' => $company->business_type,
         'total_department' => $company->companyHasDepartments->count(),
-        // 'image' => !empty($image) ? $image : '/images/no-img.png',
-        'image' => $image,
-        // 'totalImage' => $image->count()
+        'image' => $company->getRalatedDataByModelName('Image',true)->getImageUrl(),
       );
     }
 
@@ -92,15 +88,13 @@ class CompanyController extends Controller
 
     $company = new Company;
     $company->fill($request->all());
-
-    $service = new Service;
-    $company->created_by = Auth::user()->id;
+    $company->pageToken = $this->pageToken;
 
     // save
     if($company->save()){
 
-      $company->saveRelatedModelData($request->all());
-dd('xxx');
+      // $company->saveRelatedModelData();
+
       // // save company image
       // if(!empty($request->get('filenames'))){
       //   $image = new Image;
@@ -134,14 +128,14 @@ dd('xxx');
       // Bussiness type Tagging
       // $tagging->checkAndSave($businessType,$tags);
 
-      $options = array(
-        'data' => $company->getAttributes(),
-        'tags' => $tags
-      );
+      // $options = array(
+      //   'data' => $company->getAttributes(),
+      //   'tags' => $tags
+      // );
 
-      // Add to Lookup table
-      $lookup = new Lookup;
-      $lookup->saveSpecial($company,$options);
+      // // Add to Lookup table
+      // $lookup = new Lookup;
+      // $lookup->saveSpecial($company,$options);
 
       // wiki
       if(!empty($request->input('wiki'))){

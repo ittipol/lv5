@@ -82,9 +82,15 @@ class Image extends Model
 
   // }
 
-  public function saveUploadImages($model,$token,$personId) {
-    $tempFileModel = new TempFile;
+  public function saveUploadImages($model,$personId) {
 
+    if(empty($model->pageToken)) {
+      return false;
+    }
+
+    $token = $model->pageToken;
+
+    $tempFileModel = new TempFile;
     $imagesTemp = $tempFileModel->where([
       ['type','=','image'],
       ['token','=',$token],
@@ -95,11 +101,8 @@ class Image extends Model
     $images = $imagesTemp->get();
 
     foreach ($images as $image) {
-      $filename = $image['attributes']['name'];
 
-      // if(!in_array($filename, $filenames)) {
-      //   continue;
-      // }
+      $filename = $image['attributes']['name'];
 
       $path = storage_path($tempFileModel->tempFileDir).$token.'/'.$filename;
 
@@ -132,10 +135,15 @@ class Image extends Model
 
   }
 
-  public function deleteImages($model,$token,$personId) {
+  public function deleteImages($model,$personId) {
+
+    if(empty($model->pageToken)) {
+      return false;
+    }
+
+    $token = $model->pageToken;
 
     $tempFileModel = new TempFile;
-
     $imagesTemp = $tempFileModel->where([
       ['type','=','image'],
       ['token','=',$token],

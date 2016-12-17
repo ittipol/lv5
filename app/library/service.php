@@ -6,6 +6,17 @@ use App\library\token;
 
 class Service
 {
+
+  public static function loadModel($modelName) {
+    $class = 'App\Models\\'.$modelName;
+
+    if(!class_exists($class)) {
+      return false;
+    }
+
+    return new $class;
+  }
+
   public static function ipAddress() {
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))

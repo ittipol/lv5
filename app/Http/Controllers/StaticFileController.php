@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\User;
 use App\Models\Image;
+use App\library\service;
 use Auth;
 use Response;
 use File;
@@ -13,22 +14,21 @@ use Storage;
 
 class StaticFileController extends Controller
 {
-    private $noImage = 'images/no-img.png';
+    // private $noImage = 'images/no-img.png';
 
     public function serveImages($file){
       $image = Image::where('name','=',$file)->first();
 
       $path = null;
       if(!empty($image)){
-        // $class = 'App\Models\\'.$image->model;
-        // $model = new $class;
-        // $path = storage_path($model->dirPath.$image->model_id.'/images/'.$image->name);
-        $dirPath = $image->storagePath.strtolower($image->model).'/';
-        $path = storage_path($dirPath.$image->model_id.'/images/'.$image->name);
+        $model = Service::loadModel($image->model);
+        $path = storage_path($model->dirPath.$image->model_id.'/images/'.$image->name);
+        // $dirPath = $image->storagePath.strtolower($image->model).'/';
+        // $path = storage_path($dirPath.$image->model_id.'/images/'.$image->name);
       }
 
       if(!File::exists($path)){
-        $path = $this->noImage;
+        $path = $image->noImagePath;
       }
 
       return response()->download($path, null, [], null);

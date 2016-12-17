@@ -4,7 +4,7 @@ var Tag = {
 	padding: 22,
 	runningNumber: 0,
 	placeholder: 'แท๊ก',
-	dataName: 'tags'
+	dataName: 'Tag'
 }
 
 Tag.load = function(tagJson){

@@ -31,7 +31,7 @@ class Company extends Model
     parent::boot();
 
     Company::saved(function($company){
-dd($company);
+
       // Add person to company
       $personHasCompany = new PersonHasCompany;
 

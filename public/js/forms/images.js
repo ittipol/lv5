@@ -43,7 +43,7 @@ Images.preview = function(input){
 
 		var parent = $(input).parent();
 		var CSRF_TOKEN = $('input[name="_token"]').val();    
-		var formToken = $('input[name="form_token"]').val();
+		var formToken = $('input[name="__token"]').val();
 		var proceed = true;
 
 		if(!window.File && window.FileReader && window.FileList && window.Blob){ //if browser doesn't supports File API
@@ -178,7 +178,7 @@ Images.removePreview = function(input){
 
 		var data = {
 			'_token': $('input[name="_token"]').val(),
-			'formToken': $('input[name="form_token"]').val(),
+			'formToken': $('input[name="__token"]').val(),
 			'filename': parent.find('input[type="hidden"]').val(),
 			'type': 'image'
 		};

@@ -19,13 +19,15 @@ class Model extends _Model
 {
   public $modelName;
   public $alias;
+  public $pageToken;
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
   public $dirNames;
+  public $relatedData;
+  public $allowedModelData = array('Address','Tag');
   public $createDir = false;
   public $createLookup = false;
-  public $imageManaging = false;
 
   public function __construct(array $attributes = []) { 
 
@@ -41,19 +43,44 @@ class Model extends _Model
 
     parent::boot();
 
+    // before saving
     parent::saving(function($model){
 
       if(!$model->exists){ // new record
+
         if(Schema::hasColumn($model->getTable(), 'ip_address')) {
           $model->ip_address = Service::ipAddress();
         }
+
+        if(Schema::hasColumn($model->getTable(), 'created_by')) {
+          $model->created_by = Session::get('Person.id');
+        }
+
       }
 
     });
 
+    // after saving
     parent::saved(function($model){
-      $company->createImageFolder($company);     
+      $model->createDir();  
+      $model->saveRelatedData();   
     });
+
+  }
+
+  public function fill(array $attributes) {
+
+    foreach ($this->allowedModelData as $allowed) {
+
+      if(empty($attributes[$allowed])) {
+        continue;
+      }
+
+      $this->relatedData[$allowed] = $attributes[$allowed];
+    }
+
+    return parent::fill($attributes);
+
   }
 
   // public function save(array $options = []) {
@@ -62,9 +89,13 @@ class Model extends _Model
   //   // after save code
   // }
 
-  public function createImageFolder($model) {
+  public function createDir($model = null) {
 
-    if(!$company->createDir) {
+    if(empty($model)) {
+      $model = $this;
+    }
+
+    if(!$model->createDir) {
       return false;
     }
 
@@ -73,8 +104,8 @@ class Model extends _Model
       mkdir($path,0777,true);
     }
 
-    if(!empty($this->dirNames)){
-      foreach ($this->dirNames as $dir) {
+    if(!empty($model->dirNames)){
+      foreach ($model->dirNames as $dir) {
         $dirName = $path.'/'.$dir;
         if(!is_dir($dirName)){
           mkdir($dirName,0777,true);
@@ -84,28 +115,72 @@ class Model extends _Model
 
   }
 
-  public function saveRelatedModelData($input) {
+  public function saveRelatedData() {
 
-    if (!$this->exists) {
+    if (!$this->exists || empty($this->pageToken)) {
       return false;
     }
 
     $this->saveImages();
-    $this->saveAddress();
-    $this->saveTagging();
+return true;
+    foreach ($this->allowedModelData as $allowed) {
 
-    // $image = new Image;
-    // $image->saveUploadImages($this,$input['form_token'],Session::get('Person.id'));
-    // $image->deleteImages($this,$input['form_token'],Session::get('Person.id'));
+      if(empty($this->relatedData[$allowed])) {
+        continue;
+      }
 
-    // if(!empty($input['address'])) {
-    //   $address = new Address;
-    //   $address->fill($input['address']);
-    //   $address->model = $this->modelName;
-    //   $address->model_id = $this->id;
-    //   $address->save();
-    // }
+      $this->__save($allowed,$this->relatedData[$allowed]);
+    }
+
     
+    // $this->saveAddress($input['address']);
+    // $this->saveTagging($input['tags']);
+
+
+    // $wordingRelation = new WordingRelation;
+    // $wordingRelation->checkAndSave();
+
+    // Add to Lookup table
+    // $lookup = new Lookup;
+    // $lookup->saveSpecial($this);
+
+// dd('end');
+  }
+
+  private function _save($model,$value) {
+
+    $class = Service::loadModel($model);
+
+    if(!method_exists($class,'__save')) {
+      return false;
+    }
+
+    return $class->__save($value);
+    
+  }
+
+  public function saveImages() {
+    $image = new Image;
+    $image->saveUploadImages($this,Session::get('Person.id'));
+    $image->deleteImages($this,Session::get('Person.id'));
+  }
+
+  public function saveAddress($value) {
+
+    if(empty($value)) {
+      return false;
+    }
+
+    $address = new Address;
+    $address->clearAndSave($value);
+  }
+
+  public function saveTagging($value) {
+
+    if(empty($value)) {
+      return false;
+    }
+
     $tags = array();
     if(!empty($input['tags'])){
       $tag = new Tag;
@@ -116,26 +191,6 @@ class Model extends _Model
       $tagging = new Tagging;
       $tagging->clearAndSave($this,$tags);
     }
-
-    // $wordingRelation = new WordingRelation;
-    // $wordingRelation->checkAndSave();
-dd('sdss');
-    // Add to Lookup table
-    // $lookup = new Lookup;
-    // $lookup->saveSpecial($this);
-
-
-  }
-
-  public function saveImages($value) {
-
-  }
-
-  public function saveAddress($value) {
-
-  }
-
-  public function saveTagging($value) {
 
   }
 
@@ -159,11 +214,12 @@ dd('sdss');
         continue;
       }
 
-      $_class = 'App\Models\\'.$model;
+      // $_class = 'App\Models\\'.$model;
+      $_class = Service::loadModel($model);
 
-      if(class_exists($_class) && is_array($value)){
+      if(!empty($_class) && is_array($value)){
 
-        $_class = new $_class;
+        // $_class = new $_class;
         // extract
         $_data = $this->extract($value,$_class);
         // save
@@ -208,15 +264,13 @@ dd('sdss');
         return false;
       }
 
-      $relatedClass = 'App\Models\\'.$relatedClass;
-      $relatedClass = new $relatedClass;
+      $relatedClass = Service::loadModel($relatedClass);
       $records = $relatedClass->where([
         ['model','=',$this->modelName],
         ['model_id','=',$this->id]
       ])->get($fields);
 
       foreach ($records as $key => $record) {
-        // $record = $record->{$relation};
         $data[$class->modelName][$key] = $record->{$relation}->getAttributes();
       }
 
@@ -245,8 +299,7 @@ dd('sdss');
 
         $_parts = explode('.', $format);
 
-        $_class = 'App\Models\\'.$_parts[0];
-        $_class = new $_class;
+        $_class = Service::loadModel($_parts[0]);
 
         if(array_key_exists($_parts[2],$records)) {
 
@@ -294,111 +347,110 @@ dd('sdss');
 
   }
 
-  public function address() {
-    if(!empty($this->id)){
-      return Address::where([
-        ['model','=',$this->modelName],
-        ['model_id','=',$this->id]
-      ])->first();
-    }
-    return false;
-  }
+  // public function address() {
+  //   if(!empty($this->id)){
+  //     return Address::where([
+  //       ['model','=',$this->modelName],
+  //       ['model_id','=',$this->id]
+  //     ])->first();
+  //   }
+  //   return false;
+  // }
 
-  public function image() {
-    if(!empty($this->id)){
-      $image = Image::where([
-        ['model','=',$this->modelName],
-        ['model_id','=',$this->id]
-      ])->first();
-      return !empty($image) ? $image : false;
-    }
-    return false;
-  }
+  // public function images($getAttributes = false) {
+  //   if(!empty($this->id)){
+  //     $images = Image::where([
+  //       ['model','=',$this->modelName],
+  //       ['model_id','=',$this->id]
+  //     ])->get();
 
-  public function imageUrl() {
-    $image = $this->image();
+  //     if(!empty($images->count())){
+  //       if($getAttributes){
+  //         $imagesData = array();
+  //         foreach ($images as $image) {
+  //           $imagesData[] = $image->getAttributes();
+  //         }
+  //         return $imagesData;
+  //       }else{
+  //         return $images;
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
 
-    $url = null;
-    if(!empty($image)){
-      $url = $image->getImageUrl();
-    }
- 
-    return !empty($url) ? $url : false;
-  }
+  // public function imagesUrl() {
+  //   $images = $this->images();
 
-  public function images($getAttributes = false) {
-    if(!empty($this->id)){
-      $images = Image::where([
-        ['model','=',$this->modelName],
-        ['model_id','=',$this->id]
-      ])->get();
+  //   $urls = array();
+  //   if(!empty($images)){
+  //     foreach ($images as $image) {
+  //       $urls[] = $image->getImageUrl();
+  //     }
+  //   }
 
-      if(!empty($images->count())){
-        if($getAttributes){
-          $imagesData = array();
-          foreach ($images as $image) {
-            $imagesData[] = $image->getAttributes();
-          }
-          return $imagesData;
-        }else{
-          return $images;
-        }
-      }
-    }
-    return false;
-  }
+  //   return !empty($urls) ? $urls : false;
+  // }
 
-  public function imagesUrl() {
-    $images = $this->images();
+  // public function tags($getAttributes = false) {
+  //   $taggings = Tagging::where([
+  //     ['model','=',$this->modelName],
+  //     ['model_id','=',$this->id]
+  //   ])->get();
 
-    $urls = array();
-    if(!empty($images)){
-      foreach ($images as $image) {
-        $urls[] = $image->getImageUrl();
-      }
-    }
+  //   $tags = array();
 
-    return !empty($urls) ? $urls : false;
-  }
+  //   if($getAttributes){
+  //     foreach ($taggings as $tagging) {
+  //       $tags[] = $tagging->tag->getAttributes();
+  //     }
+  //   }else{
+  //     foreach ($taggings as $tagging) {
+  //       $tags[] = $tagging->tag;
+  //     }
+  //   }
 
-  public function tags($getAttributes = false) {
-    $taggings = Tagging::where([
-      ['model','=',$this->modelName],
-      ['model_id','=',$this->id]
-    ])->get();
-
-    $tags = array();
-
-    if($getAttributes){
-      foreach ($taggings as $tagging) {
-        $tags[] = $tagging->tag->getAttributes();
-      }
-    }else{
-      foreach ($taggings as $tagging) {
-        $tags[] = $tagging->tag;
-      }
-    }
-
-    return $tags;
-  }
+  //   return $tags;
+  // }
 
   public function checkHasFieldModelAndModelId() {
-    if(Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')) {
+    if(Schema::hasColumn($this->getTable(), 'model') && Schema::hasColumn($this->getTable(), 'model_id')) {
       return true;
     }
 
     return false;
   }
 
-  public function deleteByModelNameAndModelId($model,$modelId) {
+  public function getRalatedDataByModelName($modelName,$onlyFirst = false) {
 
-    if(!Schema::hasColumn($class->getTable(), 'model') || !Schema::hasColumn($class->getTable(), 'model_id')) {
+    $class = Service::loadModel($modelName);
+
+    if(!$class->checkHasFieldModelAndModelId()) {
       return false;
     }
 
-    $this->where([
+    $model = $class->where([
       ['model','=',$this->modelName],
       ['model_id','=',$this->id],
+    ]);
+
+    if($onlyFirst){
+      return $model->first();
+    }
+
+    return $model->get();
+
+  }
+
+  public function deleteByModelNameAndModelId($model,$modelId) {
+
+    if(!$this->checkHasFieldModelAndModelId()) {
+      return false;
+    }
+
+    return $this->where([
+      ['model','=',$model],
+      ['model_id','=',$modelId],
     ])->delete();
 
   }

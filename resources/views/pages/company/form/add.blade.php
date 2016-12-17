@@ -167,8 +167,8 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address[address]', 'ที่อยู่');
-          echo Form::textarea('address[address]', null, array(
+          echo Form::label('Address[address]', 'ที่อยู่');
+          echo Form::textarea('Address[address]', null, array(
             'class' => 'ckeditor'
           ));
         ?>
@@ -187,10 +187,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address[district_id]', 'อำเภอ', array(
+          echo Form::label('Address[district_id]', 'อำเภอ', array(
             'class' => 'required'
           ));
-          echo Form::select('address[district_id]', $districts ,null, array(
+          echo Form::select('Address[district_id]', $districts ,null, array(
             'id' => 'district'
           ));
         ?>
@@ -198,10 +198,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address[sub_district_id]', 'ตำบล', array(
+          echo Form::label('Address[sub_district_id]', 'ตำบล', array(
             'class' => 'required'
           ));
-          echo Form::select('address[sub_district_id]', array('0' => '-') , null, array(
+          echo Form::select('Address[sub_district_id]', array('0' => '-') , null, array(
             'id' => 'sub_district'
           ));
         ?>

@@ -9,7 +9,7 @@ class BusinessType extends Model
   public $table = 'business_types';
   protected $fillable = ['name','description'];
   public $timestamps  = false;
-  public $wordingRelation = array('Tag') 
+  // public $wordingRelation = array('Tag');
 
   public function __construct() {  
     parent::__construct();

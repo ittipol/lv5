@@ -290,14 +290,15 @@ Map.createHiddenData = function() {
 
   var lat = document.createElement('input');
   lat.setAttribute('type','hidden');
-  lat.setAttribute('name','address[lat]');
+  lat.setAttribute('name','Address[lat]');
   lat.setAttribute('id','lat');
 
   var lng = document.createElement('input');
   lng.setAttribute('type','hidden');
-  lng.setAttribute('name','address[lng]');
+  lng.setAttribute('name','Address[lng]');
   lng.setAttribute('id','lng');
 
   $('form').append(lat);
   $('form').append(lng);
+  
 }
