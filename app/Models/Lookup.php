@@ -13,10 +13,6 @@ class Lookup extends Model
 
   private function parser($model,$data = array()) {
 
-    // if(empty($model->lookupFormat)) {
-    //   return false;
-    // }
-
     $formats = $model->lookupFormat;
 
     $parseFormat = '/{{[\w\d|:.]+}}/';

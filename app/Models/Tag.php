@@ -14,27 +14,45 @@ class Tag extends Model
     parent::__construct();
   }
 
-  public function checkRecordExist($field, $data) {
-    return $this->where($field,'like',$data)->count() ? true : false;
-  }
-
-  public function saveTags($tagNames = array()) { 
-
-    $tags = array();
-
-    foreach ($tagNames as $tagName) {
-      $tag = new Tag;
-      if($tag->checkRecordExist('name',$tagName)){
-        $tag = $tag->where('name','like',$tagName)->first();
-      }else{
-        $tag->name = $tagName;
-        $tag->save();
-      }
-
-      $tags[$tag->id] = $tagName;
+  public function checkAndSave($tagName) {
+    if(!$this->checkRecordExistByTagName($tagName)) {
+      return $this->_save($tagName);
     }
 
-    return $tags;
+    return true;
+  }
+
+  private function _save($value) { 
+    $tag = new Tag;
+    $tag->name = $value;
+    return $tag->save();
+  }
+
+  public function checkRecordExistByTagName($tagName) {
+    return $this->where('name','like',$tagName)->count() ? true : false;
+  }
+
+  // public function saveTags($tagNames = array()) { 
+
+  //   $tags = array();
+
+  //   foreach ($tagNames as $tagName) {
+  //     $tag = new Tag;
+  //     if($tag->checkRecordExistByTagName($tagName)){
+  //       $tag = $tag->getTagByTagName($tagName);
+  //     }else{
+  //       $tag->name = $tagName;
+  //       $tag->save();
+  //     }
+
+  //     $tags[$tag->id] = $tagName;
+  //   }
+
+  //   return $tags;
+  // }
+
+  public function getTagByTagName($tagName) {
+    return $this->where('name','like',$tagName)->first();
   }
 
 }

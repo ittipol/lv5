@@ -15,27 +15,45 @@ class BusinessType extends Model
     parent::__construct();
   }
 
-  public function checkRecordExist($field, $data) {
-    return $this->where($field,'like',$data)->count() ? true : false;
+  public function checkRecordExist($data) {
+    return $this->where('name','like',$data)->count() ? true : false;
   }
 
   public function checkAndSave($businessType) {
-    
-    $result = null;
-
-    if($this->checkRecordExist('name',$businessType)){
-      $result = $this->where('name','like',$businessType)->first();
-    }else{
-      $this->name = $businessType;
-      $this->save();
-
-      if($this->save()){
-        $result = $this->find($this->id)->first();
-      }
+    if(!$this->checkRecordExistByTagName($businessType)) {
+      return $this->_save($businessType);
     }
 
-    return $result;
-
+    return true;
   }
+
+  private function _save($value) { 
+    $businessType = new BusinessType;
+    $businessType->name = $value;
+    return $businessType->save();
+  }
+
+  public function getBusinessTypeByName($name) {
+    return $this->where('name','like',$name)->first();
+  }
+
+  // public function checkAndSave($businessType) {
+    
+  //   $result = null;
+
+  //   if($this->checkRecordExist('name',$businessType)){
+  //     $result = $this->where('like',$businessType)->first();
+  //   }else{
+  //     $this->name = $businessType;
+  //     $this->save();
+
+  //     if($this->save()){
+  //       $result = $this->find($this->id)->first();
+  //     }
+  //   }
+
+  //   return $result;
+
+  // }
 
 }

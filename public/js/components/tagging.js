@@ -1,49 +1,49 @@
-var Tag = {
+var Tagging = {
 	tagChipsWidth: 0,
 	tagList: [],
 	padding: 22,
 	runningNumber: 0,
 	placeholder: 'แท๊ก',
-	dataName: 'Tag'
+	dataName: 'Tagging'
 }
 
-Tag.load = function(tagJson){
+Tagging.load = function(tagJson){
 
-	Tag.init();
-	Tag.bind();
-	Tag.crateTagList();
-	Tag.crateInputTagField();
+	Tagging.init();
+	Tagging.bind();
+	Tagging.crateTagList();
+	Tagging.crateInputTagField();
 
 	if (typeof tagJson != 'undefined') {
 		var _tags = JSON.parse(tagJson);
 		for (var i = 0; i < _tags.length; i++) {
-			Tag.createTagChip(_tags[i]['name']);
+			Tagging.createTagChip(_tags[i]['name']);
 		}
 	}
 
 }
 
-Tag.init = function(){
-	Tag.tagChipsWidth = 0;
+Tagging.init = function(){
+	Tagging.tagChipsWidth = 0;
 }
 
-Tag.bind = function(){
+Tagging.bind = function(){
 }
 
-Tag.createHiddenField = function(index,id,tagName) {
+Tagging.createHiddenField = function(index,id,tagName) {
 	var input = document.createElement('input');
   input.setAttribute('type','hidden');
-  input.setAttribute('name',Tag.dataName+'['+index+']');
+  input.setAttribute('name',Tagging.dataName+'['+index+']');
   input.setAttribute('id',id+'_name');
   input.setAttribute('value',tagName);
   $('form').append(input);
 }
 
-Tag.removeHiddenField = function(id) {
+Tagging.removeHiddenField = function(id) {
 	$('#'+id+'_name').remove();
 }
 
-Tag.crateTagList = function(){
+Tagging.crateTagList = function(){
 	var span = document.createElement('span');
 	span.setAttribute('id','tag_list');
 
@@ -51,7 +51,7 @@ Tag.crateTagList = function(){
 
 }
 
-Tag.crateInputTagField = function(){
+Tagging.crateInputTagField = function(){
 	var input = document.createElement('input');
 	input.setAttribute('type','search');
 	input.setAttribute('id','tag_input');
@@ -61,7 +61,7 @@ Tag.crateInputTagField = function(){
 	input.setAttribute('autocapitalize','off');
 	input.setAttribute('spellcheck','false');
 	input.setAttribute('role','textbox');
-	input.setAttribute('placeholder',Tag.placeholder);
+	input.setAttribute('placeholder',Tagging.placeholder);
 	input.style.width = $('#tags').width()+'px';
 
 	input.addEventListener("keydown", function(e){
@@ -70,7 +70,7 @@ Tag.crateInputTagField = function(){
 			e.preventDefault();
 
 			if(this.value != ''){
-				Tag.createTagChip(this.value);
+				Tagging.createTagChip(this.value);
 				this.value = '';
 			}
 			// return false;
@@ -79,23 +79,23 @@ Tag.crateInputTagField = function(){
 			if(this.value == ''){
 				e.preventDefault();
 
-				var obj = document.getElementById(Tag.tagList[Tag.tagList.length-1]);
+				var obj = document.getElementById(Tagging.tagList[Tagging.tagList.length-1]);
 
 				if(obj != null){
 					document.getElementById('tag_input').value = $(obj).find('span.tag-name').text();
 					document.getElementById('tag_input').select();
 
-					Tag.tagChipsWidth -= $(obj).width()+Tag.padding; 
-					Tag.calInputFielsWidth();
+					Tagging.tagChipsWidth -= $(obj).width()+Tagging.padding; 
+					Tagging.calInputFielsWidth();
 
 					// remove hidden field
-					Tag.removeHiddenField(Tag.tagList[Tag.tagList.length-1]);
+					Tagging.removeHiddenField(Tagging.tagList[Tagging.tagList.length-1]);
 
 					// remove tag chip
 					$(obj).remove();
 
 					// remove from array
-					Tag.tagList.splice(Tag.tagList.length-1,1);
+					Tagging.tagList.splice(Tagging.tagList.length-1,1);
 				}
 
 			}
@@ -106,7 +106,7 @@ Tag.crateInputTagField = function(){
 
 	$(input).on('blur',function(){
 		if(this.value != ''){
-			Tag.createTagChip(this.value);
+			Tagging.createTagChip(this.value);
 			this.value = '';
 		}
 	});
@@ -114,10 +114,10 @@ Tag.crateInputTagField = function(){
 	document.getElementById('tags').appendChild(input);
 }
 
-Tag.createTagChip = function(tagName){
+Tagging.createTagChip = function(tagName){
 
-	var id = 'tag_'+Tag.generateCode();
-	Tag.tagList.push(id);
+	var id = 'tag_'+Tagging.generateCode();
+	Tagging.tagList.push(id);
 
 	var tagChip = document.createElement('span');
 	tagChip.setAttribute('class','tag-chip');
@@ -133,16 +133,16 @@ Tag.createTagChip = function(tagName){
 
 	tagDelete.addEventListener("click", function(e){
 
-		Tag.tagList.splice(Tag.tagList.indexOf($(this).parent().attr('id')),1);
+		Tagging.tagList.splice(Tagging.tagList.indexOf($(this).parent().attr('id')),1);
 
-		Tag.tagChipsWidth -= $(this).parent().width()+Tag.padding; 
-		Tag.calInputFielsWidth();
+		Tagging.tagChipsWidth -= $(this).parent().width()+Tagging.padding; 
+		Tagging.calInputFielsWidth();
 
 		// 
 		$('#tag_input').focus();
 
 		// remove hidden field
-		Tag.removeHiddenField($(this).parent().attr('id'));
+		Tagging.removeHiddenField($(this).parent().attr('id'));
 
 		// remove tag chip
 		$(this).parent().remove();
@@ -153,15 +153,15 @@ Tag.createTagChip = function(tagName){
 	tagChip.appendChild(tagDelete);
 	document.getElementById('tag_list').appendChild(tagChip);
 
-	Tag.createHiddenField(Tag.runningNumber++,id,tagName);
+	Tagging.createHiddenField(Tagging.runningNumber++,id,tagName);
 
-	Tag.tagChipsWidth += $(tagChip).width()+Tag.padding; 
-	Tag.calInputFielsWidth();
+	Tagging.tagChipsWidth += $(tagChip).width()+Tagging.padding; 
+	Tagging.calInputFielsWidth();
 	
 }
 
 
-Tag.generateCode = function() {
+Tagging.generateCode = function() {
 
 	var codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
@@ -177,8 +177,8 @@ Tag.generateCode = function() {
 	return code;
 }
 
-Tag.calInputFielsWidth = function(){
-	var inputFieldWidth = $('#tags').width() - (Tag.tagChipsWidth % $('#tags').width());
+Tagging.calInputFielsWidth = function(){
+	var inputFieldWidth = $('#tags').width() - (Tagging.tagChipsWidth % $('#tags').width());
 
 	if(inputFieldWidth > 120){
 		$('#tag_input').css('width',inputFieldWidth);

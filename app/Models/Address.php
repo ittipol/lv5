@@ -14,19 +14,17 @@ class Address extends Model
     parent::__construct();
   }
 
-  public function clearAndSave($model,$address) {
-    // clear old record
+  public function __save($model,$value) {
     $this->deleteByModelNameAndModelId($model->modelName,$model->id);
-    // save
-    $this->_save($model,$address);
+    return $this->_save($model,$value);
   }
 
-  private function _save($model,$address) {
+  private function _save($model,$value) {
     $address = new Address;
-    $address->fill($address);
+    $address->fill($value);
     $address->model = $model->modelName;
     $address->model_id = $model->id;
-    $address->save();
+    return $address->save();
   }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Model;
+use App\Models\Tag;
 
 class Tagging extends Model
 {
@@ -18,38 +19,55 @@ class Tagging extends Model
     return $this->hasOne('App\Models\Tag','id','tag_id');
   }
 
-  public function checkRecordExist($model,$tagId) {
-    return $this->where([
-      ['model','=',$model->modelName],
-      ['model_id','=',$model->id],
-      ['tag_id','=',$tagId]
-    ])->count() ? true : false;
-  }
+  public function __save($model,$value) {
+    
+    $tag = new Tag;
 
-  public function checkAndSave($model,$tags) {
-    foreach ($tags as $tagId => $tag) {
-      if(!$this->checkRecordExist($model,$tagId)) {
-        $this->_save($model,$tagId);
-      }
+    $tagIds = array();
+    foreach ($value as $tagName) {
+      $tag->checkAndSave($tagName);
+      $_tag = $tag->getTagByTagName($tagName)->getAttributes();
+      $tagIds[] = $_tag['id'];
     }
+
+    return $this->clearAndSave($model,$tagIds);
+    
   }
 
-  public function clearAndSave($model,$tags) {
+  // public function checkRecordExist($model,$tagId) {
+  //   return $this->where([
+  //     ['model','=',$model->modelName],
+  //     ['model_id','=',$model->id],
+  //     ['tag_id','=',$tagId]
+  //   ])->count() ? true : false;
+  // }
+
+  // public function checkAndSave($model,$tags) {
+  //   foreach ($tags as $tagId => $tag) {
+  //     if(!$this->checkRecordExist($model,$tagId)) {
+  //       $this->_save($model,$tagId);
+  //     }
+  //   }
+  // }
+
+  public function clearAndSave($model,$tagIds) {
     // clear old record
     $this->deleteByModelNameAndModelId($model->modelName,$model->id);
 
     // save
-    foreach ($tags as $tagId => $tag) {
+    foreach ($tagIds as $tagId) {
       $this->_save($model,$tagId);
     }
+
+    return true;
   }
 
-  private function _save($model,$tagId) {
+  private function _save($model,$value) {
     $tagging = new Tagging;
     $tagging->model = $model->modelName;
     $tagging->model_id = $model->id;
-    $tagging->tag_id = $tagId;
-    $tagging->save();
+    $tagging->tag_id = $value;
+    return $tagging->save();
   }
 
 }

@@ -4,18 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
-use App\Models\Tagging;
 use App\Models\PersonHasCompany;
-use App\Models\BusinessType;
-use App\Models\CompanyHasBusinessType;
 use App\Models\District;
-use App\Models\Address;
-use App\Models\Person;
-use App\Models\Role;
 use App\Models\Lookup;
-use App\Models\Image;
 use App\Models\Wiki;
-use App\Models\Tag;
 use App\Models\TempFile;
 use App\library\message;
 use App\library\string;
@@ -40,13 +32,18 @@ class CompanyController extends Controller
     foreach ($personHasCompany as $value) {
       $company = $value->company;
 
+      $image = '';
+      if(!empty($company->getRalatedDataByModelName('Image',true))) {
+        $image = $company->getRalatedDataByModelName('Image',true)->getImageUrl();
+      }
+
       $companies[] = array(
         'id' => $company->id,
         'name' => $company->name,
         'description' => $string->subString($company->description,120),
         'business_type' => $company->business_type,
         'total_department' => $company->companyHasDepartments->count(),
-        'image' => $company->getRalatedDataByModelName('Image',true)->getImageUrl(),
+        'image' => $image,
       );
     }
 

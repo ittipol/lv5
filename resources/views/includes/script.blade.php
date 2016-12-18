@@ -7,7 +7,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/forms/images.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/item_images.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/district.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/components/tag.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/components/tagging.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/floating-menu.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>

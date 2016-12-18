@@ -273,7 +273,7 @@
     Images.load();
     District.load();
     Map.load();
-    Tag.load();
+    Tagging.load();
     Form.load();
   });
 </script>

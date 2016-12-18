@@ -19,13 +19,14 @@ class Model extends _Model
 {
   public $modelName;
   public $alias;
+  public $state = 'create';
   public $pageToken;
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
   public $dirNames;
   public $relatedData;
-  public $allowedModelData = array('Address','Tag');
+  public $allowedModelData = array('Address','Tagging');
   public $createDir = false;
   public $createLookup = false;
 
@@ -48,6 +49,8 @@ class Model extends _Model
 
       if(!$model->exists){ // new record
 
+        $model->state = 'create';
+
         if(Schema::hasColumn($model->getTable(), 'ip_address')) {
           $model->ip_address = Service::ipAddress();
         }
@@ -56,6 +59,8 @@ class Model extends _Model
           $model->created_by = Session::get('Person.id');
         }
 
+      }else{
+        $model->state = 'update';
       }
 
     });
@@ -63,7 +68,7 @@ class Model extends _Model
     // after saving
     parent::saved(function($model){
       $model->createDir();  
-      $model->saveRelatedData();   
+      $model->saveRelatedData();
     });
 
   }
@@ -83,6 +88,7 @@ class Model extends _Model
 
     if(!empty($attributes['__token'])) {
       $this->pageToken = $attributes['__token'];
+      unset($attributes['__token']);
     }
 
     return parent::fill($attributes);
@@ -128,29 +134,16 @@ class Model extends _Model
     }
 
     $this->saveImages();
-return true;
+
     foreach ($this->allowedModelData as $allowed) {
 
       if(empty($this->relatedData[$allowed])) {
         continue;
       }
 
-      $this->__save($allowed,$this->relatedData[$allowed]);
+      $this->_save($allowed,$this->relatedData[$allowed]);
     }
 
-    
-    // $this->saveAddress($input['address']);
-    // $this->saveTagging($input['tags']);
-
-
-    // $wordingRelation = new WordingRelation;
-    // $wordingRelation->checkAndSave();
-
-    // Add to Lookup table
-    // $lookup = new Lookup;
-    // $lookup->saveSpecial($this);
-
-// dd('end');
   }
 
   private function _save($model,$value) {
@@ -161,7 +154,7 @@ return true;
       return false;
     }
 
-    return $class->__save($value);
+    return $class->__save($this,$value);
     
   }
 
@@ -169,35 +162,6 @@ return true;
     $image = new Image;
     $image->saveUploadImages($this,Session::get('Person.id'));
     $image->deleteImages($this,Session::get('Person.id'));
-  }
-
-  public function saveAddress($value) {
-
-    if(empty($value)) {
-      return false;
-    }
-
-    $address = new Address;
-    $address->clearAndSave($value);
-  }
-
-  public function saveTagging($value) {
-
-    if(empty($value)) {
-      return false;
-    }
-
-    $tags = array();
-    if(!empty($input['tags'])){
-      $tag = new Tag;
-      $tags = $tag->saveTags($input['tags']);
-    }
-
-    if(!empty($tags)){
-      $tagging = new Tagging;
-      $tagging->clearAndSave($this,$tags);
-    }
-
   }
 
   public function includeRelatedData($models = array()) {
@@ -423,7 +387,6 @@ return true;
     if(Schema::hasColumn($this->getTable(), 'model') && Schema::hasColumn($this->getTable(), 'model_id')) {
       return true;
     }
-
     return false;
   }
 

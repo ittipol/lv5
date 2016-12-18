@@ -47,15 +47,24 @@ class Company extends Model
         $personHasCompany->role_id = $role->getIdByalias('admin');  
         $personHasCompany->save();
       }
-
+dd($company->business_type);
       // business type
       $businessType = new BusinessType;
       $businessType = $businessType->checkAndSave($company->business_type);
+      // getBusinessTypeByName
 
       // Company has business type
       $companyHasBusinessType = new CompanyHasBusinessType;
       $companyHasBusinessType->checkAndSave($company->id,$businessType->id);
-    
+
+      dd($businessType);
+
+      // $wordingRelation = new WordingRelation;
+      // $wordingRelation->checkAndSave();
+
+      // Add to Lookup table
+      // $lookup = new Lookup;
+      // $lookup->saveSpecial($this);
     });
   }
 

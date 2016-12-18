@@ -258,7 +258,7 @@
     Images.load('<?php echo $imageJson; ?>');
     District.load();
     Map.load('<?php echo $geographic; ?>');
-    Tag.load('<?php echo $tagJson; ?>');
+    Tagging.load('<?php echo $tagJson; ?>');
   });
 </script>
 
