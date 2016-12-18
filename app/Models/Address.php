@@ -14,9 +14,8 @@ class Address extends Model
     parent::__construct();
   }
 
-  public function __save($model,$value) {
-    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
-    return $this->_save($model,$value);
+  public function __saveWithModelAndModelId($model,$value) {
+    return $this->clearAndSave($model,$value);
   }
 
   private function _save($model,$value) {
@@ -25,6 +24,11 @@ class Address extends Model
     $address->model = $model->modelName;
     $address->model_id = $model->id;
     return $address->save();
+  }
+
+  public function clearAndSave($model,$value) {
+    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
+    return $this->_save($model,$value);
   }
 
 }

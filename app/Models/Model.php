@@ -95,11 +95,20 @@ class Model extends _Model
 
   }
 
-  // public function save(array $options = []) {
-  //   // before save 
-  //   parent::save();
-  //   // after save
-  // }
+  public function save(array $options = []) {
+
+    if(!empty($this->requireValue)) {
+      foreach ($this->requireValue as $field) {
+        if(empty($this->{$field})) {
+          return false;
+        }
+      }
+    }
+
+    // before save 
+    return parent::save();
+    // after save
+  }
 
   public function createDir($model = null) {
 
@@ -150,11 +159,11 @@ class Model extends _Model
 
     $class = Service::loadModel($model);
 
-    if(!method_exists($class,'__save')) {
+    if(!method_exists($class,'__saveWithModelAndModelId') || !$class->checkHasFieldModelAndModelId()) {
       return false;
     }
 
-    return $class->__save($this,$value);
+    return $class->__saveWithModelAndModelId($this,$value);
     
   }
 
@@ -316,16 +325,6 @@ class Model extends _Model
     return $data;
 
   }
-
-  // public function address() {
-  //   if(!empty($this->id)){
-  //     return Address::where([
-  //       ['model','=',$this->modelName],
-  //       ['model_id','=',$this->id]
-  //     ])->first();
-  //   }
-  //   return false;
-  // }
 
   // public function images($getAttributes = false) {
   //   if(!empty($this->id)){

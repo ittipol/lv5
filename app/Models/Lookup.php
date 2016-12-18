@@ -20,7 +20,17 @@ class Lookup extends Model
 
     $result = array();
 
-    foreach ($formats as $key => $format) {
+    foreach ($formats as $key => $format){
+
+      if(is_array($format)){
+        dd($format);
+        $records = $this->getData($parts[0],$model,array(
+          'lookup' => $parts[1]
+        ));
+      }else{
+
+      }
+
       preg_match_all($parseFormat, $format, $matches);
 
       if(!empty($matches[0])){
@@ -79,7 +89,7 @@ class Lookup extends Model
 
   public function saveSpecial($model,$options = array()) {
 
-    if(empty($model->lookupFormat)) {
+    if(empty($model->lookupFormat)){
       return false;
     }
 
@@ -103,9 +113,10 @@ class Lookup extends Model
       $this->tags = implode(' ',$_tags);
     }
 
+    // Parser
     $result = $this->parser($model,$data);
 
-    foreach ($result as $key => $value) {
+    foreach ($result as $key => $value){
       $this->$key = $value;
     }
 

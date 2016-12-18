@@ -9,28 +9,28 @@ class BusinessType extends Model
   public $table = 'business_types';
   protected $fillable = ['name','description'];
   public $timestamps  = false;
-  // public $wordingRelation = array('Tag');
+  public $requireValue = array('name');
 
   public function __construct() {  
     parent::__construct();
   }
 
-  public function checkRecordExist($data) {
-    return $this->where('name','like',$data)->count() ? true : false;
+  private function _save($value) {
+    $businessType = new BusinessType;
+    $businessType->name = $value;
+    return $businessType->save();
   }
 
   public function checkAndSave($businessType) {
-    if(!$this->checkRecordExistByTagName($businessType)) {
+    if(!$this->checkRecordExistByName($businessType)) {
       return $this->_save($businessType);
     }
 
     return true;
   }
 
-  private function _save($value) { 
-    $businessType = new BusinessType;
-    $businessType->name = $value;
-    return $businessType->save();
+  public function checkRecordExistByName($data) {
+    return $this->where('name','like',$data)->count() ? true : false;
   }
 
   public function getBusinessTypeByName($name) {

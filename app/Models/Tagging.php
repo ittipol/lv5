@@ -19,19 +19,26 @@ class Tagging extends Model
     return $this->hasOne('App\Models\Tag','id','tag_id');
   }
 
-  public function __save($model,$value) {
+  public function __saveWithModelAndModelId($model,$value) {
     
     $tag = new Tag;
 
     $tagIds = array();
     foreach ($value as $tagName) {
       $tag->checkAndSave($tagName);
-      $_tag = $tag->getTagByTagName($tagName)->getAttributes();
-      $tagIds[] = $_tag['id'];
+      $tagIds[] = $tag->getTagByTagName($tagName)->id;
     }
 
-    return $this->clearAndSave($model,$tagIds);
+    return $this->clearAndSaves($model,$tagIds);
     
+  }
+
+  private function _save($model,$value) {
+    $tagging = new Tagging;
+    $tagging->model = $model->modelName;
+    $tagging->model_id = $model->id;
+    $tagging->tag_id = $value;
+    return $tagging->save();
   }
 
   // public function checkRecordExist($model,$tagId) {
@@ -50,7 +57,7 @@ class Tagging extends Model
   //   }
   // }
 
-  public function clearAndSave($model,$tagIds) {
+  public function clearAndSaves($model,$tagIds) {
     // clear old record
     $this->deleteByModelNameAndModelId($model->modelName,$model->id);
 
@@ -60,14 +67,6 @@ class Tagging extends Model
     }
 
     return true;
-  }
-
-  private function _save($model,$value) {
-    $tagging = new Tagging;
-    $tagging->model = $model->modelName;
-    $tagging->model_id = $model->id;
-    $tagging->tag_id = $value;
-    return $tagging->save();
   }
 
 }
