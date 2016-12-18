@@ -263,9 +263,11 @@ class Model extends _Model
         $data[$class->modelName][$key] = $record->getAttributes();
       }
 
-    }elseif(!empty($options['lookup'])) {
+    }elseif(!empty($options['lookupStringFormat'])) {
 
-      $formats = explode(':', $options['lookup']);
+      $class->id = 143;
+
+      $formats = explode(':', $options['lookupStringFormat']);
 
       $records = array();
       foreach ($formats as $format) {
@@ -291,7 +293,6 @@ class Model extends _Model
           $records = $temp;
 
         }else{
-
 
           foreach ($records as $key => $record) {
 
@@ -320,6 +321,66 @@ class Model extends _Model
         $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
       }
 
+    }elseif(!empty($options['lookupArrayFormat'])) {
+
+      $class->id = 143;
+
+      $formats = $options['lookupArrayFormat'];
+
+      $records = array();
+      foreach ($formats as $key1 => $key2) {
+
+        $temp = array();
+
+        list($class1,$field1) = explode('.', $key1);
+        list($class2,$field2) = explode('.', $key2);
+
+        $class1 = Service::loadModel($class1);
+        $class2 = Service::loadModel($class2);
+        
+        if(($class->modelName == $class1->modelName) && empty($records)){
+          $records = $class->getAttributes();
+        }
+
+        if(array_key_exists($field1,$records)) {
+
+          $_records = $class2->where($field2,'=',$records[$field1])->get();
+
+          foreach ($_records as $key => $_record) {
+            // $temp[] = $_record->getAttributes();
+            $temp[] = $_record;
+          }
+
+          $records = $temp;
+
+        }else{
+
+          foreach ($records as $key => $record) {
+
+            if(empty($record[$field1])) {
+              continue;
+            }
+
+            $_records = $class2->where($field2,'=',$record[$field1])->get();
+
+            foreach ($_records as $key => $_record) {
+              $temp[] = $_record->getAttributes();
+            }
+            
+          }
+
+          $records = $temp;
+
+        }
+
+      }
+
+      $fields = explode('.', $fields);
+
+      $data = array();
+      foreach ($records as $key => $record) {
+        $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
+      }
     }
 
     return $data;

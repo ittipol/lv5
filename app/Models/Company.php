@@ -15,14 +15,14 @@ class Company extends Model
   public $timestamps  = false;
   public $lookupFormat = array(
     // 'keyword' => '{{Department.name|CompanyHasDepartment.company_id.id:Department.id.department_id}}',
-    'keyword' => array(
-      'get' => 'Department.name',
-      'find' => array(
-        'Company.id' => 'CompanyHasDepartment.company_id',
-        'CompanyHasDepartment.department_id' => 'department_id.id'
-      )
-    ),
-    // 'keyword' => '{{name}}',
+    // 'keyword' => array(
+    //   'get' => 'Department.name',
+    //   'key' => array(
+    //     'Company.id' => 'CompanyHasDepartment.company_id',
+    //     'CompanyHasDepartment.department_id' => 'Department.id'
+    //   )
+    // ),
+    'keyword' => '{{name}}',
     'keyword_1' => '{{business_type}}',
     'description' => '{{description}}',
   );
@@ -64,6 +64,8 @@ class Company extends Model
       // Add to Lookup table
       $lookup = new Lookup;
       $lookup->saveSpecial($company);
+
+      dd('dfg');
     });
   }
 
