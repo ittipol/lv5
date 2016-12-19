@@ -1,54 +1,53 @@
-function Images (panel,type,limit) {
-	this.panel = panel,
-	this.type = type,
-	this.limit = limit,
-	this.id = null,
-	this.code = null,
-	this.index = 0,
-	this.runningNumber = 0,
-	this.imagesPlaced = [],
-	this.filenames = [], 
-	this.defaultImage = '/images/add_images2.svg',
-	this.allowedClick = true
+var Images = {
+	id: null,
+	code: null,
+	panel: '_image_group',
+	type: 'images',
+	limit: 5,
+	index: 0,
+	runningNumber: 0,
+	imagesPlaced: [],
+	filenames: [], 
+	defaultImage: '/images/add_images2.svg',
+	allowedClick: true
 }
 
-Images.prototype.load = function(imageJson){
-	this.init();
-	this.bind();
+Images.load = function(panel,type,limit,imageJson){
+	Images.init(panel,type,limit)
+	Images.bind();
 
 	if (typeof imageJson != 'undefined') {
 		var _images = JSON.parse(imageJson);
 		for (var i = 0; i < _images.length; i++) {
-			this.index = this._createUploader(this.index,_images[i]);
+			Images.index = Images._createUploader(Images.index,_images[i]);
 		}
 	}
 
-	this.index = this.createUploader(this.index);
+	Images.index = Images.createUploader(Images.index);
 }
 
-Images.prototype.init = function(){
-	this.code = this.generateCode();
+Images.init = function(panel,type,limit){
+	Images.code = Images.generateCode();
+	Images.panel = panel;
+	Images.type = type;
+	Images.limit = limit;
 }
 
-Images.prototype.bind = function(){
+Images.bind = function(){
 
-	var _this = this;
-
-	$(document).on('change', '.'+this.code+'-image', function(){
-		_this.preview(this);
+	$(document).on('change', '.'+Images.code+'-image', function(){
+		Images.preview(this);
 	});
 
-	$(document).on('click', '.'+this.code+'-remove-btn', function(){
-		_this.removePreview(this);
+	$(document).on('click', '.'+Images.code+'-remove-btn', function(){
+		Images.removePreview(this);
 	});
 	
 }
 
-Images.prototype.preview = function(input){
+Images.preview = function(input){
 
 	if (input.files && input.files[0]) {
-
-		var _this = this;
 
 		var parent = $(input).parent();
 		var CSRF_TOKEN = $('input[name="_token"]').val();    
@@ -68,7 +67,7 @@ Images.prototype.preview = function(input){
 
 		  	parent.find('img').css('display','none').attr('src', e.target.result);
 
-		  	if(_this.checkImageType(mimeType) && _this.checkImageSize(fileSize)) {
+		  	if(Images.checkImageType(mimeType) && Images.checkImageSize(fileSize)) {
 		  		parent.css('borderColor','#E0E0E0');
 		  		parent.find('.error-message').css('display','none').text('');
 		  	}else{
@@ -83,7 +82,7 @@ Images.prototype.preview = function(input){
 
 		  reader.readAsDataURL(input.files[0]);
 
-		  if(!this.checkImageType(mimeType) || !this.checkImageSize(fileSize)) {
+		  if(!Images.checkImageType(mimeType) || !Images.checkImageSize(fileSize)) {
 		  	proceed = false;
 		  }
 		}
@@ -93,18 +92,16 @@ Images.prototype.preview = function(input){
 			formData.append('_token', CSRF_TOKEN);formToken
 			formData.append('formToken', formToken);
 			formData.append('file', input.files[0]);
-			formData.append('type', this.type);
+			formData.append('type', Images.type);
 
-			this.uploadImage(parent,input,formData);
+			Images.uploadImage(parent,input,formData);
 		}
 
 	}
 
 }
 
-Images.prototype.uploadImage = function(parent,input,data) {
-
-	var _this = this;
+Images.uploadImage = function(parent,input,data) {
 
 	var id = input.getAttribute('id');
 
@@ -153,15 +150,15 @@ Images.prototype.uploadImage = function(parent,input,data) {
 
   		var _input = document.createElement('input');
 		  _input.setAttribute('type','hidden');
-		  _input.setAttribute('name','filenames['+(_this.runningNumber-1)+']');
+		  _input.setAttribute('name','filenames['+(Images.runningNumber-1)+']');
 		  _input.setAttribute('value',response.filename);
 		  parent.append(_input);
 
-  		if(_this.imagesPlaced.indexOf(id) < 0){
-  			_this.imagesPlaced.push(id);
+  		if(Images.imagesPlaced.indexOf(id) < 0){
+  			Images.imagesPlaced.push(id);
 
-  			if(_this.index < _this.limit){
-  				_this.index = _this.createUploader(_this.index);
+  			if(Images.index < Images.limit){
+  				Images.index = Images.createUploader(Images.index);
   			}
   		}
   	}
@@ -178,11 +175,11 @@ Images.prototype.uploadImage = function(parent,input,data) {
 
 }
 
-Images.prototype.removePreview = function(input){
+Images.removePreview = function(input){
 
-	if(this.allowedClick){
+	if(Images.allowedClick){
 
-		this.allowedClick = false;
+		Images.allowedClick = false;
 
 		var parent = $(input).parent(); 
 		parent.fadeOut(220);  
@@ -191,19 +188,16 @@ Images.prototype.removePreview = function(input){
 			'_token': $('input[name="_token"]').val(),
 			'formToken': $('input[name="__token"]').val(),
 			'filename': parent.find('input[type="hidden"]').val(),
-			'type': this.type
+			'type': Images.type
 		};
 
-		this.deleteImage(parent,input,data);
+		Images.deleteImage(parent,input,data);
 
 	}
 	
 }
 
-Images.prototype.deleteImage = function(parent,input,data) {
-
-	var _this = this;
-
+Images.deleteImage = function(parent,input,data) {
 	var request = $.ajax({
 	  url: "/delete_image",
 	  type: "POST",
@@ -214,14 +208,14 @@ Images.prototype.deleteImage = function(parent,input,data) {
 	request.done(function (response, textStatus, jqXHR){
 
 		if(response.success){
-			--_this.index;
+			--Images.index;
 
-			if(_this.imagesPlaced.length == _this.limit){
-				_this.index = _this.createUploader(_this.index);
+			if(Images.imagesPlaced.length == Images.limit){
+				Images.index = Images.createUploader(Images.index);
 			}
 
 			// var parent = $(input).parent();
-			_this.imagesPlaced.splice(_this.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
+			Images.imagesPlaced.splice(Images.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
 
 			parent.parent().remove();
 		}
@@ -237,50 +231,50 @@ Images.prototype.deleteImage = function(parent,input,data) {
   });
 
   request.always(function () {
-  	_this.allowedClick = true;
+  	Images.allowedClick = true;
   });
 }
 
-Images.prototype.createUploader = function(index){
+Images.createUploader = function(index){
 	
 	var html = '';
-	html += '<div id="'+this.code+'_panel_'+this.runningNumber+'" class="image-panel">';
-	html += '<label id="'+this.code+'_'+this.runningNumber+'" class="image-label">';
-	html += '<input id="'+this.code+'_image_'+this.runningNumber+'" class="'+this.code+'-image" type="file">';
-	html +=	'<img id="'+this.code+'_preview_'+this.runningNumber+'" class="preview-image" src="'+this.defaultImage+'">';
-	html += '<a id="'+this.code+'_button_'+this.runningNumber+'" href="javscript:void(0);" class="'+this.code+'-remove-btn">×</a>'
+	html += '<div id="'+Images.code+'_panel_'+Images.runningNumber+'" class="image-panel">';
+	html += '<label id="'+Images.code+'_'+Images.runningNumber+'" class="image-label">';
+	html += '<input id="'+Images.code+'_image_'+Images.runningNumber+'" class="'+Images.code+'-image" type="file">';
+	html +=	'<img id="'+Images.code+'_preview_'+Images.runningNumber+'" class="preview-image" src="'+Images.defaultImage+'">';
+	html += '<a id="'+Images.code+'_button_'+Images.runningNumber+'" href="javscript:void(0);" class="'+Images.code+'-remove-btn">×</a>'
 	html += '<p class="error-message"></p>';
 	html += '</label>';
-	html += '<div id="'+this.code+'_progress+bar_'+this.runningNumber+'" class="progress-bar"><div class="status"></div></div>'
+	html += '<div id="'+Images.code+'_progress+bar_'+Images.runningNumber+'" class="progress-bar"><div class="status"></div></div>'
 	html += '</div>';
 
-	++this.runningNumber;
-	$('#'+this.panel).append(html);
+	++Images.runningNumber;
+	$('#'+Images.panel).append(html);
 
 	return ++index;
 
 }
 
-Images.prototype._createUploader = function(index,image){
+Images._createUploader = function(index,image){
 
 	var html = '';
-	html += '<div id="'+this.code+'_panel_'+this.runningNumber+'" class="image-panel">';
-	html += '<label id="'+this.code+'_'+this.runningNumber+'" class="image-label added">';
-	html +=	'<img id="'+this.code+'_preview_'+this.runningNumber+'" class="preview-image" src="'+image.url+'">';
-	html += '<a id="'+this.code+'_button_'+this.runningNumber+'" href="javscript:void(0);" class="'+this.code+'-remove-btn" style="display:block;">×</a>'
+	html += '<div id="'+Images.code+'_panel_'+Images.runningNumber+'" class="image-panel">';
+	html += '<label id="'+Images.code+'_'+Images.runningNumber+'" class="image-label added">';
+	html +=	'<img id="'+Images.code+'_preview_'+Images.runningNumber+'" class="preview-image" src="'+image.url+'">';
+	html += '<a id="'+Images.code+'_button_'+Images.runningNumber+'" href="javscript:void(0);" class="'+Images.code+'-remove-btn" style="display:block;">×</a>'
 	html += '<p class="error-message"></p>';
 	html += '<input type="hidden" name="filenames['+index+']" value="'+image.name+'">'
 	html += '</label>';
 	html += '</div>';
 
-	++this.runningNumber;
-	$('#'+this.panel).append(html);
+	++Images.runningNumber;
+	$('#'+Images.panel).append(html);
 
 	return ++index;
 
 }
 
-Images.prototype.generateCode = function() {
+Images.generateCode = function() {
 	var codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
   codeAlphabet += "0123456789";
@@ -295,7 +289,7 @@ Images.prototype.generateCode = function() {
 	return code;
 }
 
-Images.prototype.checkImageType = function(type){
+Images.checkImageType = function(type){
 	var allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg'];
 
 	var allowed = false;
@@ -310,7 +304,7 @@ Images.prototype.checkImageType = function(type){
 	return allowed;
 }
 
-Images.prototype.checkImageSize = function(size) {
+Images.checkImageSize = function(size) {
 	// 3MB
 	var maxSize = 3145728;
 
@@ -321,4 +315,5 @@ Images.prototype.checkImageSize = function(size) {
 	}
 
 	return allowed;
+
 }
