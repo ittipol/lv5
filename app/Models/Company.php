@@ -6,6 +6,7 @@ use App\Models\Model;
 use App\Models\PersonHasCompany;
 use App\Models\BusinessType;
 use App\Models\Role;
+use App\Models\WordingRelation;
 use Session;
 
 class Company extends Model
@@ -14,20 +15,12 @@ class Company extends Model
   protected $fillable = ['name','description','business_type','phone_number','email','website','facebook','instagram','line','ip_address','created_by'];
   public $timestamps  = false;
   public $lookupFormat = array(
-    // 'keyword' => '{{Department.name|CompanyHasDepartment.company_id.id:Department.id.department_id}}',
-    // 'keyword' => array(
-    //   'get' => 'Department.name',
-    //   'key' => array(
-    //     'Company.id' => 'CompanyHasDepartment.company_id',
-    //     'CompanyHasDepartment.department_id' => 'Department.id'
-    //   )
-    // ),
     'keyword' => '{{name}}',
     'keyword_1' => '{{business_type}}',
     'description' => '{{description}}',
   );
   public $createDir = true;
-  public $dirNames = array('cover','images');
+  public $dirNames = array('logo','cover','images');
 
   public function __construct() {  
     parent::__construct();
@@ -39,33 +32,34 @@ class Company extends Model
 
     Company::saved(function($company){
 
-      // // Add person to company
-      // $personHasCompany = new PersonHasCompany;
+      // Add person to company
+      $personHasCompany = new PersonHasCompany;
 
-      // $exist = $personHasCompany->where([
-      //   ['company_id','=',$company->id],
-      //   ['person_id','=',Session::get('Person.id')]
-      // ])->exists();
+      $exist = $personHasCompany->where([
+        ['company_id','=',$company->id],
+        ['person_id','=',Session::get('Person.id')]
+      ])->exists();
 
-      // if(!$exist){
-      //   $personHasCompany->company_id = $company->id;
-      //   $personHasCompany->person_id = Session::get('Person.id');
-      //   $role = new Role;
-      //   $personHasCompany->role_id = $role->getIdByalias('admin');  
-      //   $personHasCompany->save();
-      // }
+      if(!$exist){
+        $personHasCompany->company_id = $company->id;
+        $personHasCompany->person_id = Session::get('Person.id');
+        $role = new Role;
+        $personHasCompany->role_id = $role->getIdByalias('admin');  
+        $personHasCompany->save();
+      }
 
-      // $companyHasBusinessType = new CompanyHasBusinessType;
-      // $companyHasBusinessType->__saveSpecial($company,$company->business_type);
+      $companyHasBusinessType = new CompanyHasBusinessType;
+      $companyHasBusinessType->__saveSpecial($company,$company->business_type);
 
-      // $wordingRelation = new WordingRelation;
-      // $wordingRelation->checkAndSave();
+      $wordingRelation = new WordingRelation;
+      foreach ($company->companyHasBusinessType as $value) {
+        $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
+      } 
 
       // Add to Lookup table
       $lookup = new Lookup;
       $lookup->saveSpecial($company);
 
-      dd('dfg');
     });
   }
 
@@ -75,6 +69,10 @@ class Company extends Model
 
   public function companyHasPeople() {
     return $this->hasMany('App\Models\PersonHasCompany','company_id','id');
+  }
+
+  public function companyHasBusinessType() {
+    return $this->hasMany('App\Models\CompanyHasBusinessType','company_id','id');
   }
 
   public function checkExistById($companyId) {

@@ -14,6 +14,14 @@ class Address extends Model
     parent::__construct();
   }
 
+  public function district() {
+    return $this->hasOne('App\Models\District','id','district_id');
+  }
+
+  public function subDistrict() {
+    return $this->hasOne('App\Models\SubDistrict','id','sub_district_id');
+  }
+
   public function __saveWithModelAndModelId($model,$value) {
     return $this->clearAndSave($model,$value);
   }

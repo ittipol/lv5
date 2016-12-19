@@ -15,8 +15,11 @@ class CompanyHasBusinessType extends Model
     parent::__construct();
   }
 
+  public function businessType() {
+    return $this->hasOne('App\Models\BusinessType','id','business_type_id');
+  }
+
   public function __saveSpecial($model,$value) {
-    
     $businessType = new BusinessType;
     if($businessType->checkAndSave($value)) {
       return $this->checkAndSave($model->id,$businessType->getBusinessTypeByName($value)->id);

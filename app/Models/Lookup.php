@@ -4,15 +4,16 @@ namespace App\Models;
 
 use App\Models\Model;
 use App\Models\Tagging;
+use App\library\service;
 
 class Lookup extends Model
 {
   protected $table = 'lookups';
-  protected $fillable = ['model','model_id','keyword','description','keyword_1','keyword_2','keyword_3','keyword_4'];
+  protected $fillable = ['model','model_id','keyword','description','keyword_1','keyword_2','keyword_3','keyword_4','address','tags'];
   public $timestamps  = false;
 
   //  Lookup Special Format
-  // 'keyword' => '{{Department.name|CompanyHasDepartment.company_id.id:Department.id.department_id}}',
+  // 'keyword' => '{{Department.name|Company.id=>CompanyHasDepartment.company_id,CompanyHasDepartment.department_id=>Department.id}}',
   // 'keyword' => array(
   //   'get' => 'Department.name',
   //   'key' => array(
@@ -20,13 +21,20 @@ class Lookup extends Model
   //     'CompanyHasDepartment.department_id' => 'Department.id'
   //   )
   // ),
+  // 
+  // Call Method
+  // 'address' => '{{__getAddress}}'
 
   private function parser($model,$data = array()) {
 
+    if(empty($model->lookupFormat)){
+      return false;
+    }
+
     $formats = $model->lookupFormat;
 
-    $parseFormat = '/{{[\w\d|:.]+}}/';
-    $parseValue = '/[\w\d|:.]+/';
+    $parseFormat = '/{{[\w\d|._,=>]+}}/';
+    $parseValue = '/[\w\d|._,=>]+/';
 
     $result = array();
 
@@ -50,7 +58,8 @@ class Lookup extends Model
       
         $_value = implode(' ', $_value);
 
-        $result[$key] = trim(preg_replace('/\s\s+/', ' ', strip_tags($_value)));
+        $result[$key] = $this->_replace($_value,$value,$result[$key]);
+        // $result[$key] = trim(preg_replace('/\s\s+/', ' ', strip_tags($_value)));
 
       }else{
         preg_match_all($parseFormat, $format, $matches);
@@ -66,7 +75,9 @@ class Lookup extends Model
             if(!empty($_matches[0][0])){
 
               // First: check data in $data
-              if(array_key_exists($_matches[0][0],$data)) {
+              if(substr($_matches[0][0],0,2) == '__'){
+                $_value = $this->{$_matches[0][0]}($model);
+              }elseif(array_key_exists($_matches[0][0],$data)) {
                 $_value = $data[$_matches[0][0]];
               }else{
                 $parts = explode('|', $_matches[0][0]);
@@ -92,9 +103,7 @@ class Lookup extends Model
                 }
               }
 
-              $str = strip_tags($_value);
-              $str = trim(preg_replace('/\s\s+/', ' ', $str));
-              $result[$key] = str_replace($value, $str, $result[$key]);
+              $result[$key] = $this->_replace($_value,$value,$result[$key]);
 
             }
           }
@@ -111,10 +120,6 @@ class Lookup extends Model
   }
 
   public function saveSpecial($model,$options = array()) {
-
-    if(empty($model->lookupFormat)){
-      return false;
-    }
 
     $data = $model->getAttributes();
 
@@ -136,17 +141,97 @@ class Lookup extends Model
       $this->tags = implode(' ',$_tags);
     }
 
+    $_addresses = $this->__getAddress($model);
+    if($_addresses){
+      $this->address = $_addresses;
+    }
+
     // Parser
     $result = $this->parser($model,$data);
 
-    foreach ($result as $key => $value){
-      $this->$key = $value;
+    if(!empty($result)){
+      foreach ($result as $key => $value){
+        $this->$key = $value;
+      }
     }
 
     $this->model = $model->modelName;
     $this->model_id = $model->id;
 
     return $this->save();
+  }
+
+  public function __getAddress($model) {
+    $addresses = $model->getRalatedDataByModelName('Address');
+
+    $_address = array();
+    foreach ($addresses as $address) {
+      $_address[] = trim($address->district->name.' '.$address->subDistrict->name.' '.$address->address);
+    }
+
+    $_address = implode(' ', $_address);
+
+    return $this->_clean($_address);
+
+  }
+
+  public function __lookupFormatParser($class,$key1,$key2,$records = array()) {
+
+    $temp = array();
+
+    list($class1,$field1) = explode('.', $key1);
+    list($class2,$field2) = explode('.', $key2);
+
+    $class1 = Service::loadModel($class1);
+    $class2 = Service::loadModel($class2);
+
+    if(($class->modelName == $class1->modelName) && empty($records)){
+      $records = $class->getAttributes();
+    }
+
+    if(array_key_exists($field1,$records)) {
+
+      $_records = $class2->where($field2,'=',$records[$field1])->get();
+
+      foreach ($_records as $key => $_record) {
+        $temp[] = $_record;
+      }
+
+      $records = $temp;
+
+    }else{
+
+      foreach ($records as $key => $record) {
+
+        if(empty($record[$field1])) {
+          continue;
+        }
+
+        $_records = $class2->where($field2,'=',$record[$field1])->get();
+
+        foreach ($_records as $key => $_record) {
+          $temp[] = $_record->getAttributes();
+        }
+        
+      }
+
+      $records = $temp;
+
+    }
+
+    return $records;
+
+  }
+
+  private function _replace($value,$key1,$key2) {
+    $value = $this->_clean($value);
+    return str_replace($key1, $value, $key2);
+  }
+
+  private function _clean($value) {
+    $value = strip_tags($value);
+    $value = trim(preg_replace('/\s\s+/', ' ', $value));
+    return $value;
   }
 
 }

@@ -278,8 +278,8 @@
   });
 </script>
 
+<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"
      async defer></script>
-<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 
 @stop

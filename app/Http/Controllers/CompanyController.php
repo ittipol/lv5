@@ -89,50 +89,6 @@ class CompanyController extends Controller
     // save
     if($company->save()){
 
-      // $company->saveRelatedModelData();
-
-      // // save company image
-      // if(!empty($request->get('filenames'))){
-      //   $image = new Image;
-      //   $image->saveUploadImages($company,$request->get('form_token'),$request->get('filenames'),Session::get('Person.id'));
-      // }
-
-      // save address
-      // $address = new Address;
-      // $address->fill($request->get('address'));
-      // $address->model = $company->modelName;
-      // $address->model_id = $company->id;
-      // $address->save();
-
-      // $tags = array();
-      // if(!empty($request->get('tags'))){
-      //   $tag = new Tag;
-      //   $tags = $tag->saveTags($request->get('tags'));
-      // }
-
-      // business type
-      // $businessType = new BusinessType;
-      // $businessType = $businessType->checkAndSave($request->input('business_type'));
-
-      // Company has business type
-      // $companyHasBusinessType = new CompanyHasBusinessType;
-      // $companyHasBusinessType->checkAndSave($company->id,$businessType->id);
-      
-      // $tagging = new Tagging;
-      // Company Tagging
-      // $tagging->deleteAndSave($company->modelName,$company->id,$tags);
-      // Bussiness type Tagging
-      // $tagging->checkAndSave($businessType,$tags);
-
-      // $options = array(
-      //   'data' => $company->getAttributes(),
-      //   'tags' => $tags
-      // );
-
-      // // Add to Lookup table
-      // $lookup = new Lookup;
-      // $lookup->saveSpecial($company,$options);
-
       // wiki
       if(!empty($request->input('wiki'))){
         $wiki = new Wiki;

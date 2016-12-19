@@ -22,11 +22,6 @@ class Image extends Model
     parent::__construct();
   }
 
-  // public function generateFileName($image) {
-  //   $name = time().'_'.Token::generateNumber(15).'_'.$image->getSize();
-  //   return $name.'.'.$image->getClientOriginalExtension(); 
-  // }
-
   public function getImageUrl() {
     $dirPath = $this->storagePath.strtolower($this->model).'/';
     $path = storage_path($dirPath.$this->model_id.'/images/'.$this->name);
