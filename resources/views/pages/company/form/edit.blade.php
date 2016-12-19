@@ -34,7 +34,7 @@
     ]);
   ?>
 
-  <input type="hidden" name="form_token" value="<?php echo $formToken; ?>" >
+  <input type="hidden" name="__token" value="<?php echo $__token; ?>" >
 
   <div class="form-section">
 
@@ -78,12 +78,53 @@
       </div>
 
       <div class="form-row">
+
+        <div class="sub-title">รูปภาพ</div>
+
+        <div>
+          <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
+          <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
+        </div>
+
+        <div class="sub-form">
+
+          <div class="sub-form-inner">
+
+            <div class="form-row">
+              <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
+              <div id="_image_logo">
+              </div>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="form-row">
+              <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
+              <div id="_image_group">
+              </div>
+            </div>
+
+          </div>
+        
+        </div>
+
+      </div>
+
+      <!-- <div class="form-row">
+        <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
+        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
+        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
+        <div id="_image_logo">
+        </div>
+      </div>
+
+      <div class="form-row">
         <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
         <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
         <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
         <div id="_image_group">
         </div>
-      </div>
+      </div> -->
 
     </div>
 
@@ -255,7 +296,13 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    Images.load('<?php echo $imageJson; ?>');
+
+    var logo = new Images('_image_logo','logo',1);
+    logo.load('<?php echo $logoJson; ?>');
+
+    var images = new Images('_image_group','images',5);
+    images.load('<?php echo $imageJson; ?>');
+
     District.load();
     Map.load('<?php echo $geographic; ?>');
     Tagging.load('<?php echo $tagJson; ?>');

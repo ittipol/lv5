@@ -142,7 +142,8 @@ class Model extends _Model
       return false;
     }
 
-    $this->saveImages();
+    $imageModel = new Image;
+    $imageModel->saveImages($this,Session::get('Person.id'));
 
     foreach ($this->allowedModelData as $allowed) {
 
@@ -165,12 +166,6 @@ class Model extends _Model
 
     return $class->__saveWithModelAndModelId($this,$value);
     
-  }
-
-  public function saveImages() {
-    $image = new Image;
-    $image->saveUploadImages($this,Session::get('Person.id'));
-    $image->deleteImages($this,Session::get('Person.id'));
   }
 
   public function includeRelatedData($models = array()) {
@@ -368,7 +363,7 @@ class Model extends _Model
     return false;
   }
 
-  public function getRalatedDataByModelName($modelName,$onlyFirst = false) {
+  public function getRalatedDataByModelName($modelName,$onlyFirst = false,$conditons = []) {
 
     $class = Service::loadModel($modelName);
 
@@ -376,10 +371,14 @@ class Model extends _Model
       return false;
     }
 
-    $model = $class->where([
+    $_conditons = [
       ['model','=',$this->modelName],
       ['model_id','=',$this->id],
-    ]);
+    ];
+
+    $conditons = array_merge($conditons,$_conditons);
+
+    $model = $class->where($conditons);
 
     if($onlyFirst){
       return $model->first();

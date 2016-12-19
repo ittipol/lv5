@@ -3,6 +3,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/jquery.modal.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/form.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/images.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/item_images.js') }}"></script>

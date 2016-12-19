@@ -33,8 +33,8 @@ class CompanyController extends Controller
       $company = $value->company;
 
       $image = '';
-      if(!empty($company->getRalatedDataByModelName('Image',true))) {
-        $image = $company->getRalatedDataByModelName('Image',true)->getImageUrl();
+      if(!empty($company->getRalatedDataByModelName('Image',true,[['type','=','images']]))) {
+        $image = $company->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
       }
 
       $companies[] = array(
@@ -67,8 +67,7 @@ class CompanyController extends Controller
 
     // clear temp dir and records
     $tempFile = new TempFile;
-    $tempFile->deleteRecordByToken($this->pageToken,'images',Session::get('Person.id'));
-    $tempFile->deleteRecordByToken($this->pageToken,'logo',Session::get('Person.id'));
+    $tempFile->deleteRecordByToken($this->pageToken,Session::get('Person.id'));
     $tempFile->deleteTempDir($this->pageToken);
 
     $this->data = array(
@@ -125,8 +124,7 @@ class CompanyController extends Controller
       $districts[$district->id] = $district->name;
     }
 
-    // Get Address
-    $address = $company->address();
+    $address = $company->getRalatedDataByModelName('Address',true);
 
     $geographic = array();
     if(!empty($address->lat) && !empty($address->lng)) {
@@ -135,7 +133,18 @@ class CompanyController extends Controller
     }
 
     // Get Images
-    $images = $company->images();
+    $logo = $company->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
+
+    $_logo = array();
+    if($logo){
+      $_logo[] = array(
+        'name' => $logo->name,
+        'url' => $logo->getImageUrl()
+      );
+    }
+
+    // Get Images
+    $images = $company->getRalatedDataByModelName('Image',false,[['type','=','images']]);
 
     $_images = array();
     if($images){
@@ -148,44 +157,27 @@ class CompanyController extends Controller
     }
 
     // Get Tag
-    $tags = $company->tags(true);
+    $taggings = $company->getRalatedDataByModelName('Tagging');
 
     $_tags = array();
-    foreach ($tags as $tag) {
+    foreach ($taggings as $tagging) {
       $_tags[] = array(
-        'id' =>  $tag['id'],
-        'name' =>  $tag['name']
+        'id' =>  $tagging->tag->id,
+        'name' =>  $tagging->tag->name
       );
     }
 
-    // $company->includeRelatedData(array(
-    //   'Address' => array(
-    //     'fields' => array('address','district_id','sub_district_id','lat','lng')
-    //   ),
-    //   'Tag' => array(
-    //     'fields' => array('name'),
-    //     'options' => array(
-    //       'related' => 'Tagging.tag'
-    //     )
-    //   ),
-    //   'Image' => array(
-    //     'fields' => array('name')
-    //   )
-    // ));
-
-    // form token
-    $formToken = Token::generateFormToken('Company','edit',Session::get('Person.id'));
-
     $tempFile = new TempFile;
-    $tempFile->deleteRecordByToken($formToken,'image',Session::get('Person.id'));
+    $tempFile->deleteRecordByToken($this->pageToken,Session::get('Person.id'));
+    $tempFile->deleteTempDir($this->pageToken);
 
     $this->data = array(
       'company' => $company,
       'address' => $address,
+      'logoJson' => json_encode($_logo),
       'imageJson' => json_encode($_images),
       'tagJson' => json_encode($_tags),
       'geographic' => json_encode($geographic),
-      'formToken' => $formToken,
       'districts' => $districts,
     );
 

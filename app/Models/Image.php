@@ -12,7 +12,7 @@ use File;
 class Image extends Model
 {
   protected $table = 'images';
-  protected $fillable = ['model','model_id','alias','name'];
+  protected $fillable = ['model','model_id','alias','type','name'];
   public $timestamps  = false;
   public $maxFileSize = 3145728; 
   public $allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg'];
@@ -22,29 +22,9 @@ class Image extends Model
     parent::__construct();
   }
 
-  public function getImageUrl() {
-    $dirPath = $this->storagePath.strtolower($this->model).'/';
-    $path = storage_path($dirPath.$this->model_id.'/images/'.$this->name);
-
-    if(File::exists($path)){
-      $path = '/safe_image/'.$this->name;
-    }else{
-      $path = $this->noImagePath;
-    }
-
-    return $path;
-  }
-
-  public function base64Encode() {
-
-    $dirPath = 'image/'.strtolower($this->model).'/';
-    $path = storage_path($dirPath.$this->model_id.'/images/'.$this->name);
-
-    if(!File::exists($path)){
-      $path = public_path('/images/no-img.png');
-    }
-
-    return base64_encode(File::get($path));
+  public function saveImages($model,$personId) {
+    $this->saveUploadImages($model,$personId);
+    $this->deleteImages($model,$personId);
   }
 
   // public function saveImages($model,$images) {
@@ -87,7 +67,6 @@ class Image extends Model
 
     $tempFileModel = new TempFile;
     $imagesTemp = $tempFileModel->where([
-      ['type','=','image'],
       ['token','=',$token],
       ['status','=','add'],
       ['created_by','=',$personId]
@@ -105,7 +84,7 @@ class Image extends Model
         continue;
       }
 
-      $to = storage_path($model->dirPath).$model->id.'/images/'.$filename;
+      $to = storage_path($model->dirPath).$model->id.'/'.$image->type.'/'.$filename;
 
       // move to real dir
       File::move($path, $to);
@@ -114,6 +93,7 @@ class Image extends Model
       $imageModel = new Image;
       $imageModel->model = $model->modelName;
       $imageModel->model_id = $model->id;
+      $imageModel->type = $image->type;
       $imageModel->name = $filename;
       $imageModel->save();
 
@@ -140,7 +120,6 @@ class Image extends Model
 
     $tempFileModel = new TempFile;
     $imagesTemp = $tempFileModel->where([
-      ['type','=','image'],
       ['token','=',$token],
       ['status','=','delete'],
       ['created_by','=',$personId]
@@ -176,6 +155,32 @@ class Image extends Model
       return true;
     }
     return false;
+  }
+
+  public function getImageUrl() {
+
+    $dirPath = $this->storagePath.strtolower($this->model).'/';
+    $path = storage_path($dirPath.$this->model_id.'/'.$this->type.'/'.$this->name);
+
+    if(File::exists($path)){
+      $path = '/safe_image/'.$this->name;
+    }else{
+      $path = $this->noImagePath;
+    }
+
+    return $path;
+  }
+
+  public function base64Encode() {
+
+    $dirPath = 'image/'.strtolower($this->model).'/';
+    $path = storage_path($dirPath.$this->model_id.'/images/'.$this->name);
+
+    if(!File::exists($path)){
+      $path = public_path('/images/no-img.png');
+    }
+
+    return base64_encode(File::get($path));
   }
 
 }

@@ -49,10 +49,9 @@ class TempFile extends Model
     ])->delete();
   }
 
-  public function deleteRecordByToken($token,$type,$personId) {
+  public function deleteRecordByToken($token,$personId) {
     return $this->where([
       ['token','=',$token],
-      ['type','=',$type],
       ['created_by','=',$personId]
     ])->delete();
   }

@@ -19,11 +19,14 @@ Images.prototype.load = function(imageJson){
 	if (typeof imageJson != 'undefined') {
 		var _images = JSON.parse(imageJson);
 		for (var i = 0; i < _images.length; i++) {
+			this.imagesPlaced.push(this.index);
 			this.index = this._createUploader(this.index,_images[i]);
 		}
 	}
 
-	this.index = this.createUploader(this.index);
+	if(this.index < this.limit){
+		this.index = this.createUploader(this.index);
+	}
 }
 
 Images.prototype.init = function(){
