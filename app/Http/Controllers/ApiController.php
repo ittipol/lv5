@@ -42,14 +42,14 @@ class ApiController extends Controller
     if($imageModel->checkMaxSize($image->getSize()) && $imageModel->checkType($image->getMimeType())) {
       $tempFile = new TempFile;
       $tempFile->name = Service::generateFileName($image);
-      $tempFile->type = 'image';
+      $tempFile->type = Input::get('type');
       $tempFile->token = Input::get('formToken');
       $tempFile->status = 'add'; 
       $tempFile->created_by = Session::get('Person.id');
 
       if($tempFile->save()){
         $success = true;
-        $tempFile->uploadtempImage($image,$tempFile->token,$tempFile->name);
+        $tempFile->uploadtempFile($image,$tempFile->token,$tempFile->name);
 
         $fileName = $tempFile->name;
 
@@ -80,7 +80,7 @@ class ApiController extends Controller
 
     if($total){
       $tempFile->name = Input::get('filename');
-      $tempFile->type = 'image';
+      $tempFile->type = Input::get('type');
       $tempFile->status = 'delete';
       $tempFile->token = Input::get('formToken');
       $tempFile->created_by = Session::get('Person.id');
@@ -89,10 +89,10 @@ class ApiController extends Controller
         $success = true;
       }
     }else{
-      $success = $tempFile->deletetempImage(Input::get('formToken'),Input::get('filename'));
+      $success = $tempFile->deletetempFile(Input::get('formToken'),Input::get('filename'));
 
       if($success){
-        $tempFile->deleteRecords(Input::get('filename'),'image','add',Input::get('formToken'),Session::get('Person.id'));
+        $tempFile->deleteRecord(Input::get('filename'),Input::get('formToken'),Input::get('type'),'add',Session::get('Person.id'));
       }
 
     }

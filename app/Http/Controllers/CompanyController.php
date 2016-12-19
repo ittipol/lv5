@@ -67,7 +67,8 @@ class CompanyController extends Controller
 
     // clear temp dir and records
     $tempFile = new TempFile;
-    $tempFile->deleteRecordByToken($this->pageToken,'add',Session::get('Person.id'));
+    $tempFile->deleteRecordByToken($this->pageToken,'images',Session::get('Person.id'));
+    $tempFile->deleteRecordByToken($this->pageToken,'logo',Session::get('Person.id'));
     $tempFile->deleteTempDir($this->pageToken);
 
     $this->data = array(

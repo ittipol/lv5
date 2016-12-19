@@ -18,11 +18,11 @@ class TempFile extends Model
     parent::__construct();
   }
 
-  public function uploadtempImage($image,$token,$filename) {
+  public function uploadtempFile($image,$token,$filename) {
     $image->move(storage_path($this->tempFileDir).$token, $filename);
   }
 
-  public function deletetempImage($token,$filename) {
+  public function deletetempFile($token,$filename) {
     return File::Delete(storage_path($this->tempFileDir).$token.'/'.$filename);
   }
 

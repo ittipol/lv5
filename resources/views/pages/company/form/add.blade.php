@@ -74,6 +74,14 @@
       </div>
 
       <div class="form-row">
+        <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
+        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
+        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
+        <div id="_image_logo">
+        </div>
+      </div>
+
+      <div class="form-row">
         <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
         <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
         <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
@@ -270,7 +278,13 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    Images.load();
+
+    var logo = new Images('_image_logo','logo',1);
+    logo.load();
+
+    var images = new Images('_image_group','images',5);
+    images.load();
+
     District.load();
     Map.load();
     Tagging.load();
