@@ -10,8 +10,13 @@ use Input;
 use Session;
 
 class ApiController extends Controller
-{
+{ 
   public function GetSubDistrict($districtId = null) {
+
+    if(!isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+      exit;  //trygetRealPath detect AJAX request, simply exist if no Ajax
+    }
+
     $subDistrictRecords = SubDistrict::where('district_id', '=', $districtId)->get(); 
 
     $subDistricts = array();

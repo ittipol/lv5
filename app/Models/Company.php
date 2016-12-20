@@ -32,32 +32,34 @@ class Company extends Model
 
     Company::saved(function($company){
 
-      // Add person to company
+      $role = new Role;
       $personHasCompany = new PersonHasCompany;
-
-      $exist = $personHasCompany->where([
-        ['company_id','=',$company->id],
-        ['person_id','=',Session::get('Person.id')]
-      ])->exists();
-
-      if(!$exist){
-        $personHasCompany->company_id = $company->id;
-        $personHasCompany->person_id = Session::get('Person.id');
-        $role = new Role;
-        $personHasCompany->role_id = $role->getIdByalias('admin');  
-        $personHasCompany->save();
-      }
-
       $companyHasBusinessType = new CompanyHasBusinessType;
-      $companyHasBusinessType->__saveSpecial($company,$company->business_type);
-
       $wordingRelation = new WordingRelation;
-      foreach ($company->companyHasBusinessType as $value) {
-        $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
-      } 
+      $lookup = new Lookup;
+
+      // // Add person to company
+      // $exist = $personHasCompany->where([
+      //   ['company_id','=',$company->id],
+      //   ['person_id','=',Session::get('Person.id')]
+      // ])->exists();
+
+      // if(!$exist){
+      //   $personHasCompany->company_id = $company->id;
+      //   $personHasCompany->person_id = Session::get('Person.id');
+      //   $personHasCompany->role_id = $role->getIdByalias('admin');  
+      //   $personHasCompany->save();
+      // }
+
+      
+      // $companyHasBusinessType->__saveSpecial($company,$company->business_type);
+
+      
+      // foreach ($company->companyHasBusinessType as $value) {
+      //   $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
+      // } 
 
       // Add to Lookup table
-      $lookup = new Lookup;
       $lookup->saveSpecial($company);
 
     });

@@ -41,7 +41,7 @@ class Lookup extends Model
     foreach ($formats as $key => $format){
 
       if(is_array($format)){
-        $records = $this->getData($format['get'],$model,array(
+        $records = $this->_parser($format['get'],$model,array(
           'lookupArrayFormat' => $format['key'],
           'id' => $model->id
         ));
@@ -84,7 +84,7 @@ class Lookup extends Model
 
                 if(!empty($parts[1])){
 
-                  $records = $this->getData($parts[0],$model,array(
+                  $records = $this->_parser($parts[0],$model,array(
                     'lookupStringFormat' => $parts[1]
                   ));
 
@@ -174,8 +174,50 @@ class Lookup extends Model
     return $this->_clean($_address);
 
   }
+  
+  private function _parser($fields,$class,$options = array()) {
 
-  public function __lookupFormatParser($class,$key1,$key2,$records = array()) {
+    if(!empty($options['lookupStringFormat'])) {
+
+      $lookup = new Lookup;
+
+      $formats = explode(',', $options['lookupStringFormat']);
+
+      $records = array();
+      foreach ($formats as $format) {
+        list($key1,$key2) = explode('=>', $format);
+        $records = $this->__lookupFormatParser($class,$key1,$key2,$records);
+      }
+
+      $fields = explode('.', $fields);
+
+      $data = array();
+      foreach ($records as $key => $record) {
+        $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
+      }
+
+    }elseif(!empty($options['lookupArrayFormat'])) {
+
+      $lookup = new Lookup;
+
+      $formats = $options['lookupArrayFormat'];
+
+      $records = array();
+      foreach ($formats as $key1 => $key2) {
+        $records = $this->__lookupFormatParser($class,$key1,$key2,$records);
+      }
+
+      $fields = explode('.', $fields);
+
+      $data = array();
+      foreach ($records as $key => $record) {
+        $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
+      }
+    }
+
+  }
+
+  private function __lookupFormatParser($class,$key1,$key2,$records = array()) {
 
     $temp = array();
 

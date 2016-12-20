@@ -22,8 +22,15 @@ class Address extends Model
     return $this->hasOne('App\Models\SubDistrict','id','sub_district_id');
   }
 
-  public function __saveWithModelAndModelId($model,$value) {
-    return $this->clearAndSave($model,$value);
+  public function __saveRelatedData($model,$value) {
+
+    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
+    if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
+      $model->getRalatedDataByModelName($this->modelName,true)->fill($value)->save();
+    }else{dd($model->includeModelAndModelId($value));
+      $this->_save($model,$model->includeModelAndModelId($value));
+    }
+    
   }
 
   private function _save($model,$value) {
@@ -35,7 +42,7 @@ class Address extends Model
   }
 
   public function clearAndSave($model,$value) {
-    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
+    // $this->deleteByModelNameAndModelId($model->modelName,$model->id);
     return $this->_save($model,$value);
   }
 

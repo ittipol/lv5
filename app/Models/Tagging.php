@@ -19,7 +19,7 @@ class Tagging extends Model
     return $this->hasOne('App\Models\Tag','id','tag_id');
   }
 
-  public function __saveWithModelAndModelId($model,$value) {
+  public function __saveRelatedData($model,$value) {
     
     $tag = new Tag;
 
@@ -48,15 +48,7 @@ class Tagging extends Model
   //     ['tag_id','=',$tagId]
   //   ])->count() ? true : false;
   // }
-
-  // public function checkAndSave($model,$tags) {
-  //   foreach ($tags as $tagId => $tag) {
-  //     if(!$this->checkRecordExist($model,$tagId)) {
-  //       $this->_save($model,$tagId);
-  //     }
-  //   }
-  // }
-
+  
   public function clearAndSaves($model,$tagIds) {
     // clear old record
     $this->deleteByModelNameAndModelId($model->modelName,$model->id);

@@ -2,6 +2,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/jquery-3.1.1.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.modal.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
+<!-- <script type="text/javascript" src="{{ URL::asset('js/google.map.js') }}"></script> -->
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/form.js') }}"></script>
@@ -12,6 +13,10 @@
 <script type="text/javascript" src="{{ URL::asset('js/components/floating-menu.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"
+     async defer></script>
 
 <?php if(file_exists($jsPath)): ?>
 <script type="text/javascript" src="<?php echo $root.$jsPath; ?>"></script>

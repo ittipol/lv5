@@ -74,6 +74,39 @@
       </div>
 
       <div class="form-row">
+
+        <div class="sub-title">รูปภาพ</div>
+
+        <div>
+          <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
+          <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
+        </div>
+
+        <div class="sub-form">
+
+          <div class="sub-form-inner">
+
+            <div class="form-row">
+              <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
+              <div id="_image_logo">
+              </div>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="form-row">
+              <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
+              <div id="_image_group">
+              </div>
+            </div>
+
+          </div>
+        
+        </div>
+
+      </div>
+
+      <!-- <div class="form-row">
         <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
         <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
         <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
@@ -87,7 +120,7 @@
         <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
         <div id="_image_group">
         </div>
-      </div>
+      </div> -->
 
     </div>
 
@@ -279,10 +312,10 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    var logo = new Images('_image_logo','logo',1);
+    var logo = new Images('_image_logo','logo',1,'default');
     logo.load();
 
-    var images = new Images('_image_group','images',5);
+    var images = new Images('_image_group','images',5,'default');
     images.load();
 
     District.load();
@@ -291,8 +324,5 @@
     Form.load();
   });
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"
-     async defer></script>
 
 @stop

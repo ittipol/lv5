@@ -20,9 +20,6 @@ class CompanyController extends Controller
 {
   public function listView() {
 
-    // พนักงานประจำ
-    // พนักงานสัญญาจ้าง
-
     $string = new String;
 
     // Get company
@@ -92,11 +89,7 @@ class CompanyController extends Controller
       // wiki
       if(!empty($request->input('wiki'))){
         $wiki = new Wiki;
-        $wiki->model = $company->modelName;
-        $wiki->model_id = $company->id;
-        $wiki->subject = $company->name;
-        $wiki->description = $company->description;
-        $wiki->save();
+        $wiki->__saveSpecial($company,$company->name,$company->description);
       }
 
       $message = new Message;
@@ -186,52 +179,14 @@ class CompanyController extends Controller
   }
 
   public function edit(CompanyRequest $request,$companyId) {
-
+// dd($request->all());
     $company = Company::find($companyId);
     $company->fill($request->all());
     $company->save();
 
-    if(!empty($request->get('filenames'))){
-      $image = new Image;
-      $image->saveUploadImages($company,$request->get('form_token'),$request->get('filenames'),Session::get('Person.id'));
-      $image->deleteImages($company,$request->get('form_token'),Session::get('Person.id'));
+    if($company->save()){
+
     }
-
-    // save address
-    $address = new Address;
-    $address->fill($request->get('address'));
-    $address->model = $company->modelName;
-    $address->model_id = $company->id;
-    $address->save();
-
-    $tags = array();
-    if(!empty($request->get('tags'))){
-      $tag = new Tag;
-      $tags = $tag->saveTags($request->get('tags'));
-    }
-
-    // business type
-    $businessType = new BusinessType;
-    $businessType = $businessType->checkAndSave($request->input('business_type'));
-
-    // Company has business type
-    $companyHasBusinessType = new CompanyHasBusinessType;
-    $companyHasBusinessType->checkAndSave($company->id,$businessType->id);
-
-    $tagging = new Tagging;
-    // Company Tagging
-    $tagging->deleteAndSave($company->modelName,$company->id,$tags);
-    // Bussiness type Tagging
-    $tagging->checkAndSave($businessType->modelName,$businessType->id,$tags);
-
-    $options = array(
-      'data' => $company->getAttributes(),
-      'tags' => $tags
-    );
-
-    // Add to Lookup table
-    $lookup = new Lookup;
-    $lookup->saveSpecial($company,$options);
     
   }
 

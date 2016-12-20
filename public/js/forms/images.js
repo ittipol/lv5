@@ -1,15 +1,16 @@
-function Images (panel,type,limit) {
-	this.panel = panel,
-	this.type = type,
-	this.limit = limit,
-	this.id = null,
-	this.code = null,
-	this.index = 0,
-	this.runningNumber = 0,
-	this.imagesPlaced = [],
-	this.filenames = [], 
-	this.defaultImage = '/images/add_images2.svg',
-	this.allowedClick = true
+function Images (panel,type,limit,style) {
+	this.panel = panel;
+	this.type = type;
+	this.limit = limit;
+	this.id = null;
+	this.code = null;
+	this.index = 0;
+	this.runningNumber = 0;
+	this.imagesPlaced = [];
+	this.filenames = []; 
+	this.defaultImage = '/images/add_images2.svg';
+	this.allowedClick = true;
+	this.style = style;
 }
 
 Images.prototype.load = function(imageJson){

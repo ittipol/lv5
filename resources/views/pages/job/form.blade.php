@@ -10,6 +10,9 @@
 <div class="container">
   <h2>ลงประกาศงาน</h2>
 
+  // พนักงานประจำ
+  // พนักงานสัญญาจ้าง
+
   <?php if(!empty($errors->all())): ?>
     <div class="form-error-messages">
       <div class="form-error-messages-inner">

@@ -1,8 +1,14 @@
-var District = {}
+var District = {
+  subDistrictId: null
+}
 
-District.load = function(){
+District.load = function(subDistrictId){
   District.init();
   District.bind();
+
+  if (typeof subDistrictId != 'undefined') {
+    District.subDistrictId = subDistrictId;
+  }
 }
 
 District.init = function(){
@@ -22,8 +28,8 @@ District.getSubDistrict = function(districtId){
 
 	var request = $.ajax({
     url: "/api/get_sub_district/"+districtId,
-    type: "post",
-    data: {_token:CSRF_TOKEN},
+    type: "get",
+    // data: {_token:CSRF_TOKEN},
     dataType:'json'
   });
 
@@ -31,9 +37,19 @@ District.getSubDistrict = function(districtId){
   request.done(function (response, textStatus, jqXHR){
     $('#sub_district').empty();
     $.each(response, function(key,value) {
-      $('#sub_district').append($("<option></option>")
-         .attr("value", key).text(value));
+      
+      var option = $("<option></option>");
+
+      if(key == District.subDistrictId){
+        option.prop('selected',true);
+      }
+
+      $('#sub_district').append(option.attr("value", key).text(value));
+
     });
+
+    District.subDistrictId = null;
+    
   });
 
   // Callback handler that will be called on failure

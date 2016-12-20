@@ -110,22 +110,6 @@
 
       </div>
 
-      <!-- <div class="form-row">
-        <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
-        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        <div id="_image_logo">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
-        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        <div id="_image_group">
-        </div>
-      </div> -->
-
     </div>
 
   </div>
@@ -212,8 +196,8 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address[address]', 'ที่อยู่');
-          echo Form::textarea('address[address]', null, array(
+          echo Form::label('Address[address]', 'ที่อยู่');
+          echo Form::textarea('Address[address]', $address['address'], array(
             'class' => 'ckeditor'
           ));
         ?>
@@ -232,10 +216,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address[district_id]', 'อำเภอ', array(
+          echo Form::label('Address[district_id]', 'อำเภอ', array(
             'class' => 'required'
           ));
-          echo Form::select('address[district_id]', $districts ,null, array(
+          echo Form::select('Address[district_id]', $districts ,$address['district_id'], array(
             'id' => 'district'
           ));
         ?>
@@ -243,10 +227,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address[sub_district_id]', 'ตำบล', array(
+          echo Form::label('Address[sub_district_id]', 'ตำบล', array(
             'class' => 'required'
           ));
-          echo Form::select('address[sub_district_id]', array('0' => '-') , null, array(
+          echo Form::select('Address[sub_district_id]', array('0' => '-') , null, array(
             'id' => 'sub_district'
           ));
         ?>
@@ -297,20 +281,16 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    var logo = new Images('_image_logo','logo',1);
+    var logo = new Images('_image_logo','logo',1,'default');
     logo.load('<?php echo $logoJson; ?>');
 
-    var images = new Images('_image_group','images',5);
+    var images = new Images('_image_group','images',5,'default');
     images.load('<?php echo $imageJson; ?>');
 
-    District.load();
+    District.load('<?php echo $address['sub_district_id']; ?>');
     Map.load('<?php echo $geographic; ?>');
     Tagging.load('<?php echo $tagJson; ?>');
   });
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"
-     async defer></script>
-<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 
 @stop
