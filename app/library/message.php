@@ -30,6 +30,11 @@ class Message
     Session::flash('message.type', 'success');
   }
 
+  public function editingSuccess($subject = 'ข้อมูล') {
+    Session::flash('message.title', $subject.'ถูกแก้ไขเรียบร้อยแล้ว');
+    Session::flash('message.type', 'success');
+  }
+
   public function companyRequest() {
     Session::flash('message.title', 'คุณยังไม่ได้เพิ่มสถานประกอบการขอบคุณ');
     Session::flash('message.desc', 'กรุณาเพิ่มสถานประกอบการของคุณอย่างน้อย 1 สถานประกอบการ');

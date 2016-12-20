@@ -24,11 +24,10 @@ class Address extends Model
 
   public function __saveRelatedData($model,$value) {
 
-    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
     if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      $model->getRalatedDataByModelName($this->modelName,true)->fill($value)->save();
-    }else{dd($model->includeModelAndModelId($value));
-      $this->_save($model,$model->includeModelAndModelId($value));
+      return $model->getRalatedDataByModelName($this->modelName,true)->fill($value)->save();
+    }else{
+      return $this->fill($model->includeModelAndModelId($value))->save();
     }
     
   }
@@ -42,7 +41,7 @@ class Address extends Model
   }
 
   public function clearAndSave($model,$value) {
-    // $this->deleteByModelNameAndModelId($model->modelName,$model->id);
+    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
     return $this->_save($model,$value);
   }
 

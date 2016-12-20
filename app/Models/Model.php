@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model as _Model;
 use App\Models\Image;
 use App\Models\Address;
-use App\Models\Tag;
+// use App\Models\Tag;
 use App\Models\Tagging;
-use App\Models\WordingRelation;
+use App\Models\Wiki;
 use App\Models\Lookup;
 use App\library\token;
 use App\library\service;
@@ -29,6 +29,7 @@ class Model extends _Model
   public $allowedModelData = array('Address','Tagging');
   public $createDir = false;
   public $createLookup = false;
+  public $createWiki = false;
 
   public function __construct(array $attributes = []) { 
 
@@ -94,6 +95,11 @@ class Model extends _Model
       unset($attributes['__token']);
     }
 
+    if(!empty($attributes['wiki'])) {
+      $this->createWiki = true;
+      unset($attributes['wiki']);
+    }
+
     return parent::fill($attributes);
 
   }
@@ -108,9 +114,8 @@ class Model extends _Model
       }
     }
 
-    // before save 
     return parent::save();
-    // after save
+
   }
 
   public function createDir($model = null) {
@@ -157,6 +162,17 @@ class Model extends _Model
       $this->_save($allowed,$this->relatedData[$allowed]);
     }
 
+    // Add to Lookup table
+    if($this->createLookup) {
+      $lookup = new Lookup;
+      $lookup->saveSpecial($this);
+    }
+
+    if($this->createWiki && ($this->state == 'create')){
+      $wiki = new Wiki;
+      $wiki->saveSpecial($this);
+    }
+
   }
 
   private function _save($model,$value) {
@@ -171,133 +187,97 @@ class Model extends _Model
     
   }
 
-  // public function includeRelatedData($models = array()) {
+  public function includeRelatedData($models = array()) {
 
-  //   $data = $this->extract($models);
+    $data = $this->extract($models);
     
-  //   foreach ($data as $model => $value) {
-  //     $this->attributes[$model] = $value;
-  //   }
+    foreach ($data as $model => $value) {
+      $this->attributes[$model] = $value;
+    }
 
-  // }
+  }
 
-  // public function extract($data,$class = null) {
+  public function extractRelatedData($data,$class = null) {
 
-  //   $__data = array();
+    $__data = array();
 
-  //   foreach ($data as $model => $value) {
+    foreach ($data as $model => $value) {
 
-  //     if($model == 'options') {
-  //       continue;
-  //     }
+      if($model == 'options') {
+        continue;
+      }
 
-  //     $_class = Service::loadModel($model);
+      $_class = Service::loadModel($model);
 
-  //     if(!empty($_class) && is_array($value)){
-  //       // extract
-  //       $_data = $this->extract($value,$_class);
-  //       // save
-  //       $__data[$_class->modelName] = $_data[$_class->modelName];
-  //     }
+      if(!empty($_class) && is_array($value)){
+        // extract
+        $_data = $this->extract($value,$_class);
+        // save
+        $__data[$_class->modelName] = $_data[$_class->modelName];
+      }
 
-  //     if($model == 'fields') {
+      if($model == 'fields') {
 
-  //       $options = array();
+        $options = array();
 
-  //       if(!empty($data['options'])){
-  //         $options = $data['options'];
-  //       }
+        if(!empty($data['options'])){
+          $options = $data['options'];
+        }
 
-  //       // get data
-  //       return $this->getData($value,$class,$options);
+        // get data
+        return $this->_extractRelatedData($value,$class,$options);
 
-  //     }
+      }
 
-  //   }
+    }
 
-  //   return $__data;
+    return $__data;
     
-  // }
+  }
 
-  // public function getData($fields,$class,$options = array()) {
+  public function _extractRelatedData($fields,$class,$options = array()) {
 
-  //   $data = array();
+    $data = array();
 
-  //   if(empty($class)){
-  //     return false;
-  //   }
+    if(empty($class)){
+      return false;
+    }
 
-  //   if(!empty($options['related'])) {
-  //     $parts = explode('.', $options['related']);
+    if(!empty($options['related'])) {
+      $parts = explode('.', $options['related']);
 
-  //     if(!empty($parts[1])){
-  //       $relatedClass = $parts[0];
-  //       $relation = $parts[1];
-  //     }else{
-  //       return false;
-  //     }
+      if(!empty($parts[1])){
+        $relatedClass = $parts[0];
+        $relation = $parts[1];
+      }else{
+        return false;
+      }
 
-  //     $relatedClass = Service::loadModel($relatedClass);
-  //     $records = $relatedClass->where([
-  //       ['model','=',$this->modelName],
-  //       ['model_id','=',$this->id]
-  //     ])->get($fields);
+      $relatedClass = Service::loadModel($relatedClass);
+      $records = $relatedClass->where([
+        ['model','=',$this->modelName],
+        ['model_id','=',$this->id]
+      ])->get($fields);
 
-  //     foreach ($records as $key => $record) {
-  //       $data[$class->modelName][$key] = $record->{$relation}->getAttributes();
-  //     }
+      foreach ($records as $key => $record) {
+        $data[$class->modelName][$key] = $record->{$relation}->getAttributes();
+      }
 
-  //   }elseif(Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')){
-  //     $records = $class->where([
-  //       ['model','=',$this->modelName],
-  //       ['model_id','=',$this->id]
-  //     ])->get($fields);
+    }elseif(Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')){
+      $records = $class->where([
+        ['model','=',$this->modelName],
+        ['model_id','=',$this->id]
+      ])->get($fields);
 
-  //     foreach ($records as $key => $record) {
-  //       $data[$class->modelName][$key] = $record->getAttributes();
-  //     }
+      foreach ($records as $key => $record) {
+        $data[$class->modelName][$key] = $record->getAttributes();
+      }
 
-  //   }elseif(!empty($options['lookupStringFormat'])) {
+    }
 
-  //     $lookup = new Lookup;
+    return $data;
 
-  //     $formats = explode(',', $options['lookupStringFormat']);
-
-  //     $records = array();
-  //     foreach ($formats as $format) {
-  //       list($key1,$key2) = explode('=>', $format);
-  //       $records = $lookup->__lookupFormatParser($class,$key1,$key2,$records);
-  //     }
-
-  //     $fields = explode('.', $fields);
-
-  //     $data = array();
-  //     foreach ($records as $key => $record) {
-  //       $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
-  //     }
-
-  //   }elseif(!empty($options['lookupArrayFormat'])) {
-
-  //     $lookup = new Lookup;
-
-  //     $formats = $options['lookupArrayFormat'];
-
-  //     $records = array();
-  //     foreach ($formats as $key1 => $key2) {
-  //       $records = $lookup->__lookupFormatParser($class,$key1,$key2,$records);
-  //     }
-
-  //     $fields = explode('.', $fields);
-
-  //     $data = array();
-  //     foreach ($records as $key => $record) {
-  //       $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
-  //     }
-  //   }
-
-  //   return $data;
-
-  // }
+  }
 
   public function getRalatedDataByModelName($modelName,$onlyFirst = false,$conditons = []) {
 

@@ -14,6 +14,7 @@ class Company extends Model
   public $table = 'companies';
   protected $fillable = ['name','description','business_type','phone_number','email','website','facebook','instagram','line','ip_address','created_by'];
   public $timestamps  = false;
+  public $createLookup = true;
   public $lookupFormat = array(
     'keyword' => '{{name}}',
     'keyword_1' => '{{business_type}}',
@@ -21,6 +22,10 @@ class Company extends Model
   );
   public $createDir = true;
   public $dirNames = array('logo','cover','images');
+  public $wikiFormat = array(
+    'subject' => '{{name}}',
+    'description' => '{{description}}',
+  );
 
   public function __construct() {  
     parent::__construct();
@@ -38,29 +43,27 @@ class Company extends Model
       $wordingRelation = new WordingRelation;
       $lookup = new Lookup;
 
-      // // Add person to company
-      // $exist = $personHasCompany->where([
-      //   ['company_id','=',$company->id],
-      //   ['person_id','=',Session::get('Person.id')]
-      // ])->exists();
+      if($company->state == 'create') {
+        // Add person to company
+        $exist = $personHasCompany->where([
+          ['company_id','=',$company->id],
+          ['person_id','=',Session::get('Person.id')]
+        ])->exists();
 
-      // if(!$exist){
-      //   $personHasCompany->company_id = $company->id;
-      //   $personHasCompany->person_id = Session::get('Person.id');
-      //   $personHasCompany->role_id = $role->getIdByalias('admin');  
-      //   $personHasCompany->save();
-      // }
+        if(!$exist){
+          $personHasCompany->company_id = $company->id;
+          $personHasCompany->person_id = Session::get('Person.id');
+          $personHasCompany->role_id = $role->getIdByalias('admin');  
+          $personHasCompany->save();
+        }
 
-      
-      // $companyHasBusinessType->__saveSpecial($company,$company->business_type);
+      }
 
-      
-      // foreach ($company->companyHasBusinessType as $value) {
-      //   $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
-      // } 
+      $companyHasBusinessType->__saveSpecial($company,$company->business_type);
 
-      // Add to Lookup table
-      $lookup->saveSpecial($company);
+      foreach ($company->companyHasBusinessType as $value) {
+        $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
+      } 
 
     });
   }

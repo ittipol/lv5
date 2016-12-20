@@ -85,21 +85,11 @@ class CompanyController extends Controller
 
     // save
     if($company->save()){
-
-      // wiki
-      if(!empty($request->input('wiki'))){
-        $wiki = new Wiki;
-        $wiki->__saveSpecial($company,$company->name,$company->description);
-      }
-
       $message = new Message;
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
-
     }else{
-
       $message = new Message;
       $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้');
-
     }
 
     return Redirect::to('company/list');
@@ -140,7 +130,7 @@ class CompanyController extends Controller
     $images = $company->getRalatedDataByModelName('Image',false,[['type','=','images']]);
 
     $_images = array();
-    if($images){
+    if(!empty($images)){
       foreach ($images as $image) {
         $_images[] = array(
           'name' => $image->name,
@@ -153,11 +143,13 @@ class CompanyController extends Controller
     $taggings = $company->getRalatedDataByModelName('Tagging');
 
     $_tags = array();
-    foreach ($taggings as $tagging) {
-      $_tags[] = array(
-        'id' =>  $tagging->tag->id,
-        'name' =>  $tagging->tag->name
-      );
+    if(!empty($taggings)){
+      foreach ($taggings as $tagging) {
+        $_tags[] = array(
+          'id' =>  $tagging->tag->id,
+          'name' =>  $tagging->tag->name
+        );
+      }
     }
 
     $tempFile = new TempFile;
@@ -179,14 +171,21 @@ class CompanyController extends Controller
   }
 
   public function edit(CompanyRequest $request,$companyId) {
-// dd($request->all());
+
     $company = Company::find($companyId);
     $company->fill($request->all());
     $company->save();
 
     if($company->save()){
-
+      $message = new Message;
+      $message->editingSuccess('ร้านค้าหรือสถานประกอบการ');
+    }else{
+      $message = new Message;
+      $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้');
     }
+
+    return Redirect::to('company/list');
+
     
   }
 

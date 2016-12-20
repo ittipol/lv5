@@ -25,6 +25,51 @@ class Lookup extends Model
   // Call Method
   // 'address' => '{{__getAddress}}'
 
+  public function saveSpecial($model,$options = array()) {
+
+    $value = array();
+
+    $data = $model->getAttributes();
+
+    if(!empty($options['data'])){
+      $data = array_merge($data,$options['data']);
+    }
+
+    $tags = $model->getRalatedDataByModelName('Tagging');
+
+    $_tags = array();
+    if(empty($tags)){
+      foreach ($tags as $tag) {
+        $_tags[] = $tag->tag->name;
+      }
+    }
+
+    if(!empty($_tags)){
+      $value['tags'] = implode(' ',$_tags);
+    }
+
+    $_addresses = $this->__getAddress($model);
+    if($_addresses){
+      $value['address'] = $_addresses;
+    }
+
+    // Parser
+    $result = $this->parser($model,$data);
+
+    if(!empty($result)){
+      foreach ($result as $key => $_value){
+        $value[$key] = $_value;
+      }
+    }
+
+    if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
+      return $model->getRalatedDataByModelName($this->modelName,true)->fill($value)->save();
+    }else{
+      return $this->fill($model->includeModelAndModelId($value))->save();
+    }
+
+  }
+
   private function parser($model,$data = array()) {
 
     if(empty($model->lookupFormat)){
@@ -58,8 +103,7 @@ class Lookup extends Model
       
         $_value = implode(' ', $_value);
 
-        $result[$key] = $this->_replace($_value,$value,$result[$key]);
-        // $result[$key] = trim(preg_replace('/\s\s+/', ' ', strip_tags($_value)));
+        $result[$key] = $this->_clean($_value);
 
       }else{
         preg_match_all($parseFormat, $format, $matches);
@@ -74,7 +118,6 @@ class Lookup extends Model
 
             if(!empty($_matches[0][0])){
 
-              // First: check data in $data
               if(substr($_matches[0][0],0,2) == '__'){
                 $_value = $this->{$_matches[0][0]}($model);
               }elseif(array_key_exists($_matches[0][0],$data)) {
@@ -119,48 +162,6 @@ class Lookup extends Model
 
   }
 
-  public function saveSpecial($model,$options = array()) {
-
-    $data = $model->getAttributes();
-
-    if(!empty($options['data'])){
-      $data = array_merge($data,$options['data']);
-    }
-
-    $tags = Tagging::where([
-      ['model','=',$model->modelName],
-      ['model_id','=',$model->id]
-    ])->get();
-
-    $_tags = array();
-    foreach ($tags as $tag) {
-      $_tags[] = $tag->tag->name;
-    }
-
-    if(!empty($_tags)){
-      $this->tags = implode(' ',$_tags);
-    }
-
-    $_addresses = $this->__getAddress($model);
-    if($_addresses){
-      $this->address = $_addresses;
-    }
-
-    // Parser
-    $result = $this->parser($model,$data);
-
-    if(!empty($result)){
-      foreach ($result as $key => $value){
-        $this->$key = $value;
-      }
-    }
-
-    $this->model = $model->modelName;
-    $this->model_id = $model->id;
-
-    return $this->save();
-  }
-
   public function __getAddress($model) {
     $addresses = $model->getRalatedDataByModelName('Address');
 
@@ -176,6 +177,12 @@ class Lookup extends Model
   }
   
   private function _parser($fields,$class,$options = array()) {
+
+    $data = array();
+
+    if(empty($class)){
+      return false;
+    }
 
     if(!empty($options['lookupStringFormat'])) {
 
@@ -214,6 +221,8 @@ class Lookup extends Model
         $data[$fields[0]][$key][$fields[1]] = $record[$fields[1]];
       }
     }
+
+    return $data;
 
   }
 
