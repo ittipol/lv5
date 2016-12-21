@@ -28,8 +28,8 @@ class Model extends _Model
   public $relatedData;
   public $allowedModelData = array('Address','Tagging');
   public $createDir = false;
-  public $createLookup = false;
   public $createWiki = false;
+  public $temporaryData;
 
   public function __construct(array $attributes = []) { 
 
@@ -80,6 +80,19 @@ class Model extends _Model
 
   public function fill(array $attributes) {
 
+    if(!empty($this->temporaryData)) {
+      $_temporaryData = array();
+      foreach ($this->temporaryData as $key => $value) {
+        if(!empty($attributes[$value])) {
+          $_temporaryData[$value] = $attributes[$value];
+          // Session::put($this->pageToken.'.'.$value,$attributes[$value]);
+        }
+      } 
+      if(!empty($_temporaryData)) {
+        $this->temporaryData = $_temporaryData;
+      }
+    }
+
     foreach ($this->allowedModelData as $allowed) {
 
       if(empty($attributes[$allowed])) {
@@ -124,28 +137,22 @@ class Model extends _Model
       return false;
     }
 
-    // $imageModel = new Image;
-    // $imageModel->saveImages($this,Session::get('Person.id'));
+    $imageModel = new Image;
+    $imageModel->saveImages($this,Session::get('Person.id'));
 
-    // foreach ($this->allowedModelData as $allowed) {
+    foreach ($this->allowedModelData as $allowed) {
 
-    //   if(empty($this->relatedData[$allowed])) {
-    //     continue;
-    //   }
+      if(empty($this->relatedData[$allowed])) {
+        continue;
+      }
 
-    //   $this->_save($allowed,$this->relatedData[$allowed]);
-    // }
+      $this->_save($allowed,$this->relatedData[$allowed]);
+    }
 
-    // Add to Lookup table
-    // if($this->createLookup) {
-    //   $lookup = new Lookup;
-    //   $lookup->saveSpecial($this);
-    // }
-
-    // if($this->createWiki && ($this->state == 'create')){
-    //   $wiki = new Wiki;
-    //   $wiki->saveSpecial($this);
-    // }
+    if($this->createWiki && ($this->state == 'create')){
+      $wiki = new Wiki;
+      $wiki->saveSpecial($this);
+    }
 
   }
 

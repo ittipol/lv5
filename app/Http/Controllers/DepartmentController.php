@@ -30,14 +30,17 @@ class DepartmentController extends Controller
       if($value->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()){
 
         $department = $value->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()->department;
-        $image = $department->imageUrl();
+
+        $image = '';
+        if(!empty($department->getRalatedDataByModelName('Image',true,[['type','=','images']]))) {
+          $image = $department->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
+        }
 
         $departments[] = array(
           'id' => $department->id,
           'name' => $department->name,
           'description' => $string->subString($department->description,120),
           'business_type' => $department->business_type,
-          // 'image' => !empty($image) ? $image : '/images/no-img.png',
           'image' => $image,
         );
 
@@ -102,44 +105,16 @@ class DepartmentController extends Controller
       return Redirect::to('company/list'); 
     }
 
-    // Store Company id
-    Session::put($this->pageToken.'.compay_id',$companyId);
+    // need to store value
+    $request['company_id'] = $companyId;
 
     $department = new Department;
     $department->fill($request->all());
 
     if($department->save()){
 
-      //
-      $companyHasDepartment = new CompanyHasDepartment;
-      $companyHasDepartment->company_id = $companyId;
-      $companyHasDepartment->department_id = $department->id;
-      $companyHasDepartment->save();
-
-      $options = array(
-        'data' => $department->getAttributes(),
-      );
- 
-      //
-      $company = Company::where('id','=',$companyId)->first();
-      $options['data'] = array_merge($options['data'],array(
-        '_companyName' => $company->name,
-        '_businessType' => $company->business_type
-      ));
-
-      // Add to Lookup table
-      $lookup = new Lookup;
-      $lookup->saveSpecial($department,$options);
-
-      // wiki
-      if(!empty($request->input('wiki'))){
-        $wiki = new Wiki;
-        $wiki->model = $department->modelName;
-        $wiki->model_id = $department->id;
-        $wiki->subject = $department->name;
-        $wiki->description = $department->description;
-        $wiki->save();
-      }
+      // check empty
+      Session::forget($department->pageToken);
 
       $message = new Message;
       $message->addingSuccess('แผนก');

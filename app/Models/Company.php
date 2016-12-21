@@ -13,7 +13,6 @@ class Company extends Model
   public $table = 'companies';
   protected $fillable = ['name','description','business_type','phone_number','email','website','facebook','instagram','line','ip_address','created_by'];
   public $timestamps  = false;
-  public $createLookup = true;
   public $lookupFormat = array(
     'keyword' => '{{name}}',
     'keyword_1' => '{{business_type}}',
@@ -47,6 +46,9 @@ class Company extends Model
       foreach ($company->companyHasBusinessType as $value) {
         $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
       } 
+
+      $lookup = new Lookup;
+      $lookup->saveSpecial($this);
 
     });
   }

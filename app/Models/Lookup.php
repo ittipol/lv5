@@ -157,7 +157,7 @@ class Lookup extends Model
       }
 
     }
-dd($result);
+
     return $result;
 
   }

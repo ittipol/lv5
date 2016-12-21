@@ -26,6 +26,7 @@ class Department extends Model
     'subject' => '{{name}}',
     'description' => '{{description}}',
   );
+  public $temporaryData = array('company_id');
 
   public function __construct() {  
     parent::__construct();
@@ -38,8 +39,7 @@ class Department extends Model
     Department::saved(function($department){
 
       // get company id
-      $companyId = Session::get($department->pageToken.'.compay_id');
-      Session::forget($department->pageToken.'.compay_id');
+      $companyId = $department->temporaryData['company_id'];
 
       if($department->state == 'create') {
 
@@ -48,20 +48,17 @@ class Department extends Model
 
         $personHasDepartment = new PersonHasDepartment;
         $personHasDepartment->__saveSpecial($department->id,Session::get('Person.id'),'admin');
+
       }
 
       $lookup = new Lookup;
       $lookup->saveSpecial($department);
 
-      // foreach ($company->companyHasBusinessType as $value) {
-      //   $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
-      // } 
-
     });
   }
 
   public function fill(array $attributes) {
-
+ 
     if(!empty($attributes['company_address'])) {
       unset($attributes['Address']);
     }
