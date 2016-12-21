@@ -36,13 +36,12 @@ class Company extends Model
 
     Company::saved(function($company){
 
-      $personHasCompany = new PersonHasCompany;
-      $companyHasBusinessType = new CompanyHasBusinessType;
-
       if($company->state == 'create') {
+        $personHasCompany = new PersonHasCompany;
         $personHasCompany->__saveSpecial($company->id,Session::get('Person.id'),'admin');
       }
 
+      $companyHasBusinessType = new CompanyHasBusinessType;
       $companyHasBusinessType->__saveSpecial($company,$company->business_type);
 
       foreach ($company->companyHasBusinessType as $value) {
@@ -65,7 +64,7 @@ class Company extends Model
   }
 
   public function checkExistById($companyId) {
-    return $this->where('id','=',$companyId)->count() ? true : false;
+    return $this->find($companyId)->exists();
   }
 
 }

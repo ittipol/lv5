@@ -5,12 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DepartmentRequest;
 use App\Models\Company;
 use App\Models\Department;
-use App\Models\CompanyHasDepartment;
-use App\Models\Person;
 use App\Models\PersonHasCompany;
-use App\Models\PersonHasDepartment;
-use App\Models\Role;
-use App\Models\Lookup;
 use App\Models\District;
 use App\Models\TempFile;
 use App\library\message;
@@ -63,7 +58,7 @@ class DepartmentController extends Controller
     // check company exist and person who is in company or not
     $personHasCompany = new PersonHasCompany;
     $company = new Company;
-    if(!$personHasCompany->checkPersonInCompany(Session::get('Person.id'),$companyId) || !$company->checkExistById($companyId)){
+    if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id')) || !$company->checkExistById($companyId)){
       $message = new Message;
       $message->companyCheckFail();
       return Redirect::to('company/list'); 
@@ -82,7 +77,7 @@ class DepartmentController extends Controller
     $tempFile->deleteTempDir($this->pageToken);
 
     // Get Company name
-    $company = Company::where('id','=',$companyId)->first();
+    $company = Company::find($companyId);
 
     $this->data = array(
       'companyName' => $company->name,
@@ -98,19 +93,21 @@ class DepartmentController extends Controller
       exit;
     }
 
-// dd($request->all());
     // check company exist and person who is in company or not
     $personHasCompany = new PersonHasCompany;
     $company = new Company;
-    if(!$personHasCompany->checkPersonInCompany(Session::get('Person.id'),$companyId) || !$company->checkExistById($companyId)){
+    if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id')) || !$company->checkExistById($companyId)){
       $message = new Message;
       $message->companyCheckFail();
       return Redirect::to('company/list'); 
     }
-  // dd($request->all());
+
+    // Store Company id
+    Session::put($this->pageToken.'.compay_id',$companyId);
+
     $department = new Department;
     $department->fill($request->all());
-dd('er');
+
     if($department->save()){
 
       //
@@ -133,16 +130,6 @@ dd('er');
       // Add to Lookup table
       $lookup = new Lookup;
       $lookup->saveSpecial($department,$options);
-
-      // add person to department
-      $personHasDepartment = new PersonHasDepartment;
-      $personHasDepartment->person_id = Session::get('Person.id');
-      $personHasDepartment->department_id = $department->id;
-
-      // role
-      $role = new Role;
-      $personHasDepartment->role_id = $role->getIdByalias('admin');  
-      $personHasDepartment->save();
 
       // wiki
       if(!empty($request->input('wiki'))){

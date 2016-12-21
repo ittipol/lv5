@@ -36,8 +36,10 @@ class PersonHasCompany extends Model
     }
 
     if(!$this->checkPersonInCompany($companyId,$personId)) {
-      $this->_save($companyId,$personId,$role->getIdByalias('admin'));
+      return $this->_save($companyId,$personId,$role->getIdByalias('admin'));
     }
+
+    return true;
 
   }
 
@@ -46,13 +48,13 @@ class PersonHasCompany extends Model
     $personHasCompany->company_id = $companyId;
     $personHasCompany->person_id = $personId;
     $personHasCompany->role_id = $roleId;  
-    $personHasCompany->save();
+    return $personHasCompany->save();
   }
 
   public function checkPersonInCompany($companyId,$personId) {
     return $this->where([
-      ['person_id','=',$personId],
-      ['company_id','=',$companyId]
+      ['company_id','=',$companyId],
+      ['person_id','=',$personId]
     ])->exists();
   }
 

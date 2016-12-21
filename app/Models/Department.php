@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Models\Model;
+use App\Models\CompanyHasDepartment;
+use App\Models\PersonHasDepartment;
+use App\Models\Lookup;
+use Session;
 
 class Department extends Model
 {
@@ -12,8 +16,8 @@ class Department extends Model
   public $createLookup = true;
   public $lookupFormat = array(
     'keyword' => '{{name}}',
-    'keyword_1' => '{{_companyName|Company:name}}',
-    'keyword_2' => '{{_businessType|Company:business_type}',
+    'keyword_1' => '{{Company.name|Department.id=>CompanyHasDepartment.department_id,CompanyHasDepartment.company_id=>Company.id}}',
+    'keyword_2' => '{{Company.business_type|Department.id=>CompanyHasDepartment.department_id,CompanyHasDepartment.company_id=>Company.id}}',
     'description' => '{{description}}',
   );
   public $createDir = true;
@@ -31,32 +35,27 @@ class Department extends Model
 
     parent::boot();
 
-    Company::saved(function($company){
+    Department::saved(function($department){
 
-      $role = new Role;
-      $personHasCompany = new PersonHasCompany;
+      // get company id
+      $companyId = Session::get($department->pageToken.'.compay_id');
+      Session::forget($department->pageToken.'.compay_id');
 
-      if($company->state == 'create') {
-        // Add person to company
-        $exist = $personHasCompany->where([
-          ['company_id','=',$company->id],
-          ['person_id','=',Session::get('Person.id')]
-        ])->exists();
+      if($department->state == 'create') {
 
-        if(!$exist){
-          $personHasCompany->company_id = $company->id;
-          $personHasCompany->person_id = Session::get('Person.id');
-          $personHasCompany->role_id = $role->getIdByalias('admin');  
-          $personHasCompany->save();
-        }
+        $companyHasDepartment = new CompanyHasDepartment;
+        $companyHasDepartment->__saveSpecial($companyId,$department->id);
 
+        $personHasDepartment = new PersonHasDepartment;
+        $personHasDepartment->__saveSpecial($department->id,Session::get('Person.id'),'admin');
       }
 
-      $companyHasBusinessType->__saveSpecial($company,$company->business_type);
+      $lookup = new Lookup;
+      $lookup->saveSpecial($department);
 
-      foreach ($company->companyHasBusinessType as $value) {
-        $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
-      } 
+      // foreach ($company->companyHasBusinessType as $value) {
+      //   $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
+      // } 
 
     });
   }

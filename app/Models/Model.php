@@ -73,6 +73,7 @@ class Model extends _Model
         $model->createDir();  
       }
       $model->saveRelatedData();
+   
     });
 
   }
@@ -86,7 +87,6 @@ class Model extends _Model
       }
 
       $this->relatedData[$allowed] = $attributes[$allowed];
-
       unset($attributes[$allowed]);
     }
 
@@ -118,6 +118,49 @@ class Model extends _Model
 
   }
 
+  public function saveRelatedData() {
+
+    if (!$this->exists || empty($this->pageToken)) {
+      return false;
+    }
+
+    // $imageModel = new Image;
+    // $imageModel->saveImages($this,Session::get('Person.id'));
+
+    // foreach ($this->allowedModelData as $allowed) {
+
+    //   if(empty($this->relatedData[$allowed])) {
+    //     continue;
+    //   }
+
+    //   $this->_save($allowed,$this->relatedData[$allowed]);
+    // }
+
+    // Add to Lookup table
+    // if($this->createLookup) {
+    //   $lookup = new Lookup;
+    //   $lookup->saveSpecial($this);
+    // }
+
+    // if($this->createWiki && ($this->state == 'create')){
+    //   $wiki = new Wiki;
+    //   $wiki->saveSpecial($this);
+    // }
+
+  }
+
+  private function _save($model,$value) {
+
+    $class = Service::loadModel($model);
+
+    if(!method_exists($class,'__saveRelatedData') || !$class->checkHasFieldModelAndModelId()) {
+      return false;
+    }
+
+    return $class->__saveRelatedData($this,$value);
+    
+  }
+
   public function createDir($model = null) {
 
     if(empty($model)) {
@@ -142,49 +185,6 @@ class Model extends _Model
       }
     }
 
-  }
-
-  public function saveRelatedData() {
-
-    if (!$this->exists || empty($this->pageToken)) {
-      return false;
-    }
-
-    $imageModel = new Image;
-    $imageModel->saveImages($this,Session::get('Person.id'));
-
-    foreach ($this->allowedModelData as $allowed) {
-
-      if(empty($this->relatedData[$allowed])) {
-        continue;
-      }
-
-      $this->_save($allowed,$this->relatedData[$allowed]);
-    }
-
-    // Add to Lookup table
-    if($this->createLookup) {
-      $lookup = new Lookup;
-      $lookup->saveSpecial($this);
-    }
-
-    if($this->createWiki && ($this->state == 'create')){
-      $wiki = new Wiki;
-      $wiki->saveSpecial($this);
-    }
-
-  }
-
-  private function _save($model,$value) {
-
-    $class = Service::loadModel($model);
-
-    if(!method_exists($class,'__saveRelatedData') || !$class->checkHasFieldModelAndModelId()) {
-      return false;
-    }
-
-    return $class->__saveRelatedData($this,$value);
-    
   }
 
   public function includeRelatedData($models = array()) {

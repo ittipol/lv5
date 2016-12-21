@@ -157,22 +157,8 @@ class Lookup extends Model
       }
 
     }
-
+dd($result);
     return $result;
-
-  }
-
-  public function __getAddress($model) {
-    $addresses = $model->getRalatedDataByModelName('Address');
-
-    $_address = array();
-    foreach ($addresses as $address) {
-      $_address[] = trim($address->district->name.' '.$address->subDistrict->name.' '.$address->address);
-    }
-
-    $_address = implode(' ', $_address);
-
-    return $this->_clean($_address);
 
   }
   
@@ -271,6 +257,20 @@ class Lookup extends Model
     }
 
     return $records;
+
+  }
+
+  private function __getAddress($model) {
+    $addresses = $model->getRalatedDataByModelName('Address');
+
+    $_address = array();
+    foreach ($addresses as $address) {
+      $_address[] = trim($address->district->name.' '.$address->subDistrict->name.' '.$address->address);
+    }
+
+    $_address = implode(' ', $_address);
+
+    return $this->_clean($_address);
 
   }
 
