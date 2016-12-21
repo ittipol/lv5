@@ -2,16 +2,8 @@
 @section('content')
 
 <div class="container">
-  
-  <div class="row">
-    <div class="container-header">
-      <div class="col-lg-6">
-        <div class="title">
-          ร้านค้าหรือสถานประกอบการ
-        </div>
-      </div>
-    </div>
-  </div>
+  <h2><?php echo $companyName; ?></h2>
+  <!-- <h2>แผนก</h2> -->
 
   <?php if(!empty($errors->all())): ?>
     <div class="form-error-messages">
@@ -35,38 +27,27 @@
   <div class="form-section">
 
     <div class="title">
-      ข้อมูลร้านค้าหรือสถานประกอบการ
+      ข้อมูลแผนก
     </div>
 
     <div class="form-section-inner">
 
       <div class="form-row">
         <?php 
-          echo Form::label('name', 'ชื่อร้านค้าหรือสถานประกอบการ', array(
+          echo Form::label('name', 'ชื่อแผนก', array(
             'class' => 'required'
           ));
           echo Form::text('name', null, array(
-            'placeholder' => 'ชื่อร้านค้าหรือสถานประกอบการ',
+            'placeholder' => 'ชื่อแผนก',
             'autocomplete' => 'off'
           ));
         ?>
-        <p class="notice info">ชื่อร้านค้าหรือสถานประกอบการจะมีผลโดยตรงต่อการค้นหา</p>
+        <p class="notice info">ชื่อแผนกจะมีผลโดยตรงต่อการค้นหา</p>
       </div>
 
       <div class="form-row">
         <?php 
-          echo Form::label('business_type', 'ประเภทธุรกิจ');
-          echo Form::text('business_type', null, array(
-            'placeholder' => 'ประเภทธุรกิจ',
-            'autocomplete' => 'off'
-          ));
-        ?>
-        <p class="notice info">ประเภทธุรกิจจะมีผลโดยตรงต่อการค้นหา</p>
-      </div>
-
-      <div class="form-row">
-        <?php 
-          echo Form::label('description', 'ข้อมูลร้านค้าหรือสถานประกอบการ');
+          echo Form::label('description', 'ข้อมูลแผนก');
           echo Form::textarea('description', null, array(
             'class' => 'ckeditor'
           ));
@@ -87,7 +68,7 @@
           <div class="sub-form-inner">
 
             <div class="form-row">
-              <?php echo Form::label('', 'รูปภาพเครื่องหมายร้านค้าหรือสถานประกอบการ'); ?>
+              <?php echo Form::label('', 'รูปภาพสัญลักษณ์ของแผนก'); ?>
               <div id="_image_logo">
               </div>
             </div>
@@ -95,7 +76,7 @@
             <div class="line"></div>
 
             <div class="form-row">
-              <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
+              <?php echo Form::label('', 'รูปภาพแผนก (สูงสุด 5 รูป)'); ?>
               <div id="_image_group">
               </div>
             </div>
@@ -105,22 +86,6 @@
         </div>
 
       </div>
-
-      <!-- <div class="form-row">
-        <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
-        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        <div id="_image_logo">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
-        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        <div id="_image_group">
-        </div>
-      </div> -->
 
     </div>
 
@@ -136,19 +101,9 @@
 
       <div class="form-row">
       <?php 
-        echo Form::label('phone_number', 'เบอร์โทรศัพท์');
-        echo Form::text('phone_number', null, array(
+        echo Form::label('mobile_phone', 'เบอร์โทรศัพท์');
+        echo Form::text('mobile_phone', null, array(
           'placeholder' => 'เบอร์โทรศัพท์',
-          'autocomplete' => 'off'
-        ));
-      ?>
-      </div>
-
-      <div class="form-row">
-      <?php
-        echo Form::label('website', 'เว็บไซต์');
-        echo Form::text('website', null, array(
-          'placeholder' => 'เว็บไซต์',
           'autocomplete' => 'off'
         ));
       ?>
@@ -166,8 +121,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('facebook', 'Facebook');
-        echo Form::text('facebook', null, array(
+        echo Form::label('fb', 'Facebook');
+        echo Form::text('fb', null, array(
           'placeholder' => 'Facebook',
           'autocomplete' => 'off'
         ));
@@ -201,10 +156,20 @@
   <div class="form-section">
 
     <div class="title">
-      ที่อยู่ร้านค้าหรือสถานประกอบการ
+      ที่อยู่แผนก
     </div>
 
     <div class="form-section-inner">
+
+      <div class="form-row">
+        <p class="error-message">* เมื่อคุณเลือกตัวเลือกนี้ ข้อมูลที่อยู่แผนกจะไม่ถูกบันทึก</p>
+        <?php
+        echo Form::checkbox('company_address', 1, false);
+        echo Form::label('company_address', 'ที่อยู่เดียวกับสถานประกอบการ');
+      ?>
+      </div>
+
+      <div class="line"></div>
 
       <div class="form-row">
         <?php 
@@ -249,29 +214,9 @@
       </div>
 
       <div class="form-row">
-        <?php echo Form::label('', 'ระบุตำแหน่งร้านค้าหรือสถานประกอบการของคุณบนแผนที่'); ?>
+        <?php echo Form::label('', 'ระบุตำแหน่งบนแผนที่ เพื่อง่ายต่อการค้นหา'); ?>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map"></div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="form-section">
-
-    <div class="title">
-      แท๊ก
-    </div>
-
-    <div class="form-section-inner">
-
-      <div class="form-row">
-        <?php 
-          echo Form::label('categories', 'แท๊กที่เกี่ยวข้องกับร้านค้าหรือสถานประกอบการของคุณ');
-        ?>
-        <div id="tags" class="tag"></div>
-        <p class="notice info">แท็กจะช่วยให้การค้นหาร้านค้าหรือสถานประกอบการของคุณง่ายขึ้น</p>
       </div>
 
     </div>
@@ -289,7 +234,7 @@
       <div class="form-row">
         <?php 
           echo Form::checkbox('wiki', 1);
-          echo Form::label('wiki', 'อนุญาตให้นำข้อมูลร้านค้าหรือสถานประกอบการของคุณลงใน Wiki ชลบุรี');
+          echo Form::label('wiki', 'อนุญาตให้นำข้อมูลแผนกของคุณลงใน Wiki ชลบุรี');
         ?>
       </div>
 
@@ -298,7 +243,7 @@
   </div>
 
   <?php
-    echo Form::submit('เพิ่มร้านค้าหรือสถานประกอบการ', array(
+    echo Form::submit('เพิ่มแผนก', array(
       'class' => 'button'
     ));
   ?>
@@ -320,8 +265,6 @@
 
     District.load();
     Map.load();
-    Tagging.load();
-    Form.load();
   });
 </script>
 

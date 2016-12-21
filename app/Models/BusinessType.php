@@ -30,7 +30,7 @@ class BusinessType extends Model
   }
 
   public function checkRecordExistByName($data) {
-    return $this->where('name','like',$data)->count() ? true : false;
+    return $this->where('name','like',$data)->exists();
   }
 
   public function getBusinessTypeByName($name) {

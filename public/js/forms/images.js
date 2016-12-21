@@ -14,6 +14,11 @@ function Images (panel,type,limit,style) {
 }
 
 Images.prototype.load = function(imageJson){
+
+	if(typeof $('input[name="__token"]').val() == 'undefined') {
+		return false;
+	} 
+	
 	this.init();
 	this.bind();
 
@@ -51,6 +56,10 @@ Images.prototype.bind = function(){
 Images.prototype.preview = function(input){
 
 	if (input.files && input.files[0]) {
+
+		if(typeof $('input[name="__token"]').val() == 'undefined') {
+			return false;
+		} 
 
 		var _this = this;
 
@@ -183,6 +192,10 @@ Images.prototype.uploadImage = function(parent,input,data) {
 }
 
 Images.prototype.removePreview = function(input){
+
+	if(typeof $('input[name="__token"]').val() == 'undefined') {
+		return false;
+	}
 
 	if(this.allowedClick){
 

@@ -29,27 +29,8 @@ class Tag extends Model
   }
 
   public function checkRecordExistByTagName($tagName) {
-    return $this->where('name','like',$tagName)->count() ? true : false;
+    return $this->where('name','like',$tagName)->exists();
   }
-
-  // public function saveTags($tagNames = array()) { 
-
-  //   $tags = array();
-
-  //   foreach ($tagNames as $tagName) {
-  //     $tag = new Tag;
-  //     if($tag->checkRecordExistByTagName($tagName)){
-  //       $tag = $tag->getTagByTagName($tagName);
-  //     }else{
-  //       $tag->name = $tagName;
-  //       $tag->save();
-  //     }
-
-  //     $tags[$tag->id] = $tagName;
-  //   }
-
-  //   return $tags;
-  // }
 
   public function getTagByTagName($tagName) {
     return $this->where('name','like',$tagName)->first();

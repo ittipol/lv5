@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Model;
+use App\Models\Role;
 
 class PersonHasCompany extends Model
 {
@@ -12,13 +13,6 @@ class PersonHasCompany extends Model
 
   public function __construct() {  
     parent::__construct();
-  }
-
-  public function checkPersonInCompany($personId,$companyId) {
-    return $this->where([
-      ['person_id','=',$personId],
-      ['company_id','=',$companyId]
-    ])->count() ? true : false;
   }
 
   public function company() {
@@ -31,6 +25,35 @@ class PersonHasCompany extends Model
 
   public function personHasDepartments() {
     return $this->hasMany('App\Models\PersonHasDepartment','person_id','person_id');
+  }
+
+  public function __saveSpecial($companyId,$personId,$role) {
+
+    $role = new Role;
+
+    if(empty($personId)) {
+      $personId = Session::get('Person.id');
+    }
+
+    if(!$this->checkPersonInCompany($companyId,$personId)) {
+      $this->_save($companyId,$personId,$role->getIdByalias('admin'));
+    }
+
+  }
+
+  public function _save($companyId,$personId,$roleId) {
+    $personHasCompany = new PersonHasCompany;
+    $personHasCompany->company_id = $companyId;
+    $personHasCompany->person_id = $personId;
+    $personHasCompany->role_id = $roleId;  
+    $personHasCompany->save();
+  }
+
+  public function checkPersonInCompany($companyId,$personId) {
+    return $this->where([
+      ['person_id','=',$personId],
+      ['company_id','=',$companyId]
+    ])->exists();
   }
 
 }

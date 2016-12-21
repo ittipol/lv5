@@ -11,10 +11,8 @@ use App\Models\PersonHasCompany;
 use App\Models\PersonHasDepartment;
 use App\Models\Role;
 use App\Models\Lookup;
-use App\Models\Image;
 use App\Models\District;
-use App\Models\Address;
-use App\Models\Wiki;
+use App\Models\TempFile;
 use App\library\message;
 use App\library\string;
 use Auth;
@@ -78,6 +76,11 @@ class DepartmentController extends Controller
       $districts[$district->id] = $district->name;
     }
 
+    // clear temp dir and records
+    $tempFile = new TempFile;
+    $tempFile->deleteRecordByToken($this->pageToken,Session::get('Person.id'));
+    $tempFile->deleteTempDir($this->pageToken);
+
     // Get Company name
     $company = Company::where('id','=',$companyId)->first();
 
@@ -86,11 +89,16 @@ class DepartmentController extends Controller
       'districts' => $districts,
     );
 
-    return $this->view('pages.department.form');
+    return $this->view('pages.department.form.add');
   }
 
   public function add(DepartmentRequest $request,$companyId) {
 
+    if(empty($request->get('__token')) || ($request->get('__token') != $this->pageToken)) {
+      exit;
+    }
+
+// dd($request->all());
     // check company exist and person who is in company or not
     $personHasCompany = new PersonHasCompany;
     $company = new Company;
@@ -99,21 +107,11 @@ class DepartmentController extends Controller
       $message->companyCheckFail();
       return Redirect::to('company/list'); 
     }
-  
+  // dd($request->all());
     $department = new Department;
     $department->fill($request->all());
-    $department->created_by = Auth::user()->id;
-
+dd('er');
     if($department->save()){
-
-      // create folder
-      $department->createImageFolder();
-
-      // save company image
-      if(!empty($request->file('images'))){
-        $imageModel = new Image;
-        $imageModel->saveImages($department,$request->file('images'));
-      }
 
       //
       $companyHasDepartment = new CompanyHasDepartment;
@@ -135,16 +133,6 @@ class DepartmentController extends Controller
       // Add to Lookup table
       $lookup = new Lookup;
       $lookup->saveSpecial($department,$options);
-
-      // Address
-      if(empty($request->input('company_address'))){
-        // save address
-        $address = new Address;
-        $address->fill($request->all());
-        $address->model = $department->modelName;
-        $address->model_id = $department->id;
-        $address->save();
-      }
 
       // add person to department
       $personHasDepartment = new PersonHasDepartment;

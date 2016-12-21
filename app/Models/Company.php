@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Model;
 use App\Models\PersonHasCompany;
 use App\Models\BusinessType;
-use App\Models\Role;
 use App\Models\WordingRelation;
 use Session;
 
@@ -37,26 +36,11 @@ class Company extends Model
 
     Company::saved(function($company){
 
-      $role = new Role;
       $personHasCompany = new PersonHasCompany;
       $companyHasBusinessType = new CompanyHasBusinessType;
-      $wordingRelation = new WordingRelation;
-      $lookup = new Lookup;
 
       if($company->state == 'create') {
-        // Add person to company
-        $exist = $personHasCompany->where([
-          ['company_id','=',$company->id],
-          ['person_id','=',Session::get('Person.id')]
-        ])->exists();
-
-        if(!$exist){
-          $personHasCompany->company_id = $company->id;
-          $personHasCompany->person_id = Session::get('Person.id');
-          $personHasCompany->role_id = $role->getIdByalias('admin');  
-          $personHasCompany->save();
-        }
-
+        $personHasCompany->__saveSpecial($company->id,Session::get('Person.id'),'admin');
       }
 
       $companyHasBusinessType->__saveSpecial($company,$company->business_type);
