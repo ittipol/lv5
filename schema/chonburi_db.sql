@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2016 at 01:39 PM
+-- Generation Time: Dec 22, 2016 at 01:28 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -199,6 +199,7 @@ CREATE TABLE `images` (
   `model` varchar(255) NOT NULL,
   `model_id` int(11) NOT NULL,
   `alias` varchar(255) DEFAULT NULL,
+  `type` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -214,12 +215,13 @@ CREATE TABLE `lookups` (
   `id` int(11) NOT NULL,
   `model` varchar(255) NOT NULL,
   `model_id` int(11) NOT NULL,
-  `keyword` varchar(255) NOT NULL,
+  `keyword` varchar(255) DEFAULT NULL,
   `description` text,
   `keyword_1` varchar(255) DEFAULT NULL,
   `keyword_2` varchar(255) DEFAULT NULL,
   `keyword_3` varchar(255) DEFAULT NULL,
   `keyword_4` varchar(255) DEFAULT NULL,
+  `address` text,
   `tags` text,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -450,6 +452,19 @@ INSERT INTO `sub_districts` (`id`, `district_id`, `name`, `name_en`, `descriptio
 (93, 12, 'พัทยาเหนือ', NULL, NULL, NULL, '2016-12-04 13:17:12', '2016-12-04 13:17:12'),
 (94, 12, 'พัทยากลาง', NULL, NULL, NULL, '2016-12-04 13:17:12', '2016-12-04 13:17:12'),
 (95, 12, 'พัทยาใต้', NULL, NULL, NULL, '2016-12-04 13:17:24', '2016-12-04 13:17:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `synonyms`
+--
+
+CREATE TABLE `synonyms` (
+  `id` int(11) NOT NULL,
+  `word_1` varchar(255) NOT NULL,
+  `word_2` varchar(255) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1234,6 +1249,33 @@ CREATE TABLE `wikis` (
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wording_relations`
+--
+
+CREATE TABLE `wording_relations` (
+  `id` int(11) NOT NULL,
+  `word` varchar(255) NOT NULL,
+  `relate_to_word` varchar(255) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wording_relation_relates`
+--
+
+CREATE TABLE `wording_relation_relates` (
+  `id` int(11) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `wording_relation_id` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Indexes for dumped tables
 --
@@ -1350,6 +1392,12 @@ ALTER TABLE `sub_districts`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `synonyms`
+--
+ALTER TABLE `synonyms`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `taggings`
 --
 ALTER TABLE `taggings`
@@ -1386,6 +1434,18 @@ ALTER TABLE `wikis`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `wording_relations`
+--
+ALTER TABLE `wording_relations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wording_relation_relates`
+--
+ALTER TABLE `wording_relation_relates`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1393,12 +1453,12 @@ ALTER TABLE `wikis`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `business_types`
 --
 ALTER TABLE `business_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `categories`
 --
@@ -1408,12 +1468,12 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `company_has_business_types`
 --
 ALTER TABLE `company_has_business_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `company_has_departments`
 --
@@ -1433,12 +1493,12 @@ ALTER TABLE `districts`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `lookups`
 --
 ALTER TABLE `lookups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `people`
 --
@@ -1448,7 +1508,7 @@ ALTER TABLE `people`
 -- AUTO_INCREMENT for table `person_has_companies`
 --
 ALTER TABLE `person_has_companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `person_has_departments`
 --
@@ -1480,20 +1540,25 @@ ALTER TABLE `stories`
 ALTER TABLE `sub_districts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 --
+-- AUTO_INCREMENT for table `synonyms`
+--
+ALTER TABLE `synonyms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `taggings`
 --
 ALTER TABLE `taggings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `temp_files`
 --
 ALTER TABLE `temp_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -1508,7 +1573,17 @@ ALTER TABLE `villages`
 -- AUTO_INCREMENT for table `wikis`
 --
 ALTER TABLE `wikis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `wording_relations`
+--
+ALTER TABLE `wording_relations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `wording_relation_relates`
+--
+ALTER TABLE `wording_relation_relates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
