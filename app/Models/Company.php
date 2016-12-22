@@ -44,11 +44,12 @@ class Company extends Model
       $companyHasBusinessType->__saveSpecial($company,$company->business_type);
 
       foreach ($company->companyHasBusinessType as $value) {
+        $wordingRelation = new WordingRelation;
         $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
       } 
 
       $lookup = new Lookup;
-      $lookup->saveSpecial($this);
+      $lookup->saveSpecial($company);
 
     });
   }

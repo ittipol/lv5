@@ -26,7 +26,7 @@ class Model extends _Model
   public $dirPath;
   public $dirNames;
   public $relatedData;
-  public $allowedModelData = array('Address','Tagging');
+  public $allowedModelData = array('Address','Tagging','OfficeHour');
   public $createDir = false;
   public $createWiki = false;
   public $temporaryData;

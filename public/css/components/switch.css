@@ -18,9 +18,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #cccccc;
   -webkit-transition: .4s;
   transition: .4s;
+}
+
+.slider.office-hour {
+  background-color: red;
 }
 
 .slider:before {
@@ -39,7 +43,7 @@ input:checked + .slider {
   background-color: #2196F3;
 }
 
-input:checked + .slider.success {
+input:checked + .slider.office-hour {
   background-color: rgb(28,156,1);
 }
 

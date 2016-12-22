@@ -88,16 +88,14 @@
 
             <div class="form-row">
               <?php echo Form::label('', 'รูปภาพเครื่องหมายร้านค้าหรือสถานประกอบการ'); ?>
-              <div id="_image_logo">
-              </div>
+              <div id="_image_logo"></div>
             </div>
 
             <div class="line"></div>
 
             <div class="form-row">
               <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
-              <div id="_image_group">
-              </div>
+              <div id="_image_group"></div>
             </div>
 
           </div>
@@ -116,7 +114,7 @@
 
             <div class="form-row">
               <?php 
-                echo Form::checkbox('same_time', 1,null,array(
+                echo Form::checkbox('same_time', 1, null, array(
                   'id' => 'same_time'
                 ));
                 echo Form::label('same_time', 'กำหนดเวลาทำการเหมือนกันทุกวัน');
@@ -126,13 +124,20 @@
             <div class="line"></div>
 
             <div class="form-row">
+              <span class="office-status active"></span><span>&nbsp;เปิดทำการ</span>
+              <span class="office-status"></span><span>&nbsp;หยุดทำการ</span>
+            </div>
+
+            <div id="_office_time"></div>
+
+            <div class="form-row">
               <?php 
                 echo Form::label('OfficeHour[1]', 'วันจันทร์');
               ?>
               
               <label class="switch office-switch-btn">
-                <input type="checkbox" name="OfficeHour[1][close]" value="1" checked />
-                <div class="slider round success"></div>
+                <input id="1_open" type="checkbox" name="OfficeHour[1][open]" value="1" checked />
+                <div class="slider round office-hour"></div>
               </label>
 
               <?php
@@ -145,7 +150,7 @@
                 echo Form::select('OfficeHour[1][end_time][min]', $min, null, array('id'=>'1_end_min'));
               ?>
 
-              <div class="office-status"></div>
+              <div id="1_status" class="office-status"></div>
               
             </div>
 
@@ -155,8 +160,8 @@
               ?>
 
               <label class="switch office-switch-btn">
-                <input type="checkbox" name="OfficeHour[2][close]" value="1" checked />
-                <div class="slider round success"></div>
+                <input id="2_open" type="checkbox" name="OfficeHour[2][open]" value="1" checked />
+                <div class="slider round office-hour"></div>
               </label>
 
               <?php
@@ -169,7 +174,7 @@
                 echo Form::select('OfficeHour[2][end_time][min]', $min, null, array('id'=>'2_end_min'));
               ?>
 
-              <div class="office-status"></div>
+              <div id="2_status" class="office-status"></div>
               
             </div>
 
@@ -178,12 +183,10 @@
                 echo Form::label('OfficeHour[3]', 'วันพุธ');
               ?>
 
-              <!-- <div>
-                <label class="switch office-close-btn">
-                  <input type="checkbox" name="OfficeHour[3][close]" value="1" checked />
-                  <div class="slider round success"></div>
-                </label>
-              </div> -->
+              <label class="switch office-switch-btn">
+                <input id="3_open" type="checkbox" name="OfficeHour[3][open]" value="1" checked />
+                <div class="slider round office-hour"></div>
+              </label>
               
               <?php
                 echo Form::select('OfficeHour[3][start_time][hour]', $hour, null, array('id'=>'3_start_hour'));
@@ -194,6 +197,9 @@
                 echo ' <b>:</b> ';
                 echo Form::select('OfficeHour[3][end_time][min]', $min, null, array('id'=>'3_end_min'));
               ?>
+
+              <div id="3_status" class="office-status"></div>
+
             </div>
 
             <div class="form-row">
@@ -201,12 +207,10 @@
                 echo Form::label('OfficeHour[4]', 'วันพฤหัสบดี');
               ?>
 
-              <!-- <div>
-                <label class="switch office-close-btn">
-                  <input type="checkbox" name="OfficeHour[4][close]" value="1" checked />
-                  <div class="slider round success"></div>
-                </label>
-              </div> -->
+              <label class="switch office-switch-btn">
+                <input id="4_open" type="checkbox" name="OfficeHour[4][open]" value="1" checked />
+                <div class="slider round office-hour"></div>
+              </label>
 
               <?php
                 echo Form::select('OfficeHour[4][start_time][hour]', $hour, null, array('id'=>'4_start_hour'));
@@ -217,6 +221,9 @@
                 echo ' <b>:</b> ';
                 echo Form::select('OfficeHour[4][end_time][min]', $min, null, array('id'=>'4_end_min'));
               ?>
+
+              <div id="4_status" class="office-status"></div>
+
             </div>
 
             <div class="form-row">
@@ -224,12 +231,10 @@
                 echo Form::label('OfficeHour[5]', 'วันศุกร์');
               ?>
 
-              <!-- <div>
-                <label class="switch office-close-btn">
-                  <input type="checkbox" name="OfficeHour[5][close]" value="1" checked />
-                  <div class="slider round success"></div>
-                </label>
-              </div> -->
+              <label class="switch office-switch-btn">
+                <input id="5_open" type="checkbox" name="OfficeHour[5][open]" value="1" checked />
+                <div class="slider round office-hour"></div>
+              </label>
 
               <?php
                 echo Form::select('OfficeHour[5][start_time][hour]', $hour, null, array('id'=>'5_start_hour'));
@@ -240,6 +245,9 @@
                 echo ' <b>:</b> ';
                 echo Form::select('OfficeHour[5][end_time][min]', $min, null, array('id'=>'5_end_min'));
               ?>
+
+              <div id="5_status" class="office-status"></div>
+
             </div>
 
             <div class="form-row">
@@ -247,12 +255,10 @@
                 echo Form::label('OfficeHour[6]', 'วันเสาร์');
               ?>
 
-              <!-- <div>
-                <label class="switch office-close-btn">
-                  <input type="checkbox" name="OfficeHour[6][close]" value="1" checked />
-                  <div class="slider round success"></div>
-                </label>
-              </div> -->
+              <label class="switch office-switch-btn">
+                <input id="6_open" type="checkbox" name="OfficeHour[6][open]" value="1" checked />
+                <div class="slider round office-hour"></div>
+              </label>
 
               <?php
                 echo Form::select('OfficeHour[6][start_time][hour]', $hour, null, array('id'=>'6_start_hour'));
@@ -263,6 +269,9 @@
                 echo ' <b>:</b> ';
                 echo Form::select('OfficeHour[6][end_time][min]', $min, null, array('id'=>'6_end_min'));
               ?>
+
+              <div id="6_status" class="office-status"></div>
+
             </div>
 
             <div class="form-row">
@@ -270,12 +279,10 @@
                 echo Form::label('OfficeHour[7]', 'วันอาทิตย์');
               ?>
 
-              <!-- <div>
-                <label class="switch office-close-btn">
-                  <input type="checkbox" name="OfficeHour[7][close]" value="1" checked />
-                  <div class="slider round success"></div>
-                </label>
-              </div> -->
+              <label class="switch office-switch-btn">
+                <input id="7_open" type="checkbox" name="OfficeHour[7][open]" value="1" checked />
+                <div class="slider round office-hour"></div>
+              </label>
 
               <?php
                 echo Form::select('OfficeHour[7][start_time][hour]', $hour, null, array('id'=>'7_start_hour'));
@@ -286,6 +293,9 @@
                 echo ' <b>:</b> ';
                 echo Form::select('OfficeHour[7][end_time][min]', $min, null, array('id'=>'7_end_min'));
               ?>
+
+              <div id="7_status" class="office-status"></div>
+
             </div>
 
           </div>

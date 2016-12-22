@@ -72,7 +72,7 @@ class CompanyController extends Controller
       $hour[] = $i;
     }
 
-    for ($i=0; $i < 59; $i++) { 
+    for ($i=0; $i < 60; $i++) { 
       $min[] = $i;
     }
 
@@ -94,7 +94,6 @@ class CompanyController extends Controller
     $company = new Company;
     $company->fill($request->all());
 
-    // save
     if($company->save()){
       $message = new Message;
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
@@ -163,18 +162,51 @@ class CompanyController extends Controller
       }
     }
 
+    $officeHours = $company->getRalatedDataByModelName('OfficeHour');
+
+    $_officeHours = array();
+    foreach ($officeHours as $key => $officeHour) {
+
+      $_startTime = explode(':', $officeHour->start_time);
+      $_endTime = explode(':', $officeHour->start_time);
+
+      $_officeHours[$key+1] = array(
+        'open' => $officeHour->open,
+        'start_time' => array(
+          'hour' => $_startTime[0],
+          'min' => $_startTime[1]
+        ),
+        'end_time' => array(
+          'hour' => $_endTime[0],
+          'min' => $_endTime[1]
+        )
+      );
+    }
+
     $tempFile = new TempFile;
     $tempFile->deleteRecordByToken($this->pageToken,Session::get('Person.id'));
     $tempFile->deleteTempDir($this->pageToken);
 
+    for ($i=0; $i < 24; $i++) { 
+      $hour[] = $i;
+    }
+
+    for ($i=0; $i < 60; $i++) { 
+      $min[] = $i;
+    }
+
     $this->data = array(
       'company' => $company,
       'address' => $address,
+      'officeHours' => $_officeHours,
+      'officeHoursJson' => json_encode($_officeHours),
       'logoJson' => json_encode($_logo),
       'imageJson' => json_encode($_images),
       'tagJson' => json_encode($_tags),
       'geographic' => json_encode($geographic),
       'districts' => $districts,
+      'hour' => $hour,
+      'min' => $min
     );
 
     return $this->view('pages.company.form.edit');
