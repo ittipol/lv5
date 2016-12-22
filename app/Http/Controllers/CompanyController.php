@@ -67,8 +67,19 @@ class CompanyController extends Controller
     $tempFile->deleteRecordByToken($this->pageToken,Session::get('Person.id'));
     $tempFile->deleteTempDir($this->pageToken);
 
+
+    for ($i=0; $i < 24; $i++) { 
+      $hour[] = $i;
+    }
+
+    for ($i=0; $i < 59; $i++) { 
+      $min[] = $i;
+    }
+
     $this->data = array(
       'districts' => $districts,
+      'hour' => $hour,
+      'min' => $min,
     );
 
     return $this->view('pages.company.form.add');

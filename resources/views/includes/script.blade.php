@@ -1,4 +1,7 @@
 <!-- css and js goes here -->
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"></script>
+
 <script type="text/javascript" src="{{ URL::asset('js/jquery-3.1.1.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.modal.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
@@ -7,16 +10,12 @@
 <script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/form.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/images.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/forms/item_images.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/forms/office_hour.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/district.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/tagging.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/floating-menu.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>
-
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"
-     async defer></script>
 
 <?php if(file_exists($jsPath)): ?>
 <script type="text/javascript" src="<?php echo $root.$jsPath; ?>"></script>

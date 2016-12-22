@@ -2,7 +2,6 @@ var Form = {}
 
 Form.load = function() {
 	Form.init();
-	// Form.bind();
 }
 
 Form.init = function() {
@@ -12,7 +11,4 @@ Form.init = function() {
 	    return false;
 	  }
 	});
-}
-
-Form.bind = function() {
 }

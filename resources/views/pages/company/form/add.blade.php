@@ -106,21 +106,142 @@
 
       </div>
 
-      <!-- <div class="form-row">
-        <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
-        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        <div id="_image_logo">
-        </div>
-      </div>
-
       <div class="form-row">
-        <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
-        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        <div id="_image_group">
+
+        <div class="sub-title">เวลาทำการ</div>
+
+        <div class="sub-form">
+
+          <div class="sub-form-inner">
+
+            <div class="form-row">
+              <?php 
+                echo Form::checkbox('same_time', 1,null,array(
+                  'id' => 'same_time'
+                ));
+                echo Form::label('same_time', 'กำหนดเวลาทำการเหมือนกันทุกวัน');
+              ?>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="form-row">
+              <?php 
+                echo Form::label('OfficeHour[1]', 'วันจันทร์');
+                echo Form::select('OfficeHour[1][start_time][hour]', $hour, null, array('id'=>'1_start_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[1][start_time][min]', $min, null, array('id'=>'1_start_min'));
+                echo ' <b>-</b> ';
+                echo Form::select('OfficeHour[1][end_time][hour]', $hour, null, array('id'=>'1_end_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[1][end_time][min]', $min, null, array('id'=>'1_end_min'));
+              ?>
+              <label class="office-close-btn">
+                <input type="checkbox" name="OfficeHour[1][close]" value="1" />หยุดทำการ
+              </label>
+            </div>
+
+            <div class="form-row">
+              <?php 
+                echo Form::label('OfficeHour[2]', 'วันอังคาร');
+                echo Form::select('OfficeHour[2][start_time][hour]', $hour, null, array('id'=>'2_start_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[2][start_time][min]', $min, null, array('id'=>'2_start_min'));
+                echo ' <b>-</b> ';
+                echo Form::select('OfficeHour[2][end_time][hour]', $hour, null, array('id'=>'2_end_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[2][end_time][min]', $min, null, array('id'=>'2_end_min'));
+              ?>
+              <label class="office-close-btn">
+                <input type="checkbox" name="OfficeHour[2][close]" value="1" />หยุดทำการ
+              </label>
+            </div>
+
+            <div class="form-row">
+              <?php 
+                echo Form::label('OfficeHour[3]', 'วันพุธ');
+                echo Form::select('OfficeHour[3][start_time][hour]', $hour, null, array('id'=>'3_start_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[3][start_time][min]', $min, null, array('id'=>'3_start_min'));
+                echo ' <b>-</b> ';
+                echo Form::select('OfficeHour[3][end_time][hour]', $hour, null, array('id'=>'3_end_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[3][end_time][min]', $min, null, array('id'=>'3_end_min'));
+              ?>
+              <label class="office-close-btn">
+                <input type="checkbox" name="OfficeHour[3][close]" value="1" />หยุดทำการ
+              </label>
+            </div>
+
+            <div class="form-row">
+              <?php 
+                echo Form::label('OfficeHour[4]', 'วันพฤหัสบดี');
+                echo Form::select('OfficeHour[4][start_time][hour]', $hour, null, array('id'=>'4_start_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[4][start_time][min]', $min, null, array('id'=>'4_start_min'));
+                echo ' <b>-</b> ';
+                echo Form::select('OfficeHour[4][end_time][hour]', $hour, null, array('id'=>'4_end_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[4][end_time][min]', $min, null, array('id'=>'4_end_min'));
+              ?>
+              <label class="office-close-btn">
+                <input type="checkbox" name="OfficeHour[4][close]" value="1" />หยุดทำการ
+              </label>
+            </div>
+
+            <div class="form-row">
+              <?php 
+                echo Form::label('OfficeHour[5]', 'วันศุกร์');
+                echo Form::select('OfficeHour[5][start_time][hour]', $hour, null, array('id'=>'5_start_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[5][start_time][min]', $min, null, array('id'=>'5_start_min'));
+                echo ' <b>-</b> ';
+                echo Form::select('OfficeHour[5][end_time][hour]', $hour, null, array('id'=>'5_end_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[5][end_time][min]', $min, null, array('id'=>'5_end_min'));
+              ?>
+              <label class="office-close-btn">
+                <input type="checkbox" name="OfficeHour[5][close]" value="1" />หยุดทำการ
+              </label>
+            </div>
+
+            <div class="form-row">
+              <?php 
+                echo Form::label('OfficeHour[6]', 'วันเสาร์');
+                echo Form::select('OfficeHour[6][start_time][hour]', $hour, null, array('id'=>'6_start_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[6][start_time][min]', $min, null, array('id'=>'6_start_min'));
+                echo ' <b>-</b> ';
+                echo Form::select('OfficeHour[6][end_time][hour]', $hour, null, array('id'=>'6_end_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[6][end_time][min]', $min, null, array('id'=>'6_end_min'));
+              ?>
+              <label class="office-close-btn">
+                <input type="checkbox" name="OfficeHour[6][close]" value="1" />หยุดทำการ
+              </label>
+            </div>
+
+            <div class="form-row">
+              <?php 
+                echo Form::label('OfficeHour[7]', 'วันอาทิตย์');
+                echo Form::select('OfficeHour[7][start_time][hour]', $hour, null, array('id'=>'7_start_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[7][start_time][min]', $min, null, array('id'=>'7_start_min'));
+                echo ' <b>-</b> ';
+                echo Form::select('OfficeHour[7][end_time][hour]', $hour, null, array('id'=>'7_end_hour'));
+                echo ' <b>:</b> ';
+                echo Form::select('OfficeHour[7][end_time][min]', $min, null, array('id'=>'7_end_min'));
+              ?>
+              <label class="office-close-btn">
+                <input type="checkbox" name="OfficeHour[7][close]" value="1" />หยุดทำการ
+              </label>
+            </div>
+
+          </div>
+        
         </div>
-      </div> -->
+
+      </div>
 
     </div>
 
@@ -288,7 +409,9 @@
 
       <div class="form-row">
         <?php 
-          echo Form::checkbox('wiki', 1);
+          echo Form::checkbox('wiki', 1, null, array(
+            'id' => 'wiki'
+          ));
           echo Form::label('wiki', 'อนุญาตให้นำข้อมูลร้านค้าหรือสถานประกอบการของคุณลงใน Wiki ชลบุรี');
         ?>
       </div>
@@ -310,6 +433,7 @@
 </div>
 
 <script type="text/javascript">
+
   $(document).ready(function(){
 
     var logo = new Images('_image_logo','logo',1,'default');
@@ -322,6 +446,7 @@
     Map.load();
     Tagging.load();
     Form.load();
+    OfficeHour.load();
   });
 </script>
 
