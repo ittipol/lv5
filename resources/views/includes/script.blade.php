@@ -33,6 +33,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/components/card.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/button.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/modal.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/components/switch.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/additional-option.css') }}" />
 
 <?php if(file_exists($cssPath)): ?>

@@ -251,16 +251,16 @@ select[name^="OfficeHour"].disabled {
 	color: #aaaaaa;
 }
 
-label.office-close-btn {
-  color: #ffffff;
-  font-size: 15px;
-  background-color: #E53935;
-  padding: 0 10px;
-  line-height: 40px;
+.office-status {
+	width: 14px;
+	height: 14px;
+	border-radius: 14px;
+	margin-left: 10px;
+	background-color: red;
+	border: 1px solid #eaeaea;
 	display: inline-block;
-  cursor: pointer;
 }
 
-label.office-close-btn > input {
-	display: none;
+.office-status.active {
+	background-color: rgb(28,156,1);
 }
