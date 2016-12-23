@@ -16,10 +16,12 @@ class Controller extends BaseController
     protected $header = true;
     protected $footer = true;
     protected $data = array();
-    protected $pageToken;
+    protected $ident;
+    protected $FormToken;
 
     public function __construct(array $attributes = []) { 
-        $this->pageToken = Token::generateFormToken(Session::get('Person.id'));
+        $this->ident = Token::generatePageIdent();
+        $this->FormToken = Token::generateFormToken(Session::get('Person.id'));
     }
 
     protected function view($view) {
@@ -27,7 +29,7 @@ class Controller extends BaseController
     	// Control layouts
     	$this->data['header'] = $this->header;
 		$this->data['footer'] = $this->footer;   
-        $this->data['__token'] = $this->pageToken;
+        $this->data['__token'] = $this->FormToken;
 
     	return view($view,$this->data);
     }

@@ -63,31 +63,20 @@ class CompanyController extends Controller
     }
 
     // clear temp dir and records
-    $tempFile = new TempFile;
-    $tempFile->deleteRecordByToken($this->pageToken,Session::get('Person.id'));
-    $tempFile->deleteTempDir($this->pageToken);
-
-
-    for ($i=0; $i < 24; $i++) { 
-      $hour[] = $i;
-    }
-
-    for ($i=0; $i < 60; $i++) { 
-      $min[] = $i;
-    }
+    // $tempFile = new TempFile;
+    // $tempFile->deleteRecordByToken($this->FormToken,Session::get('Person.id'));
+    // $tempFile->deleteTempDir($this->FormToken);
 
     $this->data = array(
-      'districts' => $districts,
-      'hour' => $hour,
-      'min' => $min,
+      'districts' => $districts
     );
 
     return $this->view('pages.company.form.add');
   }
 
   public function add(CompanyRequest $request) {
-
-    if(empty($request->get('__token')) || ($request->get('__token') != $this->pageToken)) {
+dd($request->all());
+    if(empty($request->get('__token')) || ($request->get('__token') != $this->FormToken)) {
       exit;
     }
 
@@ -173,19 +162,19 @@ class CompanyController extends Controller
       $_officeHours[$key+1] = array(
         'open' => $officeHour->open,
         'start_time' => array(
-          'hour' => $_startTime[0],
-          'min' => $_startTime[1]
+          'hour' => (int)$_startTime[0],
+          'min' => (int)$_startTime[1]
         ),
         'end_time' => array(
-          'hour' => $_endTime[0],
-          'min' => $_endTime[1]
+          'hour' => (int)$_endTime[0],
+          'min' => (int)$_endTime[1]
         )
       );
     }
 
-    $tempFile = new TempFile;
-    $tempFile->deleteRecordByToken($this->pageToken,Session::get('Person.id'));
-    $tempFile->deleteTempDir($this->pageToken);
+    // $tempFile = new TempFile;
+    // $tempFile->deleteRecordByToken($this->FormToken,Session::get('Person.id'));
+    // $tempFile->deleteTempDir($this->FormToken);
 
     for ($i=0; $i < 24; $i++) { 
       $hour[] = $i;
@@ -198,7 +187,6 @@ class CompanyController extends Controller
     $this->data = array(
       'company' => $company,
       'address' => $address,
-      'officeHours' => $_officeHours,
       'officeHoursJson' => json_encode($_officeHours),
       'logoJson' => json_encode($_logo),
       'imageJson' => json_encode($_images),

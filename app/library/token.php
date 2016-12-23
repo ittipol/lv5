@@ -36,7 +36,24 @@ class Token
     return $token;
   }
 
+  public static function generateHex($length = 60){
+    $codeAlphabet = "abcdef0123456789";
+
+    $token = '';
+    $len = strlen($codeAlphabet);
+
+    for ($i = 0; $i <= $length; $i++) {
+      $token .= $codeAlphabet[rand(0,$len-1)];
+    };
+
+    return $token;
+  }
+
+  public static function generatePageIdent() {
+    return hash('sha256',Route::getCurrentRoute()->getPath());
+  }
+
   public static function generateFormToken($personId) {
-    return hash('sha256',Route::getCurrentRoute()->getPath().$personId);
+    return hash('sha256',Route::getCurrentRoute()->getPath().$personId.time()).Token::generateHex(10);
   } 
 }

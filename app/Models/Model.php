@@ -20,7 +20,7 @@ class Model extends _Model
   public $modelName;
   public $alias;
   public $state = 'create';
-  public $pageToken;
+  public $FormToken;
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
@@ -85,7 +85,7 @@ class Model extends _Model
       foreach ($this->temporaryData as $key => $value) {
         if(!empty($attributes[$value])) {
           $_temporaryData[$value] = $attributes[$value];
-          // Session::put($this->pageToken.'.'.$value,$attributes[$value]);
+          // Session::put($this->FormToken.'.'.$value,$attributes[$value]);
         }
       } 
       if(!empty($_temporaryData)) {
@@ -104,7 +104,7 @@ class Model extends _Model
     }
 
     if(!empty($attributes['__token'])) {
-      $this->pageToken = $attributes['__token'];
+      $this->FormToken = $attributes['__token'];
       unset($attributes['__token']);
     }
 
@@ -133,7 +133,7 @@ class Model extends _Model
 
   public function saveRelatedData() {
 
-    if (!$this->exists || empty($this->pageToken)) {
+    if (!$this->exists || empty($this->FormToken)) {
       return false;
     }
 

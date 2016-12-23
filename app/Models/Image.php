@@ -59,11 +59,11 @@ class Image extends Model
 
   public function saveUploadImages($model,$personId) {
 
-    if(empty($model->pageToken)) {
+    if(empty($model->FormToken)) {
       return false;
     }
 
-    $token = $model->pageToken;
+    $token = $model->FormToken;
 
     $tempFileModel = new TempFile;
     $imagesTemp = $tempFileModel->where([
@@ -112,11 +112,11 @@ class Image extends Model
 
   public function deleteImages($model,$personId) {
 
-    if(empty($model->pageToken)) {
+    if(empty($model->FormToken)) {
       return false;
     }
 
-    $token = $model->pageToken;
+    $token = $model->FormToken;
 
     $tempFileModel = new TempFile;
     $imagesTemp = $tempFileModel->where([

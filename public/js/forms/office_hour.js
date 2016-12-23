@@ -10,10 +10,14 @@ var OfficeHour = {
 	latestEndMin: 0
 }
 
-OfficeHour.load = function(officeHours) {
+OfficeHour.load = function(officeHours,sameTime) {
 
 	OfficeHour.init();
 	OfficeHour.bind();
+
+	if (typeof sameTime != 'undefined') {
+		OfficeHour.sameTime = sameTime;
+	}
 
 	if (typeof officeHours != 'undefined') {
 		var _officeHours = JSON.parse(officeHours);
@@ -23,12 +27,20 @@ OfficeHour.load = function(officeHours) {
 		for (var i = 1; i <= Object.keys(_officeHours).length; i++) {
 
 			if(_officeHours[i]['open']){
-				$('#'+i+'_open').prop('checked','checked');
+				$('#'+OfficeHour.code+'_'+i+'_open').prop('checked','checked');
 
-				$('#'+i+'_start_hour').val(_officeHours[i]['start_time']['hour']);
-				$('#'+i+'_start_min').val(_officeHours[i]['start_time']['min']);
-				$('#'+i+'_end_hour').val(_officeHours[i]['end_time']['hour']);
-				$('#'+i+'_end_min').val(_officeHours[i]['end_time']['min']);
+				OfficeHour.latestStartHour = _officeHours[i]['start_time']['hour'];
+				OfficeHour.latestStartMin = _officeHours[i]['start_time']['min'];
+				OfficeHour.latestEndHour = _officeHours[i]['end_time']['hour'];
+				OfficeHour.latestEndMin = _officeHours[i]['end_time']['min'];
+
+				$('#'+OfficeHour.code+'_'+i+'_start_hour').val(_officeHours[i]['start_time']['hour']);
+				$('#'+OfficeHour.code+'_'+i+'_start_min').val(_officeHours[i]['start_time']['min']);
+				$('#'+OfficeHour.code+'_'+i+'_end_hour').val(_officeHours[i]['end_time']['hour']);
+				$('#'+OfficeHour.code+'_'+i+'_end_min').val(_officeHours[i]['end_time']['min']);
+			}else{
+				var obj = $('#'+OfficeHour.code+'_'+i+'_switch');
+				OfficeHour.disabled(obj,obj.parent());
 			}
 
 		}
@@ -96,7 +108,7 @@ OfficeHour.disabled = function(obj,parent) {
 				$(this).val(value);
 			});
 		}
-		
+
 	}
 }
 
@@ -128,8 +140,8 @@ OfficeHour.createSelect = function(day,index,code) {
 	var html = '';
 	html += '<div id="'+code+'_'+index+'" class="form-row">';
 	html += '<label for="OfficeHour['+index+']">'+day+'</label> ';             
-	html += '<label class="switch '+code+'-office-switch-btn">';
-	html += '<input id="'+code+'_'+index+'_open" type="checkbox" name="OfficeHour['+index+'][open]" value="1" checked>';
+	html += '<label id="'+code+'_'+index+'_switch" class="switch '+code+'-office-switch-btn">';
+	html += '<input id="'+code+'_'+index+'_open" type="checkbox" name="OfficeHour['+index+'][open]" value="1">';
 	html += '<div class="slider round office-hour"></div>';
 	html += '</label>';
 	html += '<select id="'+code+'_'+index+'_start_hour" name="OfficeHour['+index+'][start_time][hour]"></select>';
