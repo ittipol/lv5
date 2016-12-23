@@ -118,10 +118,10 @@
 
             <div class="form-row">
               <?php 
-                echo Form::checkbox('same_time', 1, null, array(
-                  'id' => 'same_time'
+                echo Form::checkbox('office_hour_same_time', 1, null, array(
+                  'id' => 'office_hour_same_time'
                 ));
-                echo Form::label('same_time', 'กำหนดเวลาทำการเหมือนกันทุกวัน');
+                echo Form::label('office_hour_same_time', 'กำหนดเวลาทำการเหมือนกันทุกวัน');
               ?>
             </div>
 

@@ -3,7 +3,11 @@ var OfficeHour = {
 	sameTime: false,
 	code: null,
 	index: 1,
-	days: ['วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัสบดี','วันศุกร์','วันเสาร์','วันอาทิตย์']
+	days: ['วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัสบดี','วันศุกร์','วันเสาร์','วันอาทิตย์'],
+	latestStartHour: 0,
+	latestStartMin: 0,
+	latestEndHour: 0,
+	latestEndMin: 0
 }
 
 OfficeHour.load = function(officeHours) {
@@ -47,27 +51,29 @@ OfficeHour.init = function() {
 
 OfficeHour.bind = function() {
 
-	$('#same_time').on('click',function(){
+	$('#office_hour_same_time').on('click',function(){
 		if($(this).is(':checked')){
 			OfficeHour.sameTime = true;
-			OfficeHour.setSameTime();
+			OfficeHour.setSameTime(OfficeHour.code);
 		}else{
 			OfficeHour.sameTime = false;
 		}
 	});
-
-	// $('select[name^="OfficeHour"]').on('change',function(){
-	// 	if(OfficeHour.sameTime){
-	// 		OfficeHour.setTime($(this).prop('id'),$(this).val());
-	// 	}
-	// });
 
 	$('.'+OfficeHour.code+'-office-switch-btn').on('change',function(){
 		OfficeHour.disabled(this,$(this).parent());
 	});
 
 	$('select[id^="'+OfficeHour.code+'"]').on('change',function(){
-		alert('xxxx');
+		
+		var id =$(this).prop('id');
+		var parts = id.split('_');
+
+		OfficeHour.setLatestValue(parts[2],parts[3],$(this).val());
+
+		if(OfficeHour.sameTime){
+			OfficeHour.setTimes($(this).prop('id'),$(this).val(),OfficeHour.code);
+		}
 	});
 
 }
@@ -82,26 +88,37 @@ OfficeHour.disabled = function(obj,parent) {
 		parent.find('.office-status').addClass('active');
 
 		if(OfficeHour.sameTime){	
-			OfficeHour.setSameTime();
-		}
+			parent.find('select').each(function(key, value) {
+				var id = $(this).prop('id');
+				var parts = id.split('_');
+				var value = OfficeHour.getLatestValue(parts[2],parts[3]);
 
+				$(this).val(value);
+			});
+		}
+		
 	}
 }
 
-OfficeHour.setSameTime = function() {
-	var selects = ['1_start_hour','1_start_min','1_end_hour','1_end_min'];
+OfficeHour.setSameTime = function(code) {
+	var selects = [code+'_'+'1_start_hour',code+'_'+'1_start_min',code+'_'+'1_end_hour',code+'_'+'1_end_min'];
 
-	for (var i = 0; i < selects.length; i++) {	
-		OfficeHour.setTime(selects[i],$('#'+selects[i]).val());			
+	for (var i = 0; i < selects.length; i++) {
+
+		var id = $('#'+selects[i]).prop('id');
+		var parts = id.split('_');
+		var value = OfficeHour.getLatestValue(parts[2],parts[3]);
+
+		OfficeHour.setTimes(selects[i],value,code);			
 	};
 }
 
-OfficeHour.setTime = function(id,value) {
+OfficeHour.setTimes = function(id,value,code) {
 	var parts = id.split('_');
 
 	for (var i = 1; i <= 7; i++) {
-		if(!$('#'+i+'_'+parts[1]+'_'+parts[2]).prop('disabled')){
-			$('#'+i+'_'+parts[1]+'_'+parts[2]).val(value);
+		if(!$('#'+code+'_'+i+'_'+parts[2]+'_'+parts[3]).prop('disabled')){
+			$('#'+code+'_'+i+'_'+parts[2]+'_'+parts[3]).val(value);
 		}
 	}
 }
@@ -115,28 +132,34 @@ OfficeHour.createSelect = function(day,index,code) {
 	html += '<input id="'+code+'_'+index+'_open" type="checkbox" name="OfficeHour['+index+'][open]" value="1" checked>';
 	html += '<div class="slider round office-hour"></div>';
 	html += '</label>';
-	html += '<select id="'+code+'_'+index+'_start_hour" name="OfficeHour['+index+'][start_time][hour]">{{hour}}</select>';
-	html += '<select id="'+code+'_'+index+'_start_min" name="OfficeHour['+index+'][start_time][min]">{{min}}</select>';
-	html += '<select id="'+code+'_'+index+'_end_hour" name="OfficeHour['+index+'][end_time][hour]">{{hour}}</select>';
-	html += '<select id="'+code+'_'+index+'_end_min" name="OfficeHour['+index+'][end_time][min]">{{min}}</select>';
+	html += '<select id="'+code+'_'+index+'_start_hour" name="OfficeHour['+index+'][start_time][hour]"></select>';
+	html += '<b> : </b>';
+	html += '<select id="'+code+'_'+index+'_start_min" name="OfficeHour['+index+'][start_time][min]"></select>';
+	html += '<b> - </b>';
+	html += '<select id="'+code+'_'+index+'_end_hour" name="OfficeHour['+index+'][end_time][hour]"></select>';
+	html += '<b> : </b>';
+	html += '<select id="'+code+'_'+index+'_end_min" name="OfficeHour['+index+'][end_time][min]"></select>';
 	html += '<div id="'+code+'_'+index+'_status" class="office-status active"></div>';
 	html += '</div>';
 
 	$('#'+OfficeHour.panel).append(html);
-console.log($('#'+code+'_'+index+'_end_min'));
-	$('#'+code+'_'+index+'_end_min').append(OfficeHour.optionHours());
+
+	$('#'+code+'_'+index+'_start_hour').append(OfficeHour.optionHours());
+	$('#'+code+'_'+index+'_start_min').append(OfficeHour.optionMins());
+	$('#'+code+'_'+index+'_end_hour').append(OfficeHour.optionHours());
+	$('#'+code+'_'+index+'_end_min').append(OfficeHour.optionMins());
 
 	return ++index;
 }
 
 OfficeHour.optionHours = function() {
 
-	var hour = '';
+	var hour = [];
 	for (var i = 0; i < 24; i++) {
 		var option = document.createElement('option'); 
 		option.value = i;
 		option.innerHTML = i;
-		hour += option;
+		hour.push(option);
 	};
 
 	return hour;
@@ -144,12 +167,12 @@ OfficeHour.optionHours = function() {
 
 OfficeHour.optionMins = function() {
 
-	var min = '';
+	var min = [];
 	for (var i = 0; i < 60; i++) {
 		var option = document.createElement('option'); 
 		option.value = i;
 		option.innerHTML = i;
-		min += option;
+		min.push(option);
 	};
 
 	return min;
@@ -168,4 +191,37 @@ OfficeHour.generateCode = function() {
   };
 
 	return code;
+}
+
+OfficeHour.setLatestValue = function(type,unit,value) {
+	if(type == 'start'){
+		if(unit == 'hour'){
+			OfficeHour.latestStartHour = value;
+		}else if(unit == 'min'){
+			OfficeHour.latestStartMin = value;
+		}
+	}else if(type == 'end'){
+		if(unit == 'hour'){
+			OfficeHour.latestEndHour = value;
+		}else if(unit == 'min'){
+			OfficeHour.latestEndMin = value;
+		}
+	}
+}
+
+OfficeHour.getLatestValue = function(type,unit) {
+	if(type == 'start'){
+		if(unit == 'hour'){
+			value = OfficeHour.latestStartHour;
+		}else if(unit == 'min'){
+			value = OfficeHour.latestStartMin;
+		}
+	}else if(type == 'end'){
+		if(unit == 'hour'){
+			value = OfficeHour.latestEndHour;
+		}else if(unit == 'min'){
+			value = OfficeHour.latestEndMin;
+		}
+	}
+	return value;
 }
