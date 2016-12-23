@@ -27,7 +27,7 @@ OfficeHour.load = function(officeHours,sameTime) {
 		for (var i = 1; i <= Object.keys(_officeHours).length; i++) {
 
 			if(_officeHours[i]['open']){
-				$('#'+OfficeHour.code+'_'+i+'_open').prop('checked','checked');
+				// $('#'+OfficeHour.code+'_'+i+'_open').prop('checked','checked');
 
 				OfficeHour.latestStartHour = _officeHours[i]['start_time']['hour'];
 				OfficeHour.latestStartMin = _officeHours[i]['start_time']['min'];
@@ -39,6 +39,7 @@ OfficeHour.load = function(officeHours,sameTime) {
 				$('#'+OfficeHour.code+'_'+i+'_end_hour').val(_officeHours[i]['end_time']['hour']);
 				$('#'+OfficeHour.code+'_'+i+'_end_min').val(_officeHours[i]['end_time']['min']);
 			}else{
+				$('#'+OfficeHour.code+'_'+i+'_open').removeAttr('checked');
 				var obj = $('#'+OfficeHour.code+'_'+i+'_switch');
 				OfficeHour.disabled(obj,obj.parent());
 			}
@@ -46,7 +47,7 @@ OfficeHour.load = function(officeHours,sameTime) {
 		}
 	}
 
-	$('.office-switch-btn').each(function(key, value) {
+	$('.'+OfficeHour.code+'-office-switch-btn').each(function(key, value) {
 		OfficeHour.disabled(value,$(value).parent());
 	});
 
@@ -141,7 +142,7 @@ OfficeHour.createSelect = function(day,index,code) {
 	html += '<div id="'+code+'_'+index+'" class="form-row">';
 	html += '<label for="OfficeHour['+index+']">'+day+'</label> ';             
 	html += '<label id="'+code+'_'+index+'_switch" class="switch '+code+'-office-switch-btn">';
-	html += '<input id="'+code+'_'+index+'_open" type="checkbox" name="OfficeHour['+index+'][open]" value="1">';
+	html += '<input id="'+code+'_'+index+'_open" type="checkbox" name="OfficeHour['+index+'][open]" value="1" checked>';
 	html += '<div class="slider round office-hour"></div>';
 	html += '</label>';
 	html += '<select id="'+code+'_'+index+'_start_hour" name="OfficeHour['+index+'][start_time][hour]"></select>';

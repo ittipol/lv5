@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/','HomeController@landing');
 Route::get('home','HomeController@index');
+Route::get('session','HomeController@session');
 
 // Account
 Route::get('account','UserController@account');

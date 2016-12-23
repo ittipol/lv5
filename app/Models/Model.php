@@ -85,7 +85,6 @@ class Model extends _Model
       foreach ($this->temporaryData as $key => $value) {
         if(!empty($attributes[$value])) {
           $_temporaryData[$value] = $attributes[$value];
-          // Session::put($this->FormToken.'.'.$value,$attributes[$value]);
         }
       } 
       if(!empty($_temporaryData)) {

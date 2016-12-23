@@ -67,17 +67,28 @@ class CompanyController extends Controller
     // $tempFile->deleteRecordByToken($this->FormToken,Session::get('Person.id'));
     // $tempFile->deleteTempDir($this->FormToken);
 
+    Session::put($this->FormToken,1);
+
     $this->data = array(
-      'districts' => $districts
+      'districts' => $districts,
+      't' => $this->FormToken
     );
 
     return $this->view('pages.company.form.add');
   }
 
   public function add(CompanyRequest $request) {
-dd($request->all());
-    if(empty($request->get('__token')) || ($request->get('__token') != $this->FormToken)) {
-      exit;
+
+    if(empty($request->get('__token')) || empty(Session::get($request->get('__token')))) {
+      // clear temp dir and records
+      $tempFile = new TempFile;
+      $tempFile->deleteRecordByToken($request->get('__token'),Session::get('Person.id'));
+      $tempFile->deleteTempDir($request->get('__token'));
+
+
+      $message = new Message;
+      $message->formTokenNotFound('บันทึก');
+      return Redirect::to('company/add');
     }
 
     $company = new Company;

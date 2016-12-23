@@ -177,6 +177,16 @@ Images.prototype.uploadImage = function(parent,input,data) {
   				_this.index = _this.createUploader(_this.index);
   			}
   		}
+  	}else{
+
+  		if(typeof response.message == 'object') {
+			  NotificationBottom.type = response.message.type;
+				NotificationBottom.title = response.message.title;
+				NotificationBottom.load();
+  		}
+
+  		
+
   	}
   	
   });

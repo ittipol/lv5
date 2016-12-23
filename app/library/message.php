@@ -23,15 +23,20 @@ class Message
 	  Session::flash('message.title', 'กรุณาเข้าสู่ระบบ');
 	  Session::flash('message.desc', 'หน้าที่คุณเรียกนั้น จำเป็นต้องเข้าสู่ระบบก่อนเพื่อการทำงานที่ถูกต้อง');
 	  Session::flash('message.type', 'error');
-	} 
+	}
 
-  public function addingSuccess($subject = 'ข้อมูล') {
-    Session::flash('message.title', $subject.'ถูกเพิ่มเรียบร้อยแล้ว');
+  public function formTokenNotFound($text = 'บันทึก') {
+    Session::flash('message.title', 'เกิดข้อผิดพลาด ไม่สามารถ'.$subject.'ข้อมูลได้ โปรดลองใหม่อีกครั้ง');
+    Session::flash('message.type', 'error');
+  }
+
+  public function addingSuccess($text = 'ข้อมูล') {
+    Session::flash('message.title', $text.'ถูกเพิ่มเรียบร้อยแล้ว');
     Session::flash('message.type', 'success');
   }
 
-  public function editingSuccess($subject = 'ข้อมูล') {
-    Session::flash('message.title', $subject.'ถูกแก้ไขเรียบร้อยแล้ว');
+  public function editingSuccess($text = 'ข้อมูล') {
+    Session::flash('message.title', $text.'ถูกแก้ไขเรียบร้อยแล้ว');
     Session::flash('message.type', 'success');
   }
 

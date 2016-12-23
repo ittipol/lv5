@@ -56,4 +56,10 @@ class TempFile extends Model
     ])->delete();
   }
 
+  public function checkDataExistByToken($token) {
+    return $this->where([
+      ['token','=',$token]
+    ])->count() ? true : false;
+  }
+
 }

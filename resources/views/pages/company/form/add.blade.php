@@ -13,6 +13,8 @@
     </div>
   </div>
 
+  <?php echo $t; ?>
+
   <?php if(!empty($errors->all())): ?>
     <div class="form-error-messages">
       <div class="form-error-messages-inner">

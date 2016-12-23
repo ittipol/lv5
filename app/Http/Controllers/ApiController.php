@@ -14,7 +14,7 @@ class ApiController extends Controller
   public function GetSubDistrict($districtId = null) {
 
     if(!isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-      exit;  //trygetRealPath detect AJAX request, simply exist if no Ajax
+      exit('Error!!!');  //trygetRealPath detect AJAX request, simply exist if no Ajax
     }
 
     $subDistrictRecords = SubDistrict::where('district_id', '=', $districtId)->get(); 
@@ -30,12 +30,24 @@ class ApiController extends Controller
   public function uploadTempImage() {
 
     if(!isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-      exit;  //trygetRealPath detect AJAX request, simply exist if no Ajax
+      exit('Error!!!');  //trygetRealPath detect AJAX request, simply exist if no Ajax
     }
 
-    if (!Input::hasFile('file')) {
-      exit;
+    if(empty(Input::get('formToken')) || empty(Session::get(Input::get('formToken')))) {
+      $result = array(
+        'success' => false,
+        'message' => array(
+          'type' => 'error',
+          'title' => 'เกิดข้อผิดพลาด กรุณารีเฟรช แล้วลองอีกครั้ง'
+        )
+      );
+
+      return response()->json($result);
     }
+
+    // if (!Input::hasFile('file')) {
+    //   exit('error!!!');
+    // }
 
     $success = false;
     $fileName = '';
@@ -72,7 +84,19 @@ class ApiController extends Controller
   public function deleteTempImage() {
 
     if(!isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-      exit;  //trygetRealPath detect AJAX request, simply exist if no Ajax
+      exit('Error');  //trygetRealPath detect AJAX request, simply exist if no Ajax
+    }
+
+    if(empty(Input::get('formToken')) || empty(Session::get(Input::get('formToken')))) {
+      $result = array(
+        'success' => false,
+        'message' => array(
+          'type' => 'error',
+          'title' => 'เกิดข้อผิดพลาด กรุณารีเฟรช แล้วลองอีกครั้ง'
+        )
+      );
+
+      return response()->json($result);
     }
 
     $success = false;

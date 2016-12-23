@@ -17,4 +17,8 @@ class HomeController extends Controller
       return $this->view('landing');
     }
 
+    public function session() {
+      dd(Session::all());
+    }
+
 }
