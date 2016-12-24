@@ -25,7 +25,7 @@ class OfficeHour extends Model
 
       $_data['open'] = 0;
       $_data['start_time'] = '00:00:00';
-      $_data['start_time'] = '00:00:00';
+      $_data['end_time'] = '00:00:00';
 
       if(!empty($value[$day->id])){
 
@@ -44,10 +44,13 @@ class OfficeHour extends Model
     }
 
     foreach ($officeHours as $key => $officeHour) {
-      if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-        $model->getRalatedDataByModelName($this->modelName,true,[['day_id','=',$officeHour['day_id']]])->setFormToken($this->formToken)->_save($officeHour);
+      if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName,[['day_id','=',$officeHour['day_id']]])){
+        $model->getRalatedDataByModelName($this->modelName,true,[['day_id','=',$officeHour['day_id']]])
+              ->setFormToken($this->formToken)
+              ->fill($officeHour)
+              ->save();
       }else{
-        $this->_save($officeHour);
+        $this->_save($model->includeModelAndModelId($officeHour));
       }
     }
 

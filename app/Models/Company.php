@@ -53,8 +53,7 @@ class Company extends Model
       } 
 
       $lookup = new Lookup;
-      $lookup->setFormToken($company->formToken);
-      $lookup->__saveRelatedData($company);
+      $lookup->setFormToken($company->formToken)->__saveRelatedData($company);
 
     });
   }

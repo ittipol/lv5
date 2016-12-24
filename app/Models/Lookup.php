@@ -63,7 +63,10 @@ class Lookup extends Model
     }
 
     if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      return $model->getRalatedDataByModelName($this->modelName,true)->setFormToken($this->formToken)->_save($value);
+      return $model->getRalatedDataByModelName($this->modelName,true)
+      ->setFormToken($this->formToken)
+      ->fill($value)
+      ->save();
     }else{
       return $this->fill($model->includeModelAndModelId($value))->save();
     }

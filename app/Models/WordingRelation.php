@@ -13,18 +13,22 @@ class WordingRelation extends Model
 
   public  function saveSpecial($model1,$model2,$value) {
 
+    $wordingRelationRelate = new WordingRelationRelate;
+    $wordingRelationRelate->setFormToken($this->formToken);
+
     $taggings = $model1->getRalatedDataByModelName('Tagging');
 
     if(!empty($taggings)){
-      
+
       foreach ($taggings as $tagging) {
         $this->checkAndSave($value,$tagging->tag->name);
         $data = $this->getDataByWordAndRelateToWord($value,$tagging->tag->name);
-
+ 
         if(!empty($data->id)){
-          $this->checkAndSave($model2,$data->id);
+          $wordingRelationRelate->checkAndSave($model2,$data->id);
         }
       }
+
     }
     
     return true;

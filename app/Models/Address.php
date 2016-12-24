@@ -25,8 +25,10 @@ class Address extends Model
   public function __saveRelatedData($model,$value) {
 
     if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      // $value = array_merge($value,array('__token' => $this->formToken));
-      return $model->getRalatedDataByModelName($this->modelName,true)->setFormToken($this->formToken)->_save($value);
+      return $model->getRalatedDataByModelName($this->modelName,true)
+      ->setFormToken($this->formToken)
+      ->fill($value)
+      ->save();
     }else{
       return $this->fill($model->includeModelAndModelId($value))->save();
     }

@@ -82,7 +82,7 @@ class Model extends _Model
     // after saving
     parent::saved(function($model){
 
-      if($model->state == 'create') {
+      if(($model->state == 'create') && $model->createDir) {
         $model->createDir();  
       }
       $model->saveRelatedData();
@@ -144,14 +144,12 @@ class Model extends _Model
 
     if($this->createImage) {
       $imageModel = new Image;
-      $imageModel->setFormToken($this->formToken);
-      $imageModel->__saveRelatedData($this,Session::get('Person.id'));
+      $imageModel->setFormToken($this->formToken)->__saveRelatedData($this,Session::get('Person.id'));
     }
 
     if($this->createWiki && ($this->state == 'create')){
       $wiki = new Wiki;
-      $wiki->setFormToken($this->formToken);
-      $wiki->__saveRelatedData($this);
+      $wiki->setFormToken($this->formToken)->__saveRelatedData($this);
     }
 
     foreach ($this->allowedModelData as $allowed) {
@@ -173,13 +171,13 @@ class Model extends _Model
       return false;
     }
 
-    $class->setFormToken($this->formToken);
-    return $class->__saveRelatedData($this,$value);
+    return $class->setFormToken($this->formToken)->__saveRelatedData($this,$value);
     
   }
 
   public function setFormToken($formToken) {
     $this->formToken = $formToken;
+    return $this;
   }
 
   public function createDir($model = null) {

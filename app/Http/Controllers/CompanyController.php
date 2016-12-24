@@ -62,11 +62,6 @@ class CompanyController extends Controller
       $districts[$district->id] = $district->name;
     }
 
-    // clear temp dir and records
-    // $tempFile = new TempFile;
-    // $tempFile->deleteRecordByToken($this->formToken,Session::get('Person.id'));
-    // $tempFile->deleteTempDir($this->formToken);
-
     // set form token
     Session::put($this->formToken,1);
 
@@ -84,9 +79,9 @@ class CompanyController extends Controller
 
     if($company->save()){
       // delete temp dir & records
-      $company->deleteTempData($request->get('__token'));
+      $company->deleteTempData($company->formToken);
       // reomove form token
-      Session::forget($request->get('__token'));
+      Session::forget($company->formToken);
 
       $message = new Message;
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
@@ -162,7 +157,7 @@ class CompanyController extends Controller
     foreach ($officeHours as $key => $officeHour) {
 
       $_startTime = explode(':', $officeHour->start_time);
-      $_endTime = explode(':', $officeHour->start_time);
+      $_endTime = explode(':', $officeHour->end_time);
 
       $_officeHours[$key+1] = array(
         'open' => $officeHour->open,
@@ -177,17 +172,7 @@ class CompanyController extends Controller
       );
     }
 
-    // $tempFile = new TempFile;
-    // $tempFile->deleteRecordByToken($this->formToken,Session::get('Person.id'));
-    // $tempFile->deleteTempDir($this->formToken);
-
-    for ($i=0; $i < 24; $i++) { 
-      $hour[] = $i;
-    }
-
-    for ($i=0; $i < 60; $i++) { 
-      $min[] = $i;
-    }
+    Session::put($this->formToken,1);
 
     $this->data = array(
       'company' => $company,
@@ -197,9 +182,7 @@ class CompanyController extends Controller
       'imageJson' => json_encode($_images),
       'tagJson' => json_encode($_tags),
       'geographic' => json_encode($geographic),
-      'districts' => $districts,
-      'hour' => $hour,
-      'min' => $min
+      'districts' => $districts
     );
 
     return $this->view('pages.company.form.edit');
@@ -213,16 +196,22 @@ class CompanyController extends Controller
     $company->save();
 
     if($company->save()){
+
+      // delete temp dir & records
+      $company->deleteTempData($company->formToken);
+      // reomove form token
+      Session::forget($company->formToken);
+
       $message = new Message;
       $message->editingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
       $message = new Message;
-      $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้ กรุณาลองใหม่อีกครั้ง');
+      $message->error('ไม่สามารถแก้ไขร้านค้าหรือสถานประกอบการได้ กรุณาลองใหม่อีกครั้ง');
+      return Redirect::to('company/edit/'.$companyId);
     }
 
     return Redirect::to('company/list');
 
-    
   }
 
   public function dataView() {

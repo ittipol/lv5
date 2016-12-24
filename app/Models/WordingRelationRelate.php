@@ -10,17 +10,14 @@ class WordingRelationRelate extends Model
   protected $fillable = ['model','model_id','wording_relation_id'];
   public $timestamps  = false;
 
-  public function _save($model,$wordingRelationId) {
-    $wordingRelationRelate = new WordingRelationRelate;
-    $wordingRelationRelate->model = $model->modelName;
-    $wordingRelationRelate->model_id = $model->id;
-    $wordingRelationRelate->wording_relation_id = $wordingRelationId;
-    return $wordingRelationRelate->save();
-  }
-
   public function checkAndSave($model,$wordingRelationId) {
     if(!$this->checkRecordExist($model,$wordingRelationId)) {
-      return $this->_save($model,$wordingRelationId);
+
+      $value = array(
+        'wording_relation_id' => $wordingRelationId,
+      );
+
+      return $this->_save($model->includeModelAndModelId($value));
     }
 
     return true;
