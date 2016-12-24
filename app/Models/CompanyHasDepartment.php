@@ -22,7 +22,7 @@ class CompanyHasDepartment extends Model
     return $this->hasMany('App\Models\PersonHasDepartment','department_id','department_id');
   }
 
-  public function __saveSpecial($companyId,$departmentId) {
+  public function saveSpecial($companyId,$departmentId) {
     if(!$this->checkRecordExist($companyId,$departmentId)) {
       return $this->_save(array('company_id' => $companyId, 'department_id' => $departmentId));
     }

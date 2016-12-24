@@ -7,7 +7,7 @@ use App\Models\Model;
 class PersonHasDepartment extends Model
 {
   public $table = 'person_has_departments';
-  protected $fillable = ['person_id','department_id'];
+  protected $fillable = ['person_id','department_id','role_id'];
   public $timestamps  = false;
 
   public function __construct() {  
@@ -18,7 +18,7 @@ class PersonHasDepartment extends Model
     return $this->hasOne('App\Models\Department','id','department_id');
   }
 
-  public function __saveSpecial($departmentId,$personId,$role) {
+  public function saveSpecial($departmentId,$personId,$role) {
 
     $role = new Role;
 
@@ -27,17 +27,16 @@ class PersonHasDepartment extends Model
     }
 
     if(!$this->checkPersonInDepartment($departmentId,$personId)) {
-      $this->_save($departmentId,$personId,$role->getIdByalias('admin'));
+
+      $value = array(
+        'person_id' => $personId,
+        'department_id' => $departmentId,
+        'role_id' => $role->getIdByalias('admin')
+      );
+
+      $this->_save($value);
     }
 
-  }
-
-  public function _save($departmentId,$personId,$roleId) {
-    $personHasDepartment = new PersonHasDepartment;
-    $personHasDepartment->department_id = $departmentId;
-    $personHasDepartment->person_id = $personId;
-    $personHasDepartment->role_id = $roleId;  
-    $personHasDepartment->save();
   }
 
   public function checkPersonInDepartment($departmentId,$personId) {

@@ -49,6 +49,7 @@ class DepartmentController extends Controller
     }
 
     $this->data = array(
+      'companyId' => $companyId,
       'companyName' => Company::find($companyId)->name,
       'departments' => $departments
     );
@@ -74,10 +75,7 @@ class DepartmentController extends Controller
       $districts[$district->id] = $district->name;
     }
 
-    // clear temp dir and records
-    $tempFile = new TempFile;
-    $tempFile->deleteRecordByToken($this->formToken,Session::get('Person.id'));
-    $tempFile->deleteTempDir($this->formToken);
+    Session::put($this->formToken,1);
 
     // Get Company name
     $company = Company::find($companyId);
@@ -91,10 +89,6 @@ class DepartmentController extends Controller
   }
 
   public function add(DepartmentRequest $request,$companyId) {
-
-    if(empty($request->get('__token')) || ($request->get('__token') != $this->formToken)) {
-      exit;
-    }
 
     // check company exist and person who is in company or not
     $personHasCompany = new PersonHasCompany;
@@ -112,16 +106,19 @@ class DepartmentController extends Controller
     $department->fill($request->all());
 
     if($department->save()){
-
-      // check empty
-      Session::forget($department->formToken);
+      // delete temp dir & records
+      $company->deleteTempData($company->formToken);
+      // reomove form token
+      Session::forget($company->formToken);
 
       $message = new Message;
       $message->addingSuccess('แผนก');
 
-      return Redirect::to('department/list/'.$companyId);
+    }else{
 
     }
+
+    return Redirect::to('department/list/'.$companyId);
 
   }
 

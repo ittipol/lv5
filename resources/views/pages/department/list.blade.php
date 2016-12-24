@@ -3,7 +3,19 @@
 
 <div class="container">
   <h2><?php echo $companyName; ?></h2>
-  <h2>แผนก</h2>
+  <div class="row">
+    <div class="container-header">
+      <div class="col-lg-6">
+        <div class="title">
+          แผนก
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <a href="{{URL::to('department/add')}}/<?php echo $companyId; ?>" class="button pull-right">เพิ่มแผนก</a>
+      </div>
+    </div>
+  </div>
 
   <div class="card-container row">
 

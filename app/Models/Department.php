@@ -44,15 +44,17 @@ class Department extends Model
       if($department->state == 'create') {
 
         $companyHasDepartment = new CompanyHasDepartment;
-        $companyHasDepartment->__saveSpecial($companyId,$department->id);
+        $companyHasDepartment->setFormToken($department->formToken);
+        $companyHasDepartment->saveSpecial($companyId,$department->id);
 
         $personHasDepartment = new PersonHasDepartment;
-        $personHasDepartment->__saveSpecial($department->id,Session::get('Person.id'),'admin');
+        $personHasDepartment->setFormToken($department->formToken);
+        $personHasDepartment->saveSpecial($department->id,Session::get('Person.id'),'admin');
 
       }
 
       $lookup = new Lookup;
-      $lookup->saveSpecial($department);
+      $lookup->setFormToken($department->formToken)->__saveRelatedData($department);
 
     });
   }

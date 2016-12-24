@@ -3,7 +3,6 @@
 
 <div class="container">
   <h2><?php echo $companyName; ?></h2>
-  <!-- <h2>แผนก</h2> -->
 
   <?php if(!empty($errors->all())): ?>
     <div class="form-error-messages">
@@ -164,7 +163,9 @@
       <div class="form-row">
         <p class="error-message">* เมื่อคุณเลือกตัวเลือกนี้ ข้อมูลที่อยู่แผนกจะไม่ถูกบันทึก</p>
         <?php
-        echo Form::checkbox('company_address', 1, false);
+        echo Form::checkbox('company_address', 1, false, array(
+          'id' => 'company_address'
+        ));
         echo Form::label('company_address', 'ที่อยู่เดียวกับสถานประกอบการ');
       ?>
       </div>
@@ -232,10 +233,14 @@
     <div class="form-section-inner">
 
       <div class="form-row">
+        <p class="error-message">* สามารถเพิ่มหรือลบได้ในภายหลัง</p>
         <?php 
-          echo Form::checkbox('wiki', 1);
-          echo Form::label('wiki', 'อนุญาตให้นำข้อมูลแผนกของคุณลงใน Wiki ชลบุรี');
+          echo Form::checkbox('wiki', 1, null, array(
+            'id' => 'wiki'
+          ));
+          echo Form::label('wiki', 'อนุญาตให้นำข้อมูลร้านค้าหรือสถานประกอบการของคุณลงใน Wiki ชลบุรี');
         ?>
+        <p class="notice info">Wiki จะเป็นระบบในการจัดเก็บข้อมูลต่างๆ ใยชลบุรี และจะทำให้ง่ายต่อการค้นหาและเข้าถึง</p>
       </div>
 
     </div>
