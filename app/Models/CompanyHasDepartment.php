@@ -13,9 +13,13 @@ class CompanyHasDepartment extends Model
   public function __construct() {  
     parent::__construct();
   }
+
+  public function company() {
+    return $this->hasOne('App\Models\Company','id','company_id');
+  }
   
   public function department() {
-    return $this->hasOne('App\Models\Department','id');
+    return $this->hasOne('App\Models\Department','id','department_id');
   }
 
   public function departmentHasPeople() {

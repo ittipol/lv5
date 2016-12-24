@@ -33,13 +33,13 @@
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="additional-option-items">
-              <a href="{{URL::to('job/add/<?php echo $department['id']; ?>')}}">ลงประกาศงาน</a>
-              <a href="{{URL::to('department/report/<?php echo $department['id']; ?>')}}">รายชื่อผู้สมัครงาน</a>
+              <a href="{{URL::to('job/add')}}/<?php echo $department['id']; ?>">ลงประกาศงาน</a>
+              <a href="{{URL::to('department/report')}}/<?php echo $department['id']; ?>">รายชื่อผู้สมัครงาน</a>
             </div>
           </div>
-          <a href="{{URL::to('company/view')}}">แสดงเพิ่มเติม</a>
-          <a href="{{URL::to('company/edit')}}">แก้ไข</a>
-          <a href="{{URL::to('company/delete')}}">ลบ</a>
+          <a href="{{URL::to('department/view')}}/<?php echo $department['id']; ?>">แสดงเพิ่มเติม</a>
+          <a href="{{URL::to('department/edit')}}/<?php echo $department['id']; ?>">แก้ไข</a>
+          <a href="{{URL::to('department/delete')}}/<?php echo $department['id']; ?>">ลบ</a>
         </div>
       </div>
     </div>

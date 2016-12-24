@@ -6,6 +6,7 @@ use App\Http\Requests\DepartmentRequest;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\PersonHasCompany;
+use App\Models\CompanyHasDepartment;
 use App\Models\District;
 use App\Models\TempFile;
 use App\library\message;
@@ -115,11 +116,52 @@ class DepartmentController extends Controller
       $message->addingSuccess('แผนก');
 
     }else{
-
+      $message = new Message;
+      $message->error('ไม่สามารถเพิ่มแผนกได้ กรุณาลองใหม่อีกครั้ง');
+      return Redirect::to('department/add/'.$companyId);
     }
 
-    return Redirect::to('department/list/'.$companyId);
+    return Redirect::to('department/list');
 
+  }
+
+  public function formEdit($departmentId) {
+   
+    $department = Department::find($departmentId);
+
+    // find company id
+    $company = CompanyHasDepartment::where('department_id','=',$departmentId)->first()->company;
+
+     dd($company);
+
+    $districtRecords = District::all();
+
+    $districts = array();
+    foreach ($districtRecords as $district) {
+      $districts[$district->id] = $district->name;
+    }
+
+    Session::put($this->formToken,1);
+
+    // Get Company name
+    $company = Company::find($companyId);
+
+    $this->data = array(
+      'companyName' => $company->name,
+      'districts' => $districts,
+    );
+
+    Session::put($this->formToken,1);
+
+    // Get Company name
+    $company = Company::find($companyId);
+
+    $this->data = array(
+      'companyName' => $company->name,
+      'districts' => $districts,
+    );
+
+    return $this->view('pages.department.form.edit');
   }
 
 }

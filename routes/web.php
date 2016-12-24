@@ -87,6 +87,12 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('department/list/{company_id}','DepartmentController@listView');
   Route::get('department/add/{company_id}','DepartmentController@formAdd');
   Route::post('department/add/{company_id}','DepartmentController@add');
+
+  Route::get('department/edit/{department_id}','DepartmentController@formEdit');
+  Route::patch('department/edit/{department_id}',[
+    'as' => 'department.edit',
+    'uses' => 'DepartmentController@edit'
+  ]);
 });
 
 // Matches /api/{route} URL
