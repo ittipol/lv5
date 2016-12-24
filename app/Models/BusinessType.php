@@ -15,15 +15,9 @@ class BusinessType extends Model
     parent::__construct();
   }
 
-  private function _save($value) {
-    $businessType = new BusinessType;
-    $businessType->name = $value;
-    return $businessType->save();
-  }
-
   public function checkAndSave($businessType) {
     if(!$this->checkRecordExistByName($businessType)) {
-      return $this->_save($businessType);
+      return $this->_save(array('name' => $businessType));
     }
 
     return true;

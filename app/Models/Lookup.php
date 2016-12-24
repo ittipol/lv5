@@ -25,7 +25,7 @@ class Lookup extends Model
   // Call Method
   // 'address' => '{{__getAddress}}'
 
-  public function saveSpecial($model,$options = array()) {
+  public function __saveRelatedData($model,$options = array()) {
 
     $value = array();
 
@@ -63,7 +63,7 @@ class Lookup extends Model
     }
 
     if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      return $model->getRalatedDataByModelName($this->modelName,true)->fill($value)->save();
+      return $model->getRalatedDataByModelName($this->modelName,true)->setFormToken($this->formToken)->_save($value);
     }else{
       return $this->fill($model->includeModelAndModelId($value))->save();
     }

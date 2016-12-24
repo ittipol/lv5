@@ -54,6 +54,6 @@ class Token
   }
 
   public static function generateFormToken($personId) {
-    return hash('sha256',Route::getCurrentRoute()->getPath().$personId.time()).Token::generateHex(10);
+    return Route::getCurrentRoute()->getPath().'_'.hash('sha256',Route::getCurrentRoute()->getPath().$personId.time()).Token::generateHex(10);
   } 
 }

@@ -57,7 +57,10 @@ class UserController extends Controller
       $message->loginSuccess();
       return Redirect::intended('home');
     }else{
-      return Redirect::back()->withErrors(['อีเมล  หรือ รหัสผ่านไม่ถูก']);
+      $message = new Message;
+      $message->loginFail();
+      // return Redirect::back()->withErrors(['อีเมล  หรือ รหัสผ่านไม่ถูก']);
+      return Redirect::back();
     }
 
   }

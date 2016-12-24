@@ -22,40 +22,19 @@ class Tagging extends Model
   public function __saveRelatedData($model,$value) {
     
     $tag = new Tag;
-
-    $tagIds = array();
-    foreach ($value as $tagName) {
-      $tag->checkAndSave($tagName);
-      $tagIds[] = $tag->getTagByTagName($tagName)->id;
-    }
+    $tag->setFormToken($this->formToken);
+    $tagIds = $tag->saveSpecial($value);
 
     return $this->clearAndSaves($model,$tagIds);
     
   }
 
-  private function _save($model,$value) {
-    $tagging = new Tagging;
-    $tagging->model = $model->modelName;
-    $tagging->model_id = $model->id;
-    $tagging->tag_id = $value;
-    return $tagging->save();
-  }
-
-  // public function checkRecordExist($model,$tagId) {
-  //   return $this->where([
-  //     ['model','=',$model->modelName],
-  //     ['model_id','=',$model->id],
-  //     ['tag_id','=',$tagId]
-  //   ])->count() ? true : false;
-  // }
-  
   public function clearAndSaves($model,$tagIds) {
     // clear old record
     $this->deleteByModelNameAndModelId($model->modelName,$model->id);
 
-    // save
     foreach ($tagIds as $tagId) {
-      $this->_save($model,$tagId);
+      $this->_save($model->includeModelAndModelId(array('tag_id' => $tagId)));
     }
 
     return true;

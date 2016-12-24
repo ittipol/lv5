@@ -76,8 +76,8 @@ class DepartmentController extends Controller
 
     // clear temp dir and records
     $tempFile = new TempFile;
-    $tempFile->deleteRecordByToken($this->FormToken,Session::get('Person.id'));
-    $tempFile->deleteTempDir($this->FormToken);
+    $tempFile->deleteRecordByToken($this->formToken,Session::get('Person.id'));
+    $tempFile->deleteTempDir($this->formToken);
 
     // Get Company name
     $company = Company::find($companyId);
@@ -92,7 +92,7 @@ class DepartmentController extends Controller
 
   public function add(DepartmentRequest $request,$companyId) {
 
-    if(empty($request->get('__token')) || ($request->get('__token') != $this->FormToken)) {
+    if(empty($request->get('__token')) || ($request->get('__token') != $this->formToken)) {
       exit;
     }
 
@@ -114,7 +114,7 @@ class DepartmentController extends Controller
     if($department->save()){
 
       // check empty
-      Session::forget($department->FormToken);
+      Session::forget($department->formToken);
 
       $message = new Message;
       $message->addingSuccess('แผนก');

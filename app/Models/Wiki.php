@@ -14,7 +14,7 @@ class Wiki extends Model
     parent::__construct();
   }
 
-  public function saveSpecial($model,$options = array()) {
+  public function __saveRelatedData($model,$options = array()) {
 
     $value = array();
 
@@ -29,7 +29,8 @@ class Wiki extends Model
     }
 
     if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      return $model->getRalatedDataByModelName($this->modelName,true)->fill($value)->save();
+      $value = array_merge($value,array('__token' => $this->formToken));
+      return $model->getRalatedDataByModelName($this->modelName,true)->setFormToken($this->formToken)->_save($value);
     }else{
       return $this->fill($model->includeModelAndModelId($value))->save();
     }

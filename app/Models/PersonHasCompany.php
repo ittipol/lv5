@@ -8,7 +8,7 @@ use App\Models\Role;
 class PersonHasCompany extends Model
 {
   public $table = 'person_has_companies';
-  protected $fillable = ['person_id','company_id'];
+  protected $fillable = ['person_id','company_id','role_id'];
   public $timestamps  = false;
 
   public function __construct() {  
@@ -27,7 +27,7 @@ class PersonHasCompany extends Model
     return $this->hasMany('App\Models\PersonHasDepartment','person_id','person_id');
   }
 
-  public function __saveSpecial($companyId,$personId,$role) {
+  public function saveSpecial($companyId,$personId,$role) {
 
     $role = new Role;
 
@@ -36,20 +36,26 @@ class PersonHasCompany extends Model
     }
 
     if(!$this->checkPersonInCompany($companyId,$personId)) {
-      return $this->_save($companyId,$personId,$role->getIdByalias('admin'));
+
+      $value = array(
+        'company_id' => $companyId,
+        'person_id' => $personId,
+        'role_id' => $role->getIdByalias('admin')
+      );
+
+      return $this->_save($value);
     }
 
     return true;
 
   }
 
-  public function _save($companyId,$personId,$roleId) {
-    $personHasCompany = new PersonHasCompany;
-    $personHasCompany->company_id = $companyId;
-    $personHasCompany->person_id = $personId;
-    $personHasCompany->role_id = $roleId;  
-    return $personHasCompany->save();
-  }
+  // public function _save($companyId,$personId,$roleId) {
+  //   $personHasCompany = new PersonHasCompany;
+  //   $personHasCompany->fill($value);
+  //   $personHasCompany->setFormToken($this->formToken);
+  //   return $personHasCompany->save();
+  // }
 
   public function checkPersonInCompany($companyId,$personId) {
     return $this->where([

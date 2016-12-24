@@ -11,20 +11,18 @@ class WordingRelation extends Model
   protected $fillable = ['word','relate_to_word'];
   public $timestamps  = false;
 
-  public  function __saveSpecial($model1,$model2,$value) {
+  public  function saveSpecial($model1,$model2,$value) {
 
     $taggings = $model1->getRalatedDataByModelName('Tagging');
 
     if(!empty($taggings)){
-      
-      $wordingRelationRelate = new WordingRelationRelate;
       
       foreach ($taggings as $tagging) {
         $this->checkAndSave($value,$tagging->tag->name);
         $data = $this->getDataByWordAndRelateToWord($value,$tagging->tag->name);
 
         if(!empty($data->id)){
-          $wordingRelationRelate->checkAndSave($model2,$data->id);
+          $this->checkAndSave($model2,$data->id);
         }
       }
     }
@@ -32,16 +30,9 @@ class WordingRelation extends Model
     return true;
   }
 
-  private function _save($companyId,$businessTypeId) {
-    $wordingRelation = new WordingRelation;
-    $wordingRelation->word = $companyId;
-    $wordingRelation->relate_to_word = $businessTypeId;
-    return $wordingRelation->save();
-  }
-
   public function checkAndSave($word,$relateToWord) {
     if(!$this->checkRecordExist($word,$relateToWord)) {
-      return $this->_save($word,$relateToWord);
+      return $this->_save(array('word' => $word, 'relate_to_word' => $relateToWord));
     }
 
     return true;

@@ -19,8 +19,9 @@ class CompanyHasBusinessType extends Model
     return $this->hasOne('App\Models\BusinessType','id','business_type_id');
   }
 
-  public function __saveSpecial($model,$value) {
+  public function saveSpecial($model,$value) {
     $businessType = new BusinessType;
+    $businessType->setFormToken($this->formToken);
     if($businessType->checkAndSave($value)) {
       return $this->checkAndSave($model->id,$businessType->getBusinessTypeByName($value)->id);
     }
@@ -28,12 +29,12 @@ class CompanyHasBusinessType extends Model
     return false;
   }
 
-  private function _save($companyId,$businessTypeId) {
-    $companyHasBusinessType = new CompanyHasBusinessType;
-    $companyHasBusinessType->company_id = $companyId;
-    $companyHasBusinessType->business_type_id = $businessTypeId;
-    return $companyHasBusinessType->save();
-  }
+  // private function _save($value) {
+  //   $companyHasBusinessType = new CompanyHasBusinessType;
+  //   $companyHasBusinessType->fill($value);
+  //   $companyHasBusinessType->setFormToken($this->formToken);
+  //   return $companyHasBusinessType->save();
+  // }
 
   public function checkAndSave($companyId,$businessTypeId) {
     if(!$this->checkRecordExist($companyId,$businessTypeId)) {
@@ -45,7 +46,7 @@ class CompanyHasBusinessType extends Model
 
   public function clearAndSave($companyId,$businessTypeId) {
     $this->where('company_id','=',$companyId)->delete();
-    return $this->_save($companyId,$businessTypeId);
+    return $this->_save(array('company_id' => $companyId, 'business_type_id' => $businessTypeId));
   }
 
   public function checkRecordExist($companyId,$businessTypeId) {

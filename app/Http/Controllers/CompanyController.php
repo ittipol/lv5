@@ -64,14 +64,14 @@ class CompanyController extends Controller
 
     // clear temp dir and records
     // $tempFile = new TempFile;
-    // $tempFile->deleteRecordByToken($this->FormToken,Session::get('Person.id'));
-    // $tempFile->deleteTempDir($this->FormToken);
+    // $tempFile->deleteRecordByToken($this->formToken,Session::get('Person.id'));
+    // $tempFile->deleteTempDir($this->formToken);
 
-    Session::put($this->FormToken,1);
+    // set form token
+    Session::put($this->formToken,1);
 
     $this->data = array(
-      'districts' => $districts,
-      't' => $this->FormToken
+      'districts' => $districts
     );
 
     return $this->view('pages.company.form.add');
@@ -79,27 +79,21 @@ class CompanyController extends Controller
 
   public function add(CompanyRequest $request) {
 
-    if(empty($request->get('__token')) || empty(Session::get($request->get('__token')))) {
-      // clear temp dir and records
-      $tempFile = new TempFile;
-      $tempFile->deleteRecordByToken($request->get('__token'),Session::get('Person.id'));
-      $tempFile->deleteTempDir($request->get('__token'));
-
-
-      $message = new Message;
-      $message->formTokenNotFound('บันทึก');
-      return Redirect::to('company/add');
-    }
-
     $company = new Company;
     $company->fill($request->all());
 
     if($company->save()){
+      // delete temp dir & records
+      $company->deleteTempData($request->get('__token'));
+      // reomove form token
+      Session::forget($request->get('__token'));
+
       $message = new Message;
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
       $message = new Message;
-      $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้');
+      $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้ กรุณาลองใหม่อีกครั้ง');
+      return Redirect::to('company/add');
     }
 
     return Redirect::to('company/list');
@@ -184,8 +178,8 @@ class CompanyController extends Controller
     }
 
     // $tempFile = new TempFile;
-    // $tempFile->deleteRecordByToken($this->FormToken,Session::get('Person.id'));
-    // $tempFile->deleteTempDir($this->FormToken);
+    // $tempFile->deleteRecordByToken($this->formToken,Session::get('Person.id'));
+    // $tempFile->deleteTempDir($this->formToken);
 
     for ($i=0; $i < 24; $i++) { 
       $hour[] = $i;
@@ -223,7 +217,7 @@ class CompanyController extends Controller
       $message->editingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
       $message = new Message;
-      $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้');
+      $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้ กรุณาลองใหม่อีกครั้ง');
     }
 
     return Redirect::to('company/list');

@@ -13,8 +13,6 @@
     </div>
   </div>
 
-  <?php echo $t; ?>
-
   <?php if(!empty($errors->all())): ?>
     <div class="form-error-messages">
       <div class="form-error-messages-inner">
@@ -303,12 +301,14 @@
     <div class="form-section-inner">
 
       <div class="form-row">
+        <p class="error-message">* สามารถเพิ่มหรือลบได้ในภายหลัง</p>
         <?php 
           echo Form::checkbox('wiki', 1, null, array(
             'id' => 'wiki'
           ));
           echo Form::label('wiki', 'อนุญาตให้นำข้อมูลร้านค้าหรือสถานประกอบการของคุณลงใน Wiki ชลบุรี');
         ?>
+        <p class="notice info">Wiki จะเป็นระบบในการจัดเก็บข้อมูลต่างๆ ใยชลบุรี และจะทำให้ง่ายต่อการค้นหาและเข้าถึง</p>
       </div>
 
     </div>

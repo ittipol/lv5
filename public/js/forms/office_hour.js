@@ -60,6 +60,11 @@ OfficeHour.init = function() {
 		OfficeHour.index = OfficeHour.createSelect(OfficeHour.days[i],OfficeHour.index,OfficeHour.code);
 	}
 
+	if($('#office_hour_same_time').is(':checked')){
+		OfficeHour.sameTime = true;
+		OfficeHour.setSameTime(OfficeHour.code);
+	}
+
 }
 
 OfficeHour.bind = function() {

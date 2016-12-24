@@ -16,6 +16,8 @@ class User extends Model
     protected $hidden = ['password','remember_token'];
     protected $fillable = ['email','password','remember_token'];
     public $timestamps  = false;
+    public $createDir = true;
+    public $dirNames = array('avatar','images');
 
     public function __construct() {  
       parent::__construct();
@@ -29,9 +31,6 @@ class User extends Model
         $user->attributes['password'] = Hash::make($user->attributes['password']);
       });
 
-      // User::saved(function($user){
-
-      // });
     }
 
     public function createUserFolder() {

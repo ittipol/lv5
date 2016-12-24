@@ -14,15 +14,18 @@ class Tag extends Model
     parent::__construct();
   }
 
-  private function _save($value) { 
-    $tag = new Tag;
-    $tag->name = $value;
-    return $tag->save();
+  public function saveSpecial($value) {
+    $tagIds = array();
+    foreach ($value as $tagName) {
+      $this->checkAndSave($tagName);
+      $tagIds[] = $this->getTagByTagName($tagName)->id;
+    }
+    return $tagIds;
   }
 
   public function checkAndSave($tagName) {
     if(!$this->checkRecordExistByTagName($tagName)) {
-      return $this->_save($tagName);
+      return $this->_save(array('name' => $tagName));
     }
 
     return true;

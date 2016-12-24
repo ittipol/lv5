@@ -24,6 +24,7 @@ class Company extends Model
     'subject' => '{{name}}',
     'description' => '{{description}}',
   );
+  public $createImage = true;
 
   public function __construct() {  
     parent::__construct();
@@ -37,19 +38,23 @@ class Company extends Model
 
       if($company->state == 'create') {
         $personHasCompany = new PersonHasCompany;
-        $personHasCompany->__saveSpecial($company->id,Session::get('Person.id'),'admin');
+        $personHasCompany->setFormToken($company->formToken);
+        $personHasCompany->saveSpecial($company->id,Session::get('Person.id'),'admin');
       }
 
       $companyHasBusinessType = new CompanyHasBusinessType;
-      $companyHasBusinessType->__saveSpecial($company,$company->business_type);
+      $companyHasBusinessType->setFormToken($company->formToken);
+      $companyHasBusinessType->saveSpecial($company,$company->business_type);
 
+      $wordingRelation = new WordingRelation;
+      $wordingRelation->setFormToken($company->formToken);
       foreach ($company->companyHasBusinessType as $value) {
-        $wordingRelation = new WordingRelation;
-        $wordingRelation->__saveSpecial($company,$value->businessType,$value->businessType->name);
+        $wordingRelation->saveSpecial($company,$value->businessType,$value->businessType->name);
       } 
 
       $lookup = new Lookup;
-      $lookup->saveSpecial($company);
+      $lookup->setFormToken($company->formToken);
+      $lookup->__saveRelatedData($company);
 
     });
   }

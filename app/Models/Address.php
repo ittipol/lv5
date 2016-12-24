@@ -25,19 +25,12 @@ class Address extends Model
   public function __saveRelatedData($model,$value) {
 
     if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      return $model->getRalatedDataByModelName($this->modelName,true)->fill($value)->save();
+      // $value = array_merge($value,array('__token' => $this->formToken));
+      return $model->getRalatedDataByModelName($this->modelName,true)->setFormToken($this->formToken)->_save($value);
     }else{
       return $this->fill($model->includeModelAndModelId($value))->save();
     }
     
-  }
-
-  private function _save($model,$value) {
-    $address = new Address;
-    $address->fill($value);
-    $address->model = $model->modelName;
-    $address->model_id = $model->id;
-    return $address->save();
   }
 
   public function clearAndSave($model,$value) {

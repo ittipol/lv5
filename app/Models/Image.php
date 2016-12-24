@@ -22,25 +22,10 @@ class Image extends Model
     parent::__construct();
   }
 
-  public function saveImages($model,$personId) {
+  public function __saveRelatedData($model,$personId) {
     $this->saveUploadImages($model,$personId);
     $this->deleteImages($model,$personId);
   }
-
-  // public function saveImages($model,$images) {
-
-  //   foreach ($images as $image) {
-  //     $imageModel = new Image;
-  //     $imageModel->model = $model->modelName;
-  //     $imageModel->model_id = $model->id;
-  //     $imageModel->name = $imageModel->generateFileName($model,$image);
-  //     if($imageModel->save()){
-  //       $imageModel->saveImage($model,$image,$imageModel->name);
-  //     }
-  //   }
-    
-  //   return true;
-  // }
 
   // public function saveImage($model,$image,$filename) {
 
@@ -59,11 +44,11 @@ class Image extends Model
 
   public function saveUploadImages($model,$personId) {
 
-    if(empty($model->FormToken)) {
+    if(empty($this->formToken)) {
       return false;
     }
 
-    $token = $model->FormToken;
+    $token = $this->formToken;
 
     $tempFileModel = new TempFile;
     $imagesTemp = $tempFileModel->where([
@@ -84,22 +69,24 @@ class Image extends Model
         continue;
       }
 
-      $to = storage_path($model->dirPath).$model->id.'/'.$image->type.'/'.$filename;
+      $value = array(
+        'model' => $model->modelName,
+        'model_id' => $model->id,
+        'name' => $filename,
+        'type' => $image->type
+      );
 
-      // move to real dir
-      File::move($path, $to);
-    
-      //
-      $imageModel = new Image;
-      $imageModel->model = $model->modelName;
-      $imageModel->model_id = $model->id;
-      $imageModel->type = $image->type;
-      $imageModel->name = $filename;
-      $imageModel->save();
+      if($this->_save($value)) {
 
-      //
-      // $tempFile->find($image['attributes']['id'])->delete();
+        $to = storage_path($model->dirPath).$model->id.'/'.$image->type.'/'.$filename;
 
+        // move to real dir
+        File::move($path, $to);
+
+        //
+        // $tempFile->find($image['attributes']['id'])->delete();
+      }
+      
     }
     
     // remove temp dir
@@ -112,11 +99,11 @@ class Image extends Model
 
   public function deleteImages($model,$personId) {
 
-    if(empty($model->FormToken)) {
+    if(empty($this->formToken)) {
       return false;
     }
 
-    $token = $model->FormToken;
+    $token = $this->formToken;
 
     $tempFileModel = new TempFile;
     $imagesTemp = $tempFileModel->where([

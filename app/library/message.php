@@ -17,7 +17,13 @@ class Message
     Session::flash('message.title', 'คุณเข้าสู่ระบบแล้ว');
     Session::flash('message.desc', '');
     Session::flash('message.type', 'info');
-  } 
+  }
+
+  public function loginFail() {
+    Session::flash('message.title', 'อีเมล  หรือ รหัสผ่านไม่ถูก');
+    Session::flash('message.desc', '');
+    Session::flash('message.type', 'error');
+  }
 
 	public function loginRequest() {
 	  Session::flash('message.title', 'กรุณาเข้าสู่ระบบ');
@@ -53,7 +59,7 @@ class Message
   }
 
   public function error($text = '') {
-    Session::flash('message.title', 'เกิดข้อผิดพลาด!!! '.$text);
+    Session::flash('message.title', 'เกิดข้อผิดพลาด '.$text);
     Session::flash('message.type', 'error'); 
   }
 

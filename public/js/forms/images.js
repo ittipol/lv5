@@ -130,6 +130,7 @@ Images.prototype.uploadImage = function(parent,input,data) {
     cache: false,
     processData:false,
     beforeSend: function( xhr ) {
+    	input.remove();
     	$(parent).parent().find('.status').css('width','0%');
     	parent.parent().find('.progress-bar').css('display','block');
     },
@@ -157,18 +158,18 @@ Images.prototype.uploadImage = function(parent,input,data) {
 
   	if(response.success){
 
-  		input.remove();
+  		// input.remove();
 
   		parent.addClass('added');
   		parent.find('img').fadeIn(450);
   		parent.find('a').css('display','block');
   		parent.parent().find('.progress-bar').css('display','none');
 
-  		var _input = document.createElement('input');
-		  _input.setAttribute('type','hidden');
-		  _input.setAttribute('name','filenames['+(_this.runningNumber-1)+']');
-		  _input.setAttribute('value',response.filename);
-		  parent.append(_input);
+  		// var _input = document.createElement('input');
+		  // _input.setAttribute('type','hidden');
+		  // _input.setAttribute('name','filenames['+(_this.runningNumber-1)+']');
+		  // _input.setAttribute('value',response.filename);
+		  // parent.append(_input);
 
   		if(_this.imagesPlaced.indexOf(id) < 0){
   			_this.imagesPlaced.push(id);

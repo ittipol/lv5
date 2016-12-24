@@ -20,13 +20,14 @@ class Model extends _Model
   public $modelName;
   public $alias;
   public $state = 'create';
-  public $FormToken;
+  public $formToken;
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
   public $dirNames;
   public $relatedData;
   public $allowedModelData = array('Address','Tagging','OfficeHour');
+  public $createImage = false;
   public $createDir = false;
   public $createWiki = false;
   public $temporaryData;
@@ -47,6 +48,18 @@ class Model extends _Model
 
     // before saving
     parent::saving(function($model){
+
+      if(empty($model->formToken) || empty(Session::get($model->formToken))) {
+        return false;
+      }
+
+      if(!empty($model->requireValue)) {
+        foreach ($model->requireValue as $field) {
+          if(empty($model->{$field})) {
+            return false;
+          }
+        }
+      }
 
       if(!$model->exists){ // create new record
 
@@ -103,7 +116,7 @@ class Model extends _Model
     }
 
     if(!empty($attributes['__token'])) {
-      $this->FormToken = $attributes['__token'];
+      $this->formToken = $attributes['__token'];
       unset($attributes['__token']);
     }
 
@@ -116,28 +129,30 @@ class Model extends _Model
 
   }
 
-  public function save(array $options = []) {
-
-    if(!empty($this->requireValue)) {
-      foreach ($this->requireValue as $field) {
-        if(empty($this->{$field})) {
-          return false;
-        }
-      }
-    }
-
-    return parent::save();
-
+  public function _save($value) {
+    $model = Service::loadModel($this->modelName);
+    $model->fill($value);
+    $model->setFormToken($this->formToken);
+    return $model->save();
   }
 
   public function saveRelatedData() {
 
-    if (!$this->exists || empty($this->FormToken)) {
+    if (!$this->exists || empty($this->formToken)) {
       return false;
     }
 
-    $imageModel = new Image;
-    $imageModel->saveImages($this,Session::get('Person.id'));
+    if($this->createImage) {
+      $imageModel = new Image;
+      $imageModel->setFormToken($this->formToken);
+      $imageModel->__saveRelatedData($this,Session::get('Person.id'));
+    }
+
+    if($this->createWiki && ($this->state == 'create')){
+      $wiki = new Wiki;
+      $wiki->setFormToken($this->formToken);
+      $wiki->__saveRelatedData($this);
+    }
 
     foreach ($this->allowedModelData as $allowed) {
 
@@ -145,17 +160,12 @@ class Model extends _Model
         continue;
       }
 
-      $this->_save($allowed,$this->relatedData[$allowed]);
-    }
-
-    if($this->createWiki && ($this->state == 'create')){
-      $wiki = new Wiki;
-      $wiki->saveSpecial($this);
+      $this->_saveRelatedData($allowed,$this->relatedData[$allowed]);
     }
 
   }
 
-  private function _save($model,$value) {
+  private function _saveRelatedData($model,$value) {
 
     $class = Service::loadModel($model);
 
@@ -163,8 +173,13 @@ class Model extends _Model
       return false;
     }
 
+    $class->setFormToken($this->formToken);
     return $class->__saveRelatedData($this,$value);
     
+  }
+
+  public function setFormToken($formToken) {
+    $this->formToken = $formToken;
   }
 
   public function createDir($model = null) {
@@ -193,97 +208,108 @@ class Model extends _Model
 
   }
 
-  public function includeRelatedData($models = array()) {
+  public function deleteTempData($formToken = null) {
 
-    $data = $this->extract($models);
+    if(!empty($formToken)) {
+      $formToken = $this->formToken;
+    }
+
+    $tempFile = new TempFile;
+    $tempFile->deleteRecordByToken($formToken,Session::get('Person.id'));
+    $tempFile->deleteTempDir($formToken);
+  }
+
+  // public function includeRelatedData($models = array()) {
+
+  //   $data = $this->extract($models);
     
-    foreach ($data as $model => $value) {
-      $this->attributes[$model] = $value;
-    }
+  //   foreach ($data as $model => $value) {
+  //     $this->attributes[$model] = $value;
+  //   }
 
-  }
+  // }
 
-  public function extractRelatedData($data,$class = null) {
+  // public function extractRelatedData($data,$class = null) {
 
-    $__data = array();
+  //   $__data = array();
 
-    foreach ($data as $model => $value) {
+  //   foreach ($data as $model => $value) {
 
-      if($model == 'options') {
-        continue;
-      }
+  //     if($model == 'options') {
+  //       continue;
+  //     }
 
-      $_class = Service::loadModel($model);
+  //     $_class = Service::loadModel($model);
 
-      if(!empty($_class) && is_array($value)){
-        // extract
-        $_data = $this->extract($value,$_class);
-        // save
-        $__data[$_class->modelName] = $_data[$_class->modelName];
-      }
+  //     if(!empty($_class) && is_array($value)){
+  //       // extract
+  //       $_data = $this->extract($value,$_class);
+  //       // save
+  //       $__data[$_class->modelName] = $_data[$_class->modelName];
+  //     }
 
-      if($model == 'fields') {
+  //     if($model == 'fields') {
 
-        $options = array();
+  //       $options = array();
 
-        if(!empty($data['options'])){
-          $options = $data['options'];
-        }
+  //       if(!empty($data['options'])){
+  //         $options = $data['options'];
+  //       }
 
-        // get data
-        return $this->_extractRelatedData($value,$class,$options);
+  //       // get data
+  //       return $this->_extractRelatedData($value,$class,$options);
 
-      }
+  //     }
 
-    }
+  //   }
 
-    return $__data;
+  //   return $__data;
     
-  }
+  // }
 
-  public function _extractRelatedData($fields,$class,$options = array()) {
+  // public function _extractRelatedData($fields,$class,$options = array()) {
 
-    $data = array();
+  //   $data = array();
 
-    if(empty($class)){
-      return false;
-    }
+  //   if(empty($class)){
+  //     return false;
+  //   }
 
-    if(!empty($options['related'])) {
-      $parts = explode('.', $options['related']);
+  //   if(!empty($options['related'])) {
+  //     $parts = explode('.', $options['related']);
 
-      if(!empty($parts[1])){
-        $relatedClass = $parts[0];
-        $relation = $parts[1];
-      }else{
-        return false;
-      }
+  //     if(!empty($parts[1])){
+  //       $relatedClass = $parts[0];
+  //       $relation = $parts[1];
+  //     }else{
+  //       return false;
+  //     }
 
-      $relatedClass = Service::loadModel($relatedClass);
-      $records = $relatedClass->where([
-        ['model','=',$this->modelName],
-        ['model_id','=',$this->id]
-      ])->get($fields);
+  //     $relatedClass = Service::loadModel($relatedClass);
+  //     $records = $relatedClass->where([
+  //       ['model','=',$this->modelName],
+  //       ['model_id','=',$this->id]
+  //     ])->get($fields);
 
-      foreach ($records as $key => $record) {
-        $data[$class->modelName][$key] = $record->{$relation}->getAttributes();
-      }
+  //     foreach ($records as $key => $record) {
+  //       $data[$class->modelName][$key] = $record->{$relation}->getAttributes();
+  //     }
 
-    }elseif(Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')){
-      $records = $class->where([
-        ['model','=',$this->modelName],
-        ['model_id','=',$this->id]
-      ])->get($fields);
+  //   }elseif(Schema::hasColumn($class->getTable(), 'model') && Schema::hasColumn($class->getTable(), 'model_id')){
+  //     $records = $class->where([
+  //       ['model','=',$this->modelName],
+  //       ['model_id','=',$this->id]
+  //     ])->get($fields);
 
-      foreach ($records as $key => $record) {
-        $data[$class->modelName][$key] = $record->getAttributes();
-      }
+  //     foreach ($records as $key => $record) {
+  //       $data[$class->modelName][$key] = $record->getAttributes();
+  //     }
 
-    }
+  //   }
 
-    return $data;
+  //   return $data;
 
-  }
+  // }
 
   public function getRalatedDataByModelName($modelName,$onlyFirst = false,$conditons = []) {
 
@@ -354,9 +380,13 @@ class Model extends _Model
       return false;
     }
 
+    if(!is_array($value)) {
+      $value = array($value);
+    }
+
     return array_merge($value,array(
       'model' => $this->modelName,
-      'model_id' => $this->id,
+      'model_id' => $this->id
     ));
 
   }

@@ -45,10 +45,6 @@ class ApiController extends Controller
       return response()->json($result);
     }
 
-    // if (!Input::hasFile('file')) {
-    //   exit('error!!!');
-    // }
-
     $success = false;
     $fileName = '';
 
@@ -63,6 +59,7 @@ class ApiController extends Controller
       $tempFile->token = Input::get('formToken');
       $tempFile->status = 'add'; 
       $tempFile->created_by = Session::get('Person.id');
+      $tempFile->setFormToken(Input::get('formToken'));
 
       if($tempFile->save()){
         $success = true;
@@ -113,6 +110,7 @@ class ApiController extends Controller
       $tempFile->status = 'delete';
       $tempFile->token = Input::get('formToken');
       $tempFile->created_by = Session::get('Person.id');
+      $tempFile->setFormToken(Input::get('formToken'));
       
       if($tempFile->save()){
         $success = true;
