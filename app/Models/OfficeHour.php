@@ -8,7 +8,7 @@ use App\Models\Day;
 class OfficeHour extends Model
 {
   public $table = 'office_hours';
-  protected $fillable = ['model','model_id','day_id','start_time','end_time','open'];
+  protected $fillable = ['model','model_id','same_time','time','display'];
   public $timestamps  = false;
 
   public function __saveRelatedData($model,$value) {
@@ -17,44 +17,68 @@ class OfficeHour extends Model
 
     $days = Day::all();
 
+    $display = false;
+
     foreach ($days as $key => $day) {
 
-      $_data['model'] = $model->modelName;
-      $_data['model_id'] = $model->id;
-      $_data['day_id'] = $day->id;
+      // $_data['model'] = $model->modelName;
+      // $_data['model_id'] = $model->id;
+      // $_data['day_id'] = $day->id;
 
       $_data['open'] = 0;
       $_data['start_time'] = '00:00:00';
       $_data['end_time'] = '00:00:00';
 
-      if(!empty($value[$day->id])){
+      if(!empty($value['time'][$day->id])){
 
-        $startSeconds = ($value[$day->id]['start_time']['hour']*60*60) + ($value[$day->id]['start_time']['min']*60);
-        $endSeconds = ($value[$day->id]['end_time']['hour']*60*60) + ($value[$day->id]['end_time']['min']*60);
+        $display = true;
 
-        if($startSeconds < $endSeconds) {
-          $_data['open'] = $value[$day->id]['open'];
-          $_data['start_time'] = $value[$day->id]['start_time']['hour'].':'.$value[$day->id]['start_time']['min'].':00';
-          $_data['end_time'] = $value[$day->id]['end_time']['hour'].':'.$value[$day->id]['end_time']['min'].':00';
-        }
+        // $startSeconds = ($value['time'][$day->id]['start_time']['hour']*60*60) + ($value['time'][$day->id]['start_time']['min']*60);
+        // $endSeconds = ($value['time'][$day->id]['end_time']['hour']*60*60) + ($value['time'][$day->id]['end_time']['min']*60);
+
+        // if($startSeconds < $endSeconds) {
+        //   $_data['open'] = $value['time'][$day->id]['open'];
+        //   $_data['start_time'] = $value['time'][$day->id]['start_time']['hour'].':'.$value['time'][$day->id]['start_time']['min'].':00';
+        //   $_data['end_time'] = $value['time'][$day->id]['end_time']['hour'].':'.$value['time'][$day->id]['end_time']['min'].':00';
+        // }
+
+        $_data['open'] = $value['time'][$day->id]['open'];
+        $_data['start_time'] = $value['time'][$day->id]['start_time']['hour'].':'.$value['time'][$day->id]['start_time']['min'].':00';
+        $_data['end_time'] = $value['time'][$day->id]['end_time']['hour'].':'.$value['time'][$day->id]['end_time']['min'].':00';
 
       }
 
       $officeHours[$day->id] = $_data;
     }
 
-    foreach ($officeHours as $key => $officeHour) {
-      if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName,[['day_id','=',$officeHour['day_id']]])){
-        $model->getRalatedDataByModelName($this->modelName,true,[['day_id','=',$officeHour['day_id']]])
-              ->setFormToken($this->formToken)
-              ->fill($officeHour)
-              ->save();
-      }else{
-        $this->_save($model->includeModelAndModelId($officeHour));
-      }
-    }
 
-    return true;
+    $value = array(
+      'same_time' => $value['same_time'],
+      'time' => json_encode($officeHours),
+      'display' => $display
+    );
+
+    // foreach ($officeHours as $key => $officeHour) {
+    //   if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName,[['day_id','=',$officeHour['day_id']]])){
+    //     $model->getRalatedDataByModelName($this->modelName,true,[['day_id','=',$officeHour['day_id']]])
+    //           ->setFormToken($this->formToken)
+    //           ->fill($officeHour)
+    //           ->save();
+    //   }else{
+    //     $this->_save($model->includeModelAndModelId($officeHour));
+    //   }
+    // }
+
+    if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
+      dd('office h update 58');
+      return $model->getRalatedDataByModelName($this->modelName,true)
+            ->setFormToken($this->formToken)
+            ->fill($value)
+            ->save();
+    }else{
+      dd($model->includeModelAndModelId($value));
+      return $this->_save($model->includeModelAndModelId($value));
+    }
 
   }
 

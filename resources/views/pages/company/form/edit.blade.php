@@ -118,7 +118,7 @@
 
             <div class="form-row">
               <?php 
-                echo Form::checkbox('office_hour_same_time', 1, $company['office_hour_same_time'], array(
+                echo Form::checkbox('OfficeHour[same_time]', 1, null, array(
                   'id' => 'office_hour_same_time'
                 ));
                 echo Form::label('office_hour_same_time', 'กำหนดเวลาทำการเหมือนกันทุกวัน');

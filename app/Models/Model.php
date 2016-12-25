@@ -26,7 +26,7 @@ class Model extends _Model
   public $dirPath;
   public $dirNames;
   public $relatedData;
-  public $allowedRelatedModelData = array('Address','Tagging','OfficeHour');
+  public $allowedRelatedModel = array();
   public $createImage = false;
   public $createDir = false;
   public $createWiki = false;
@@ -105,7 +105,7 @@ class Model extends _Model
       }
     }
 
-    foreach ($this->allowedRelatedModelData as $allowed) {
+    foreach ($this->allowedRelatedModel as $allowed) {
 
       if(empty($attributes[$allowed])) {
         continue;
@@ -152,7 +152,7 @@ class Model extends _Model
       $wiki->setFormToken($this->formToken)->__saveRelatedData($this);
     }
 
-    foreach ($this->allowedRelatedModelData as $allowed) {
+    foreach ($this->allowedRelatedModel as $allowed) {
 
       if(empty($this->relatedData[$allowed])) {
         continue;

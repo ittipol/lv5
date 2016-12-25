@@ -28,6 +28,7 @@ class Department extends Model
   );
   public $temporaryData = array('company_id');
   public $createImage = true;
+  public $allowedRelatedModel = array('Address');
 
   public function __construct() {  
     parent::__construct();

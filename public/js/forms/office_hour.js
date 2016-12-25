@@ -147,16 +147,16 @@ OfficeHour.createSelect = function(day,index,code) {
 	html += '<div id="'+code+'_'+index+'" class="form-row">';
 	html += '<label for="OfficeHour['+index+']">'+day+'</label> ';             
 	html += '<label id="'+code+'_'+index+'_switch" class="switch '+code+'-office-switch-btn">';
-	html += '<input id="'+code+'_'+index+'_open" type="checkbox" name="OfficeHour['+index+'][open]" value="1" checked>';
+	html += '<input id="'+code+'_'+index+'_open" type="checkbox" name="OfficeHour[time]['+index+'][open]" value="1" checked>';
 	html += '<div class="slider round office-hour"></div>';
 	html += '</label>';
-	html += '<select id="'+code+'_'+index+'_start_hour" name="OfficeHour['+index+'][start_time][hour]"></select>';
+	html += '<select id="'+code+'_'+index+'_start_hour" name="OfficeHour[time]['+index+'][start_time][hour]"></select>';
 	html += '<b> : </b>';
-	html += '<select id="'+code+'_'+index+'_start_min" name="OfficeHour['+index+'][start_time][min]"></select>';
+	html += '<select id="'+code+'_'+index+'_start_min" name="OfficeHour[time]['+index+'][start_time][min]"></select>';
 	html += '<b> - </b>';
-	html += '<select id="'+code+'_'+index+'_end_hour" name="OfficeHour['+index+'][end_time][hour]"></select>';
+	html += '<select id="'+code+'_'+index+'_end_hour" name="OfficeHour[time]['+index+'][end_time][hour]"></select>';
 	html += '<b> : </b>';
-	html += '<select id="'+code+'_'+index+'_end_min" name="OfficeHour['+index+'][end_time][min]"></select>';
+	html += '<select id="'+code+'_'+index+'_end_min" name="OfficeHour[time]['+index+'][end_time][min]"></select>';
 	html += '<div id="'+code+'_'+index+'_status" class="office-status active"></div>';
 	html += '</div>';
 
