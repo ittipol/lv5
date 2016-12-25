@@ -263,7 +263,7 @@
       </div>
 
       <div class="form-row">
-        <?php echo Form::label('', 'ระบุตำแหน่งร้านค้าหรือสถานประกอบการของคุณบนแผนที่'); ?>
+        <?php echo Form::label('', 'ระบุตำแหน่งร้านค้าหรือสถานประกอบการบนแผนที่'); ?>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map"></div>
       </div>

@@ -19,8 +19,14 @@
   <?php endif; ?>
 
   <?php
-    echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
+    echo  Form::model($department->getAttributes(), [
+      'method' => 'PATCH',
+      'route' => ['department.edit', $department->id],
+      'enctype' => 'multipart/form-data'
+    ]);
   ?>
+
+  <input type="hidden" name="__token" value="<?php echo $__token; ?>" >
 
   <div class="form-section">
 
@@ -53,11 +59,34 @@
       </div>
 
       <div class="form-row">
-        <?php echo Form::label('', 'รูปภาพแผนก (สูงสุด 5 รูป)'); ?>
-        <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-        <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        <div id="_image_group">
+
+        <div class="sub-title">รูปภาพ</div>
+
+        <div>
+          <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
+          <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
         </div>
+
+        <div class="sub-form">
+
+          <div class="sub-form-inner">
+
+            <div class="form-row">
+              <?php echo Form::label('', 'รูปภาพเครื่องหมายการค้า'); ?>
+              <div id="_image_logo"></div>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="form-row">
+              <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
+              <div id="_image_group"></div>
+            </div>
+
+          </div>
+        
+        </div>
+
       </div>
 
     </div>
@@ -137,7 +166,9 @@
       <div class="form-row">
         <p class="error-message">* เมื่อคุณเลือกตัวเลือกนี้ ข้อมูลที่อยู่แผนกจะไม่ถูกบันทึก</p>
         <?php
-        echo Form::checkbox('company_address', 1, false);
+        echo Form::checkbox('company_address', 1, null, array(
+          'id' => 'company_address'
+        ));
         echo Form::label('company_address', 'ที่อยู่เดียวกับสถานประกอบการ');
       ?>
       </div>
@@ -146,8 +177,8 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('address', 'ที่อยู่');
-          echo Form::textarea('address', null, array(
+          echo Form::label('Address[address]', 'ที่อยู่');
+          echo Form::textarea('Address[address]', $address['address'], array(
             'class' => 'ckeditor'
           ));
         ?>
@@ -166,10 +197,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('district_id', 'อำเภอ', array(
+          echo Form::label('Address[district_id]', 'อำเภอ', array(
             'class' => 'required'
           ));
-          echo Form::select('district_id', $districts ,null, array(
+          echo Form::select('Address[district_id]', $districts ,$address['district_id'], array(
             'id' => 'district'
           ));
         ?>
@@ -177,17 +208,17 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('sub_district_id', 'ตำบล', array(
+          echo Form::label('Address[sub_district_id]', 'ตำบล', array(
             'class' => 'required'
           ));
-          echo Form::select('sub_district_id', array('0' => '-') , null, array(
+          echo Form::select('Address[sub_district_id]', array('0' => '-') , null, array(
             'id' => 'sub_district'
           ));
         ?>
       </div>
 
       <div class="form-row">
-        <?php echo Form::label('', 'ระบุตำแหน่งบนแผนที่ เพื่อง่ายต่อการค้นหา'); ?>
+        <?php echo Form::label('', 'ระบุตำแหน่แผนกบนแผนที่'); ?>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map"></div>
       </div>
@@ -199,16 +230,17 @@
   <div class="form-section">
 
     <div class="title">
-      Wiki ชลบุรี
+      แท๊ก
     </div>
 
     <div class="form-section-inner">
 
       <div class="form-row">
         <?php 
-          echo Form::checkbox('wiki', 1);
-          echo Form::label('wiki', 'อนุญาตให้นำข้อมูลแผนกของคุณลงใน Wiki ชลบุรี');
+          echo Form::label('categories', 'แท๊กที่เกี่ยวข้องกับร้านค้าหรือสถานประกอบการของคุณ');
         ?>
+        <div id="tags" class="tag"></div>
+        <p class="notice info">แท็กจะช่วยให้การค้นหาร้านค้าหรือสถานประกอบการของคุณง่ายขึ้น</p>
       </div>
 
     </div>
@@ -229,14 +261,15 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    Images.load();
-    District.load();
-    Map.load();
+    var logo = new Images('_image_logo','logo',1,'default');
+    logo.load('<?php echo $logoJson; ?>');
+
+    var images = new Images('_image_group','images',5,'default');
+    images.load('<?php echo $imageJson; ?>');
+
+    District.load('<?php echo $address['sub_district_id']; ?>');
+    Map.load('<?php echo $geographic; ?>');
+    Tagging.load('<?php echo $tagJson; ?>');
   });
 </script>
-
-<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places&callback=initAutocomplete"
-     async defer></script>
-
 @stop

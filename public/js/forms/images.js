@@ -89,7 +89,8 @@ Images.prototype.preview = function(input){
 		  		parent.find('.error-message').css('display','block').text('ไม่รองรับรูปภาพนี้');
 		  		parent.find('input[type="hidden"]').remove();
 		  		parent.find('input').val('');
-		  		parent.find('img').fadeIn(1000);
+		  		// parent.find('img').fadeIn(1000);
+		  		parent.find('img').css('display','none');
 		  	}
 
 		  }

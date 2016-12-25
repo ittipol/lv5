@@ -27,9 +27,14 @@ class Department extends Model
     'description' => '{{description}}',
   );
   public $temporaryData = array('company_id');
+  public $createImage = true;
 
   public function __construct() {  
     parent::__construct();
+  }
+
+  public function companyHasDepartment() {
+    return $this->hasOne('App\Models\CompanyHasDepartment','department_id','id');
   }
 
   public static function boot() {
@@ -38,10 +43,10 @@ class Department extends Model
 
     Department::saved(function($department){
 
-      // get company id
-      $companyId = $department->temporaryData['company_id'];
-
       if($department->state == 'create') {
+
+        // get company id
+        $companyId = $department->temporaryData['company_id'];
 
         $companyHasDepartment = new CompanyHasDepartment;
         $companyHasDepartment->setFormToken($department->formToken);
@@ -60,9 +65,13 @@ class Department extends Model
   }
 
   public function fill(array $attributes) {
- 
+
     if(!empty($attributes['company_address'])) {
       unset($attributes['Address']);
+    }else{
+      if(!empty($this->company_address) && ($this->company_address == 1)) {
+        $attributes['company_address'] = 0;
+      }
     }
 
     return parent::fill($attributes);

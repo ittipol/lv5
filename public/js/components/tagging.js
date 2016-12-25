@@ -46,9 +46,8 @@ Tagging.removeHiddenField = function(id) {
 Tagging.crateTagList = function(){
 	var span = document.createElement('span');
 	span.setAttribute('id','tag_list');
-
+	
 	document.getElementById('tags').appendChild(span);
-
 }
 
 Tagging.crateInputTagField = function(){

@@ -6,7 +6,6 @@ use App\Http\Requests\DepartmentRequest;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\PersonHasCompany;
-use App\Models\CompanyHasDepartment;
 use App\Models\District;
 use App\Models\TempFile;
 use App\library\message;
@@ -108,9 +107,9 @@ class DepartmentController extends Controller
 
     if($department->save()){
       // delete temp dir & records
-      $company->deleteTempData($company->formToken);
+      $department->deleteTempData();
       // reomove form token
-      Session::forget($company->formToken);
+      Session::forget($department->formToken);
 
       $message = new Message;
       $message->addingSuccess('แผนก');
@@ -121,18 +120,18 @@ class DepartmentController extends Controller
       return Redirect::to('department/add/'.$companyId);
     }
 
-    return Redirect::to('department/list');
+    return Redirect::to('department/list/'.$companyId);
 
   }
 
   public function formEdit($departmentId) {
+
+    // check person in department
    
     $department = Department::find($departmentId);
 
-    // find company id
-    $company = CompanyHasDepartment::where('department_id','=',$departmentId)->first()->company;
-
-     dd($company);
+    // find company
+    $company = $department->companyHasDepartment->company;
 
     $districtRecords = District::all();
 
@@ -141,27 +140,96 @@ class DepartmentController extends Controller
       $districts[$district->id] = $district->name;
     }
 
-    Session::put($this->formToken,1);
+    $address = $department->getRalatedDataByModelName('Address',true);
 
-    // Get Company name
-    $company = Company::find($companyId);
+    $geographic = array();
+    if(!empty($address->lat) && !empty($address->lng)) {
+      $geographic['lat'] = $address->lat;
+      $geographic['lng'] = $address->lng;
+    }
+
+    // Get logo
+    $logo = $department->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
+
+    $_logo = array();
+    if($logo){
+      $_logo[] = array(
+        'name' => $logo->name,
+        'url' => $logo->getImageUrl()
+      );
+    }
+
+    // Get Images
+    $images = $department->getRalatedDataByModelName('Image',false,[['type','=','images']]);
+
+    $_images = array();
+    if(!empty($images)){
+      foreach ($images as $image) {
+        $_images[] = array(
+          'name' => $image->name,
+          'url' => $image->getImageUrl()
+        );
+      }
+    }
+
+    // Get Tag
+    $taggings = $department->getRalatedDataByModelName('Tagging');
+
+    $_tags = array();
+    if(!empty($taggings)){
+      foreach ($taggings as $tagging) {
+        $_tags[] = array(
+          'id' =>  $tagging->tag->id,
+          'name' =>  $tagging->tag->name
+        );
+      }
+    }
+    
+    Session::put($this->formToken,1);
 
     $this->data = array(
       'companyName' => $company->name,
-      'districts' => $districts,
-    );
-
-    Session::put($this->formToken,1);
-
-    // Get Company name
-    $company = Company::find($companyId);
-
-    $this->data = array(
-      'companyName' => $company->name,
+      'department' => $department,
+      'address' => $address,
+      'logoJson' => json_encode($_logo),
+      'imageJson' => json_encode($_images),
+      'tagJson' => json_encode($_tags),
+      'geographic' => json_encode($geographic),
       'districts' => $districts,
     );
 
     return $this->view('pages.department.form.edit');
+  }
+
+  public function edit(DepartmentRequest $request,$departmentId) {
+
+    // check person in department
+
+    $department = Department::find($departmentId);
+    // find company
+    $company = $department->companyHasDepartment->company;
+    // need to store value
+    $request['company_id'] = $company->id;
+
+    $department->fill($request->all());
+
+    if($department->save()){
+      // delete temp dir & records
+      $department->deleteTempData();
+      // reomove form token
+      Session::forget($department->formToken);
+
+      $message = new Message;
+      $message->addingSuccess('แผนก');
+
+    }else{
+      $message = new Message;
+      $message->error('ไม่สามารถเพิ่มแผนกได้ กรุณาลองใหม่อีกครั้ง');
+      return Redirect::to('department/add/'.$company->id);
+    }
+
+    return Redirect::to('department/list/'.$company->id);
+
   }
 
 }

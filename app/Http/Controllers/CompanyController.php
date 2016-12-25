@@ -79,7 +79,7 @@ class CompanyController extends Controller
 
     if($company->save()){
       // delete temp dir & records
-      $company->deleteTempData($company->formToken);
+      $company->deleteTempData();
       // reomove form token
       Session::forget($company->formToken);
 
@@ -114,7 +114,7 @@ class CompanyController extends Controller
       $geographic['lng'] = $address->lng;
     }
 
-    // Get Images
+    // Get logo
     $logo = $company->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
 
     $_logo = array();
@@ -177,11 +177,11 @@ class CompanyController extends Controller
     $this->data = array(
       'company' => $company,
       'address' => $address,
-      'officeHoursJson' => json_encode($_officeHours),
       'logoJson' => json_encode($_logo),
       'imageJson' => json_encode($_images),
       'tagJson' => json_encode($_tags),
       'geographic' => json_encode($geographic),
+      'officeHoursJson' => json_encode($_officeHours),
       'districts' => $districts
     );
 
@@ -196,9 +196,8 @@ class CompanyController extends Controller
     $company->save();
 
     if($company->save()){
-
       // delete temp dir & records
-      $company->deleteTempData($company->formToken);
+      $company->deleteTempData();
       // reomove form token
       Session::forget($company->formToken);
 
