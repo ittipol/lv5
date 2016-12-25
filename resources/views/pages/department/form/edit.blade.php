@@ -270,6 +270,7 @@
     District.load('<?php echo $address['sub_district_id']; ?>');
     Map.load('<?php echo $geographic; ?>');
     Tagging.load('<?php echo $tagJson; ?>');
+    Form.load();
   });
 </script>
 @stop

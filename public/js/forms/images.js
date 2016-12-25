@@ -15,10 +15,10 @@ function Images (panel,type,limit,style) {
 
 Images.prototype.load = function(imageJson){
 
-	if(typeof $('input[name="__token"]').val() == 'undefined') {
-		return false;
-	} 
-	
+	// if(typeof $('input[name="__token"]').val() == 'undefined') {
+	// 	return false;
+	// } 
+
 	this.init();
 	this.bind();
 
@@ -58,6 +58,7 @@ Images.prototype.preview = function(input){
 	if (input.files && input.files[0]) {
 
 		if(typeof $('input[name="__token"]').val() == 'undefined') {
+			alert('Error, token not found');
 			return false;
 		} 
 
@@ -119,7 +120,7 @@ Images.prototype.preview = function(input){
 Images.prototype.uploadImage = function(parent,input,data) {
 
 	var _this = this;
-
+	
 	var id = input.getAttribute('id');
 
 	var request = $.ajax({
@@ -186,8 +187,6 @@ Images.prototype.uploadImage = function(parent,input,data) {
 				NotificationBottom.title = response.message.title;
 				NotificationBottom.load();
   		}
-
-  		
 
   	}
   	
@@ -271,7 +270,7 @@ Images.prototype.deleteImage = function(parent,input,data) {
 }
 
 Images.prototype.createUploader = function(index){
-	
+
 	var html = '';
 	html += '<div id="'+this.code+'_panel_'+this.runningNumber+'" class="image-panel">';
 	html += '<label id="'+this.code+'_'+this.runningNumber+'" class="image-label">';

@@ -26,7 +26,7 @@ class Model extends _Model
   public $dirPath;
   public $dirNames;
   public $relatedData;
-  public $allowedModelData = array('Address','Tagging','OfficeHour');
+  public $allowedRelatedModelData = array('Address','Tagging','OfficeHour');
   public $createImage = false;
   public $createDir = false;
   public $createWiki = false;
@@ -105,7 +105,7 @@ class Model extends _Model
       }
     }
 
-    foreach ($this->allowedModelData as $allowed) {
+    foreach ($this->allowedRelatedModelData as $allowed) {
 
       if(empty($attributes[$allowed])) {
         continue;
@@ -147,12 +147,12 @@ class Model extends _Model
       $imageModel->setFormToken($this->formToken)->__saveRelatedData($this,Session::get('Person.id'));
     }
 
-    if($this->createWiki && ($this->state == 'create')){
+    if($this->createWiki){
       $wiki = new Wiki;
       $wiki->setFormToken($this->formToken)->__saveRelatedData($this);
     }
 
-    foreach ($this->allowedModelData as $allowed) {
+    foreach ($this->allowedRelatedModelData as $allowed) {
 
       if(empty($this->relatedData[$allowed])) {
         continue;

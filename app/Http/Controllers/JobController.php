@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\District;
+use App\Http\Requests\JobRequest;
+use App\Models\Job;
 use App\Models\Company;
 use App\Models\Person;
 use App\Models\PersonHasCompany;
-use App\library\date;
 use App\library\message;
 use Auth;
 use Redirect;
@@ -15,7 +15,9 @@ use Session;
 class JobController extends Controller
 {
 
-  public function formAdd() {
+  public function formAdd($companyId) {
+
+    $company = new Company;
 
     $personHasCompany = new PersonHasCompany;
     if(!$personHasCompany->checkPersonHasCompany(Session::get('Person.id'))) {
@@ -24,24 +26,40 @@ class JobController extends Controller
       return Redirect::to('company/add');
     }
 
-    $districtRecords = District::all();
-
-    $districts = array();
-    foreach ($districtRecords as $district) {
-      $districts[$district['attributes']['id']] = $district['attributes']['name'];
+    if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id')) || !$company->checkExistById($companyId)){
+      $message = new Message;
+      $message->companyNotFound();
+      return Redirect::to('company/list'); 
     }
 
-    $dateModel = new Date;
+    // Get Company name
+    $company = Company::find($companyId);
+
+    // Get departments filter by person in department
+    $departments = array();
+    foreach ($company->companyHasDepartments as $key => $companyHasDepartment) {
+      if($companyHasDepartment->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()){
+        $department = $companyHasDepartment->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()->department;
+        $departments[$department->id] = $department->name;
+      }
+    }
+
+    $departments = array_merge(array(0 => 'ไม่กำหนด'),$departments);
+
     $this->data = array(
-      'districts' => $districts,
-      'last_date' => $dateModel->covertDateToSting(date("Y-m-d", strtotime("+1 month", time())))
+      'companyName' => $company->name,
+      'departments' => $departments
     );
 
-    return $this->view('pages.job.form');
+    Session::put($this->formToken,1);
+
+    return $this->view('pages.job.form.add');
   }
 
-  public function add(AdvertisingRequest $request) {
+  public function add(JobRequest $request, $companyId) {
     dd($request->all());
+
+
   }
 
   public function formEdit() {

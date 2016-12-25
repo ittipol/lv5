@@ -62,12 +62,12 @@ class CompanyController extends Controller
       $districts[$district->id] = $district->name;
     }
 
-    // set form token
-    Session::put($this->formToken,1);
-
     $this->data = array(
       'districts' => $districts
     );
+
+    // set form token
+    Session::put($this->formToken,1);
 
     return $this->view('pages.company.form.add');
   }
@@ -100,14 +100,12 @@ class CompanyController extends Controller
     $company = Company::find($companyId);
 
     $districtRecords = District::all();
-
     $districts = array();
     foreach ($districtRecords as $district) {
       $districts[$district->id] = $district->name;
     }
 
     $address = $company->getRalatedDataByModelName('Address',true);
-
     $geographic = array();
     if(!empty($address->lat) && !empty($address->lng)) {
       $geographic['lat'] = $address->lat;
@@ -116,7 +114,6 @@ class CompanyController extends Controller
 
     // Get logo
     $logo = $company->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
-
     $_logo = array();
     if($logo){
       $_logo[] = array(
@@ -127,7 +124,6 @@ class CompanyController extends Controller
 
     // Get Images
     $images = $company->getRalatedDataByModelName('Image',false,[['type','=','images']]);
-
     $_images = array();
     if(!empty($images)){
       foreach ($images as $image) {
@@ -140,7 +136,6 @@ class CompanyController extends Controller
 
     // Get Tag
     $taggings = $company->getRalatedDataByModelName('Tagging');
-
     $_tags = array();
     if(!empty($taggings)){
       foreach ($taggings as $tagging) {
@@ -152,7 +147,6 @@ class CompanyController extends Controller
     }
 
     $officeHours = $company->getRalatedDataByModelName('OfficeHour');
-
     $_officeHours = array();
     foreach ($officeHours as $key => $officeHour) {
 
@@ -172,8 +166,6 @@ class CompanyController extends Controller
       );
     }
 
-    Session::put($this->formToken,1);
-
     $this->data = array(
       'company' => $company,
       'address' => $address,
@@ -184,6 +176,8 @@ class CompanyController extends Controller
       'officeHoursJson' => json_encode($_officeHours),
       'districts' => $districts
     );
+
+    Session::put($this->formToken,1);
 
     return $this->view('pages.company.form.edit');
 
@@ -211,10 +205,6 @@ class CompanyController extends Controller
 
     return Redirect::to('company/list');
 
-  }
-
-  public function dataView() {
-    
   }
 
 }

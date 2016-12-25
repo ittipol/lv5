@@ -20,7 +20,7 @@ class Controller extends BaseController
     protected $formToken;
 
     public function __construct(array $attributes = []) { 
-        $this->ident = Token::generatePageIdent();
+        $this->ident = Token::generatePageIdentity(Session::get('Person.id'));
         $this->formToken = Token::generateformToken(Session::get('Person.id'));
     }
 

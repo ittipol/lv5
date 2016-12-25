@@ -33,11 +33,11 @@ class DepartmentController extends Controller
 
     $departments = array();
 
-    foreach ($companyHasDepartments as $value) {
+    foreach ($companyHasDepartments as $companyHasDepartment) {
 
-      if($value->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()){
+      if($companyHasDepartment->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()){
 
-        $department = $value->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()->department;
+        $department = $companyHasDepartment->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()->department;
 
         $image = '';
         if(!empty($department->getRalatedDataByModelName('Image',true,[['type','=','images']]))) {
@@ -65,11 +65,12 @@ class DepartmentController extends Controller
     return $this->view('pages.department.list');
   }
 
-  public function formAdd($companyId = null) {
+  public function formAdd($companyId) {
+    
+    $company = new Company;
 
     // check company exist and person who is in company or not
     $personHasCompany = new PersonHasCompany;
-    $company = new Company;
     if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id')) || !$company->checkExistById($companyId)){
       $message = new Message;
       $message->companyNotFound();
@@ -83,8 +84,6 @@ class DepartmentController extends Controller
       $districts[$district->id] = $district->name;
     }
 
-    Session::put($this->formToken,1);
-
     // Get Company name
     $company = Company::find($companyId);
 
@@ -92,6 +91,8 @@ class DepartmentController extends Controller
       'companyName' => $company->name,
       'districts' => $districts,
     );
+
+    Session::put($this->formToken,1);
 
     return $this->view('pages.department.form.add');
   }
@@ -147,14 +148,12 @@ class DepartmentController extends Controller
     }
    
     $districtRecords = District::all();
-
     $districts = array();
     foreach ($districtRecords as $district) {
       $districts[$district->id] = $district->name;
     }
 
     $address = $department->getRalatedDataByModelName('Address',true);
-
     $geographic = array();
     if(!empty($address->lat) && !empty($address->lng)) {
       $geographic['lat'] = $address->lat;
@@ -163,7 +162,6 @@ class DepartmentController extends Controller
 
     // Get logo
     $logo = $department->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
-
     $_logo = array();
     if($logo){
       $_logo[] = array(
@@ -174,7 +172,6 @@ class DepartmentController extends Controller
 
     // Get Images
     $images = $department->getRalatedDataByModelName('Image',false,[['type','=','images']]);
-
     $_images = array();
     if(!empty($images)){
       foreach ($images as $image) {
@@ -187,7 +184,6 @@ class DepartmentController extends Controller
 
     // Get Tag
     $taggings = $department->getRalatedDataByModelName('Tagging');
-
     $_tags = array();
     if(!empty($taggings)){
       foreach ($taggings as $tagging) {
@@ -197,8 +193,6 @@ class DepartmentController extends Controller
         );
       }
     }
-    
-    Session::put($this->formToken,1);
 
     $this->data = array(
       'companyName' => $company->name,
@@ -210,6 +204,8 @@ class DepartmentController extends Controller
       'geographic' => json_encode($geographic),
       'districts' => $districts,
     );
+
+    Session::put($this->formToken,1);
 
     return $this->view('pages.department.form.edit');
   }

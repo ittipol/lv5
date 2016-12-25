@@ -271,6 +271,7 @@
 
     District.load();
     Map.load();
+    Form.load();
   });
 </script>
 

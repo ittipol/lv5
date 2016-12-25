@@ -6,12 +6,12 @@
     <div class="container-header">
       <div class="col-lg-6">
         <div class="title">
-          ร้านค้าหรือสถานประกอบการ
+          สถานประกอบการหรือร้านค้า
         </div>
       </div>
 
       <div class="col-lg-6">
-        <a href="{{URL::to('company/add')}}" class="button pull-right">เพิ่มร้านค้าหรือสถาประกอบการ</a>
+        <a href="{{URL::to('company/add')}}" class="button pull-right">เพิ่มสถานประกอบการหรือร้านค้า</a>
       </div>
     </div>
   </div>
@@ -37,10 +37,10 @@
                 <a href="{{URL::to('department/list')}}/<?php echo $company['id']; ?>">แสดงแผนก</a>
                 <a href="{{URL::to('department/add/')}}/<?php echo $company['id']; ?>">เพิ่มแผนก</a>
                 <a href="{{URL::to('job/add')}}/<?php echo $company['id']; ?>">ลงประกาศงาน</a>
-                <a href="{{URL::to('company/report/<?php echo $company['id']; ?>')}}">รายชื่อผู้สมัครงาน</a>
+                <a href="{{URL::to('company/report/<?php echo $company['id']; ?>')}}">แสดงรายชื่อผู้สมัครงาน</a>
               </div>
             </div>
-            <a href="{{URL::to('company/view')}}/<?php echo $company['id']; ?>">แสดงเพิ่มเติม</a>
+            <a href="{{URL::to('company/view')}}/<?php echo $company['id']; ?>">หน้าหลัก</a>
             <a href="{{URL::to('company/edit')}}/<?php echo $company['id']; ?>">แก้ไข</a>
             <a href="{{URL::to('company/delete')}}/<?php echo $company['id']; ?>">ลบ</a>
           </div>

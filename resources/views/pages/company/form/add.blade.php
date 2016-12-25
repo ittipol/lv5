@@ -283,7 +283,7 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('categories', 'แท๊กที่เกี่ยวข้องกับร้านค้าหรือสถานประกอบการของคุณ');
+          echo Form::label('tags', 'แท๊กที่เกี่ยวข้องกับร้านค้าหรือสถานประกอบการของคุณ');
         ?>
         <div id="tags" class="tag"></div>
         <p class="notice info">แท็กจะช่วยให้การค้นหาร้านค้าหรือสถานประกอบการของคุณง่ายขึ้น</p>
@@ -341,8 +341,8 @@
     District.load();
     Map.load();
     Tagging.load();
-    Form.load();
     OfficeHour.load();
+    Form.load();
   });
 </script>
 

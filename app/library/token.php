@@ -24,13 +24,13 @@ class Token
   }
 
   public static function generateNumber($length = 60){
-    $codeAlphabet = "0123456789";
+    $number = "0123456789";
 
     $token = '';
-    $len = strlen($codeAlphabet);
+    $len = strlen($number);
 
     for ($i = 0; $i <= $length; $i++) {
-      $token .= $codeAlphabet[rand(0,$len-1)];
+      $token .= $number[rand(0,$len-1)];
     };
 
     return $token;
@@ -49,12 +49,11 @@ class Token
     return $token;
   }
 
-  public static function generatePageIdent() {
-    return hash('sha256',Route::getCurrentRoute()->getPath());
+  public static function generatePageIdentity($personId) {
+    return hash('sha256',Route::getCurrentRoute()->getPath().$personId);
   }
 
   public static function generateFormToken($personId) {
-    return md5($personId).'/'.hash('sha256',time()).Token::generateHex(10);
-    // return Token::generateHex(10).'/'.hash('sha256',Route::getCurrentRoute()->getPath().$personId.time());
+    return md5($personId).hash('sha256',time()).Token::generateHex(10);
   } 
 }
