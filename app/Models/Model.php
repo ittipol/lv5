@@ -309,6 +309,10 @@ class Model extends _Model
 
   // }
 
+  public function checkExistById($id) {
+    return $this->find($id)->exists();
+  }
+
   public function getRalatedDataByModelName($modelName,$onlyFirst = false,$conditons = []) {
 
     $class = Service::loadModel($modelName);

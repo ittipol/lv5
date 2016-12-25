@@ -36,7 +36,7 @@
               <div class="additional-option-items">
                 <a href="{{URL::to('department/list')}}/<?php echo $company['id']; ?>">แสดงแผนก</a>
                 <a href="{{URL::to('department/add/')}}/<?php echo $company['id']; ?>">เพิ่มแผนก</a>
-                <a href="{{URL::to('job/add/<?php echo $company['id']; ?>')}}">ลงประกาศงาน</a>
+                <a href="{{URL::to('job/add')}}/<?php echo $company['id']; ?>">ลงประกาศงาน</a>
                 <a href="{{URL::to('company/report/<?php echo $company['id']; ?>')}}">รายชื่อผู้สมัครงาน</a>
               </div>
             </div>

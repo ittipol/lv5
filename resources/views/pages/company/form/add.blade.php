@@ -7,7 +7,7 @@
     <div class="container-header">
       <div class="col-lg-6">
         <div class="title">
-          ร้านค้าหรือสถานประกอบการ
+          เพิ่มสถานประกอบการหรือร้านค้า
         </div>
       </div>
     </div>
@@ -124,6 +124,7 @@
             <div class="line"></div>
 
             <div class="form-row">
+              <p class="error-message">* ข้อมูลนี้จะไม่ถูกแสดง เมื่อคุณเลือกหยุดทำการทั้งหมด</p>
               <span class="office-status active"></span><span>&nbsp;เปิดทำการ</span>
               <span class="office-status"></span><span>&nbsp;หยุดทำการ</span>
             </div>

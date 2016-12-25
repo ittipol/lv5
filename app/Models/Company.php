@@ -69,9 +69,5 @@ class Company extends Model
   public function companyHasBusinessType() {
     return $this->hasMany('App\Models\CompanyHasBusinessType','company_id','id');
   }
-
-  public function checkExistById($companyId) {
-    return $this->find($companyId)->exists();
-  }
-
+  
 }

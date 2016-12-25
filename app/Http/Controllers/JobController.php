@@ -5,27 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\District;
 use App\Models\Company;
 use App\Models\Person;
+use App\Models\PersonHasCompany;
 use App\library\date;
 use App\library\message;
 use Auth;
 use Redirect;
+use Session;
 
 class JobController extends Controller
 {
 
   public function formAdd() {
 
-    if(!Auth::check()){
+    $personHasCompany = new PersonHasCompany;
+    if(!$personHasCompany->checkPersonHasCompany(Session::get('Person.id'))) {
       $message = new Message;
-      $message->loginRequest();
-      return Redirect::to('login'); 
-    }
-
-    // Check user at least has 1 company
-    if(Person::where('user_id','=',Auth::user()->id)->count() == 0){
-      $message = new Message;
-      $message->companyRequest();
-      return Redirect::to('company/add'); 
+      $message->companyRequireAtLeastOne();
+      return Redirect::to('company/add');
     }
 
     $districtRecords = District::all();

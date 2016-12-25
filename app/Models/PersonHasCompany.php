@@ -50,18 +50,17 @@ class PersonHasCompany extends Model
 
   }
 
-  // public function _save($companyId,$personId,$roleId) {
-  //   $personHasCompany = new PersonHasCompany;
-  //   $personHasCompany->fill($value);
-  //   $personHasCompany->setFormToken($this->formToken);
-  //   return $personHasCompany->save();
-  // }
-
   public function checkPersonInCompany($companyId,$personId) {
     return $this->where([
       ['company_id','=',$companyId],
       ['person_id','=',$personId]
     ])->exists();
+  }
+
+  public function checkPersonHasCompany($personId) {
+    return $this->where([
+      ['person_id','=',$personId]
+    ])->count() ? true : false;
   }
 
 }

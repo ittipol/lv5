@@ -46,15 +46,21 @@ class Message
     Session::flash('message.type', 'success');
   }
 
-  public function companyRequest() {
-    Session::flash('message.title', 'คุณยังไม่ได้เพิ่มสถานประกอบการขอบคุณ');
-    Session::flash('message.desc', 'กรุณาเพิ่มสถานประกอบการของคุณอย่างน้อย 1 สถานประกอบการ');
+  public function companyRequireAtLeastOne() {
+    Session::flash('message.title', 'ไม่พบสถานประกอบการหรือร้านค้าของคุณ');
+    Session::flash('message.desc', 'กรุณาเพิ่มสถานประกอบการหรือร้านค้าของคุณอย่างน้อย 1 สถานประกอบการ');
     Session::flash('message.type', 'error');
   } 
 
-  public function companyCheckFail() {
+  public function companyNotFound() {
     Session::flash('message.title', 'ไม่พบสถานประกอบการนี้ในระบบหรือคุณไม่ได้อยู่ในสถานประกอบการนี้');
-    Session::flash('message.desc', 'กรุณาตรวจสอบรายชื่อสถานประกอบการของคุณ');
+    Session::flash('message.desc', 'กรุณาตรวจสอบอีกครั้ง');
+    Session::flash('message.type', 'error');
+  }
+
+  public function DepartmentNotFound() {
+    Session::flash('message.title', 'ไม่พบแผนกนี้ระบบหรือคุณไม่ได้อยู่ในแผนกี้');
+    Session::flash('message.desc', 'กรุณาตรวจสอบอีกครั้ง');
     Session::flash('message.type', 'error');
   }
 

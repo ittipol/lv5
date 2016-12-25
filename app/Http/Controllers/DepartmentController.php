@@ -6,6 +6,7 @@ use App\Http\Requests\DepartmentRequest;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\PersonHasCompany;
+use App\Models\PersonHasDepartment;
 use App\Models\District;
 use App\Models\TempFile;
 use App\library\message;
@@ -18,6 +19,13 @@ class DepartmentController extends Controller
 {
 
   public function listView($companyId = null) {
+
+    $personHasCompany = new PersonHasCompany;
+    if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id'))) {
+      $message = new Message;
+      $message->companyNotFound();
+      return Redirect::to('company/list'); 
+    }
 
     $string = new String;
 
@@ -64,7 +72,7 @@ class DepartmentController extends Controller
     $company = new Company;
     if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id')) || !$company->checkExistById($companyId)){
       $message = new Message;
-      $message->companyCheckFail();
+      $message->companyNotFound();
       return Redirect::to('company/list'); 
     }
 
@@ -95,7 +103,7 @@ class DepartmentController extends Controller
     $company = new Company;
     if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id')) || !$company->checkExistById($companyId)){
       $message = new Message;
-      $message->companyCheckFail();
+      $message->companyNotFound();
       return Redirect::to('company/list'); 
     }
 
@@ -126,13 +134,18 @@ class DepartmentController extends Controller
 
   public function formEdit($departmentId) {
 
-    // check person in department
-   
     $department = Department::find($departmentId);
-
     // find company
     $company = $department->companyHasDepartment->company;
 
+    // check person in PersonHasDepartment
+    $personHasDepartment = new PersonHasDepartment;
+    if(!$personHasDepartment->checkPersonInDepartment($departmentId,Session::get('Person.id')) || !$department->checkExistById($departmentId)){
+      $message = new Message;
+      $message->DepartmentNotFound();
+      return Redirect::to('department/list/'.$company->id);
+    }
+   
     $districtRecords = District::all();
 
     $districts = array();
@@ -203,11 +216,18 @@ class DepartmentController extends Controller
 
   public function edit(DepartmentRequest $request,$departmentId) {
 
-    // check person in department
-
     $department = Department::find($departmentId);
     // find company
     $company = $department->companyHasDepartment->company;
+
+    // check person in PersonHasDepartment
+    $personHasDepartment = new PersonHasDepartment;
+    if(!$personHasDepartment->checkPersonInDepartment($departmentId,Session::get('Person.id')) || !$department->checkExistById($departmentId)){
+      $message = new Message;
+      $message->DepartmentNotFound();
+      return Redirect::to('department/list/'.$company->id);
+    }
+
     // need to store value
     $request['company_id'] = $company->id;
 

@@ -3,6 +3,7 @@
 
 <div class="container">
   <h2><?php echo $companyName; ?></h2>
+  <h2>เพิ่มแผนก</h2>
 
   <?php if(!empty($errors->all())): ?>
     <div class="form-error-messages">

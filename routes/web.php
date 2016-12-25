@@ -59,11 +59,18 @@ Route::group(['middleware' => 'auth'], function () {
   Route::post('shopping/add','ShoppingController@add');
 });
 
-
 // Job
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('job/add','JobController@formAdd');
-  Route::post('job/add','JobController@add');
+  Route::get('job/list/{company_id}','JobController@listView');
+
+  Route::get('job/add/{company_id}','JobController@formAdd');;
+  Route::post('job/add/{company_id}','JobController@add');
+
+  Route::get('job/edit/{job_id}','JobController@formEdit');
+  Route::patch('job/edit/{job_id}',[
+    'as' => 'job.edit',
+    'uses' => 'JobController@edit'
+  ]);
 });
 
 
