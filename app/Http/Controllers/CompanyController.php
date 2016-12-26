@@ -146,15 +146,16 @@ class CompanyController extends Controller
       }
     }
 
-    $officeHours = $company->getRalatedDataByModelName('OfficeHour');
+    $officeHour = $company->getRalatedDataByModelName('OfficeHour',true);
+    $time = json_decode($officeHour->time,true);
     $_officeHours = array();
-    foreach ($officeHours as $key => $officeHour) {
+    foreach ($time as $day => $value) {
 
-      $_startTime = explode(':', $officeHour->start_time);
-      $_endTime = explode(':', $officeHour->end_time);
+      $_startTime = explode(':', $value['start_time']);
+      $_endTime = explode(':', $value['end_time']);
 
-      $_officeHours[$key+1] = array(
-        'open' => $officeHour->open,
+      $_officeHours[$day] = array(
+        'open' => $value['open'],
         'start_time' => array(
           'hour' => (int)$_startTime[0],
           'min' => (int)$_startTime[1]
@@ -169,6 +170,7 @@ class CompanyController extends Controller
     $this->data = array(
       'company' => $company,
       'address' => $address,
+      'sameTime' => $officeHour['same_time'],
       'logoJson' => json_encode($_logo),
       'imageJson' => json_encode($_images),
       'tagJson' => json_encode($_tags),

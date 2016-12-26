@@ -58,25 +58,12 @@ class OfficeHour extends Model
       'display' => $display
     );
 
-    // foreach ($officeHours as $key => $officeHour) {
-    //   if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName,[['day_id','=',$officeHour['day_id']]])){
-    //     $model->getRalatedDataByModelName($this->modelName,true,[['day_id','=',$officeHour['day_id']]])
-    //           ->setFormToken($this->formToken)
-    //           ->fill($officeHour)
-    //           ->save();
-    //   }else{
-    //     $this->_save($model->includeModelAndModelId($officeHour));
-    //   }
-    // }
-
     if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      dd('office h update 58');
       return $model->getRalatedDataByModelName($this->modelName,true)
             ->setFormToken($this->formToken)
             ->fill($value)
             ->save();
     }else{
-      dd($model->includeModelAndModelId($value));
       return $this->_save($model->includeModelAndModelId($value));
     }
 

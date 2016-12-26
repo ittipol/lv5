@@ -118,7 +118,7 @@
 
             <div class="form-row">
               <?php 
-                echo Form::checkbox('OfficeHour[same_time]', 1, null, array(
+                echo Form::checkbox('OfficeHour[same_time]', 1, $sameTime, array(
                   'id' => 'office_hour_same_time'
                 ));
                 echo Form::label('office_hour_same_time', 'กำหนดเวลาทำการเหมือนกันทุกวัน');
@@ -321,7 +321,7 @@
     District.load('<?php echo $address['sub_district_id']; ?>');
     Map.load('<?php echo $geographic; ?>');
     Tagging.load('<?php echo $tagJson; ?>');
-    OfficeHour.load('<?php echo $officeHoursJson; ?>','<?php echo $company["office_hour_same_time"]; ?>');
+    OfficeHour.load('<?php echo $officeHoursJson; ?>','<?php echo $sameTime; ?>');
     Form.load();
   });
 </script>
