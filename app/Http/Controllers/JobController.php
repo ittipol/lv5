@@ -201,4 +201,32 @@ class JobController extends Controller
     
   }
 
+  public function edit(JobRequest $request,$jobId) {
+
+    $job = Job::find($jobId);
+    // get company
+    $company = $job->companyHasJob->company;
+
+    $request['company_id'] = $company->id;
+
+    $job->fill($request->all());
+
+    if($job->save()){dd('edited');
+      // delete temp dir & records
+      $job->deleteTempData();
+      // reomove form token
+      Session::forget($job->formToken);
+
+      $message = new Message;
+      $message->addingSuccess('ประกาศงาน');
+    }else{
+      $message = new Message;
+      $message->error('ไม่สามารถเพิ่มประกาศงานได้ กรุณาลองใหม่อีกครั้ง');
+      return Redirect::to('job/add/'.$company->id);
+    }
+
+    return Redirect::to('job/list/'.$company->id);
+
+  }
+
 }

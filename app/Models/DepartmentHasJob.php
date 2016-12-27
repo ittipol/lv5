@@ -12,16 +12,35 @@ class DepartmentHasJob extends Model
 
   public function saveSpecial($companyHasJobId,$departmentId,$jobId) {
 
-    if(!$this->checkDepartmentHasJob($companyHasJobId,$departmentId,$jobId)) {
+    $value = array(
+      'company_has_job_id' => $companyHasJobId,
+      'department_id' => $departmentId,
+      'job_id' => $jobId
+    );
 
-      $value = array(
-        'company_has_job_id' => $companyHasJobId,
-        'department_id' => $departmentId,
-        'job_id' => $jobId
-      );
-
-      return $this->_save($value);
+    if($this->checkDepartmentHasJob($companyHasJobId,$departmentId,$jobId)){
+      return $this->where([
+        ['company_has_job_id','=',$companyHasJobId],
+        ['department_id','=',$departmentId],
+        ['job_id','=',$jobId]
+      ])
+      ->setFormToken($this->formToken)
+      ->fill($value)
+      ->save();
+    }else{
+      return $this->fill($model->includeModelAndModelId($value))->save();
     }
+
+    // if(!$this->checkDepartmentHasJob($companyHasJobId,$departmentId,$jobId)) {
+
+    //   $value = array(
+    //     'company_has_job_id' => $companyHasJobId,
+    //     'department_id' => $departmentId,
+    //     'job_id' => $jobId
+    //   );
+
+    //   return $this->_save($value);
+    // }
 
     return true;
   }

@@ -21,10 +21,6 @@ class OfficeHour extends Model
 
     foreach ($days as $key => $day) {
 
-      // $_data['model'] = $model->modelName;
-      // $_data['model_id'] = $model->id;
-      // $_data['day_id'] = $day->id;
-
       $_data['open'] = 0;
       $_data['start_time'] = '00:00:00';
       $_data['end_time'] = '00:00:00';

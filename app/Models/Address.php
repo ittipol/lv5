@@ -35,9 +35,9 @@ class Address extends Model
     
   }
 
-  public function clearAndSave($model,$value) {
-    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
-    return $this->_save($model,$value);
-  }
+  // public function clearAndSave($model,$value) {
+  //   $this->deleteByModelNameAndModelId($model->modelName,$model->id);
+  //   return $this->_save($model,$value);
+  // }
 
 }

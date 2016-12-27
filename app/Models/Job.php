@@ -37,13 +37,13 @@ class Job extends Model
       if($job->state == 'create') {
         $companyHasJob = new CompanyHasJob;
         $companyHasJob->setFormToken($job->formToken);
-        
-        if($companyHasJob->saveSpecial($job->temporaryData['company_id'],$job->id) && !empty($job->temporaryData['department_id'])) {
-          $departmentHasJob = new DepartmentHasJob;
-          $departmentHasJob->setFormToken($job->formToken);
-          $departmentHasJob->saveSpecial($job->companyHasJob->id,$job->temporaryData['department_id'],$job->id);
-        }
-      
+        $companyHasJob->saveSpecial($job->temporaryData['company_id'],$job->id)
+      }
+
+      if(!empty($job->companyHasJob->id) && !empty($job->temporaryData['department_id'])) {
+        $departmentHasJob = new DepartmentHasJob;
+        $departmentHasJob->setFormToken($job->formToken);
+        $departmentHasJob->saveSpecial($job->companyHasJob->id,$job->temporaryData['department_id'],$job->id);
       }
 
       $lookup = new Lookup;
