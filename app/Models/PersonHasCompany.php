@@ -24,7 +24,7 @@ class PersonHasCompany extends Model
   }
 
   public function personHasDepartments() {
-    return $this->hasMany('App\Models\PersonHasDepartment','person_id','person_id');
+    return $this->hasMany('App\Models\PersonHasDepartment','person_has_company_id','id');
   }
 
   public function saveSpecial($companyId,$personId,$role) {

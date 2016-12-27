@@ -29,30 +29,27 @@ class DepartmentController extends Controller
 
     $string = new String;
 
-    $companyHasDepartments = Company::find($companyId)->companyHasDepartments;
+    $personHasDepartments = PersonHasCompany::where([
+      ['person_id','=',Session::get('Person.id')],
+      ['company_id','=',$companyId]
+    ])->first()->personHasDepartments;
 
     $departments = array();
+    foreach ($personHasDepartments as $personHasDepartment) {
 
-    foreach ($companyHasDepartments as $companyHasDepartment) {
+      $department = $personHasDepartment->department;
 
-      if($companyHasDepartment->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()){
-
-        $department = $companyHasDepartment->departmentHasPeople->where('person_id','=',Session::get('Person.id'))->first()->department;
-
-        $image = '';
-        if(!empty($department->getRalatedDataByModelName('Image',true,[['type','=','images']]))) {
-          $image = $department->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
-        }
-
-        $departments[] = array(
-          'id' => $department->id,
-          'name' => $department->name,
-          'description' => $string->subString($department->description,120),
-          'business_type' => $department->business_type,
-          'image' => $image,
-        );
-
+      $image = '';
+      if(!empty($department->getRalatedDataByModelName('Image',true,[['type','=','images']]))) {
+        $image = $department->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
       }
+
+      $departments[] = array(
+        'id' => $department->id,
+        'name' => $department->name,
+        'description' => $string->subString($department->description,120),
+        'image' => $image,
+      );
 
     }
 
@@ -100,8 +97,8 @@ class DepartmentController extends Controller
   public function add(DepartmentRequest $request,$companyId) {
 
     // check company exist and person who is in company or not
-    $personHasCompany = new PersonHasCompany;
     $company = new Company;
+    $personHasCompany = new PersonHasCompany;
     if(!$personHasCompany->checkPersonInCompany($companyId,Session::get('Person.id')) || !$company->checkExistById($companyId)){
       $message = new Message;
       $message->companyNotFound();
@@ -138,10 +135,15 @@ class DepartmentController extends Controller
     $department = Department::find($departmentId);
     // find company
     $company = $department->companyHasDepartment->company;
+    // find person has company
+    $personHasCompany = PersonHasCompany::where([
+      ['person_id','=',Session::get('Person.id')],
+      ['company_id','=',$company->id]
+    ])->first();
 
     // check person in PersonHasDepartment
     $personHasDepartment = new PersonHasDepartment;
-    if(!$personHasDepartment->checkPersonInDepartment($departmentId,Session::get('Person.id')) || !$department->checkExistById($departmentId)){
+    if(!$personHasDepartment->checkPersonInDepartment($personHasCompany->id,Session::get('Person.id'),$departmentId) || !$department->checkExistById($departmentId)){
       $message = new Message;
       $message->DepartmentNotFound();
       return Redirect::to('department/list/'.$company->id);
@@ -215,10 +217,15 @@ class DepartmentController extends Controller
     $department = Department::find($departmentId);
     // find company
     $company = $department->companyHasDepartment->company;
+    // find person has company
+    $personHasCompany = PersonHasCompany::where([
+      ['person_id','=',Session::get('Person.id')],
+      ['company_id','=',$company->id]
+    ])->first();
 
     // check person in PersonHasDepartment
     $personHasDepartment = new PersonHasDepartment;
-    if(!$personHasDepartment->checkPersonInDepartment($departmentId,Session::get('Person.id')) || !$department->checkExistById($departmentId)){
+    if(!$personHasDepartment->checkPersonInDepartment($personHasCompany->id,Session::get('Person.id'),$departmentId) || !$department->checkExistById($departmentId)){
       $message = new Message;
       $message->DepartmentNotFound();
       return Redirect::to('department/list/'.$company->id);

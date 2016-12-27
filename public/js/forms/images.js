@@ -90,7 +90,6 @@ Images.prototype.preview = function(input){
 		  		parent.find('.error-message').css('display','block').text('ไม่รองรับรูปภาพนี้');
 		  		parent.find('input[type="hidden"]').remove();
 		  		parent.find('input').val('');
-		  		// parent.find('img').fadeIn(1000);
 		  		parent.find('img').css('display','none');
 		  	}
 
@@ -160,18 +159,16 @@ Images.prototype.uploadImage = function(parent,input,data) {
 
   	if(response.success){
 
-  		// input.remove();
-
   		parent.addClass('added');
   		parent.find('img').fadeIn(450);
   		parent.find('a').css('display','block');
   		parent.parent().find('.progress-bar').css('display','none');
 
-  		// var _input = document.createElement('input');
-		  // _input.setAttribute('type','hidden');
-		  // _input.setAttribute('name','filenames['+(_this.runningNumber-1)+']');
-		  // _input.setAttribute('value',response.filename);
-		  // parent.append(_input);
+  		var _input = document.createElement('input');
+		  _input.setAttribute('type','hidden');
+		  _input.setAttribute('name','filenames['+(Images.runningNumber-1)+']');
+		  _input.setAttribute('value',response.filename);
+		  parent.append(_input);
 
   		if(_this.imagesPlaced.indexOf(id) < 0){
   			_this.imagesPlaced.push(id);
@@ -252,6 +249,10 @@ Images.prototype.deleteImage = function(parent,input,data) {
 			_this.imagesPlaced.splice(_this.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
 
 			parent.parent().remove();
+		}else{
+			parent.fadeIn(100); 
+			parent.css('borderColor','red');
+			parent.find('.error-message').css('display','block').text('เกิดข้อผิดพลาด ไม่สามารถลบรูปภาพได้');
 		}
 		
 	});

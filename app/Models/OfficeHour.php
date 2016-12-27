@@ -51,9 +51,8 @@ class OfficeHour extends Model
       $officeHours[$day->id] = $_data;
     }
 
-
     $value = array(
-      'same_time' => $value['same_time'],
+      'same_time' => !empty($value['same_time']) ? 1 : 0,
       'time' => json_encode($officeHours),
       'display' => $display
     );
