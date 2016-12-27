@@ -26,8 +26,7 @@ class JobRequest extends FormRequest
         'age.required' => 'กรุณากรอกอายุ',
         'educational_level.required' => 'กรุณากรอกระดับการศึกษา',
         'experience.required' => 'กรุณากรอกประสบการณ์การทำงาน',
-        'number_of_position.required' => 'กรุณากรอกจำนวนที่รับ',
-        'number_of_position.numeric' => 'กรุณากรอกจำนวนที่รับเป็นตัวเลข',
+        // 'number_of_position.required' => 'กรุณากรอกจำนวนที่รับ',
         'description.required' => 'กรุณากรอกรายละเอียดงาน',
       ];
     }
@@ -40,14 +39,14 @@ class JobRequest extends FormRequest
     public function rules()
     {
         return [
-          // 'name' => 'required|max:255',
-          // 'salary' => 'required|max:255',
-          // 'nationality' => 'required|max:255',
-          // 'age' => 'required|max:255',
-          // 'educational_level' => 'required|max:255',
-          // 'experience' => 'required|max:255',
-          // 'number_of_position' => 'required|numeric|max:3', 
-          // 'description' => 'required'
+          'name' => 'required|max:255',
+          'salary' => 'required|max:255',
+          'nationality' => 'required|max:255',
+          'age' => 'required|max:255',
+          'educational_level' => 'required|max:255',
+          'experience' => 'required|max:255',
+          'number_of_position' => 'max:255', 
+          'description' => 'required'
         ];
     }
 }

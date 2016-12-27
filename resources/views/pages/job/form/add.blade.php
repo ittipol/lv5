@@ -117,7 +117,7 @@
                   'placeholder' => 'อายุ',
                   'autocomplete' => 'off'
                 ));
-                echo '<p class="notice info">สามารถกรอกเป็นประโยคได้ เช่น มากกว่า 25 ปี หรือ 25 - 30 ปี</p>';
+                echo '<p class="notice info">สามารถกรอกเป็นประโยคได้ เช่น ไม่จำกัดอายุ, มากกว่า 25 ปี หรือ 25 - 30 ปี</p>';
               ?>
             </div>
 
@@ -127,7 +127,7 @@
                 echo Form::select('gender', array(
                 'm' => 'ชาย',
                 'f' => 'หญิง',
-                'n' => 'ไม่กำหนด'
+                'n' => 'ไม่จำกัดเพศ'
                 ) , null);
               ?>
             </div>
@@ -153,19 +153,18 @@
                   'placeholder' => 'ประสบการณ์การทำงาน',
                   'autocomplete' => 'off'
                 ));
-                echo '<p class="notice info">สามารถกรอกเป็นประโยคได้ เช่น 3ปีขึ้นไป หรือ 0 - 3 ปี</p>';
+                echo '<p class="notice info">สามารถกรอกเป็นประโยคได้ เช่น 3 ปีขึ้นไป หรือ 0 - 3 ปี</p>';
               ?>
             </div>
 
             <div class="form-row">
               <?php
-                echo Form::label('number_of_position', 'จำนวนที่รับ', array(
-                  'class' => 'required'
-                ));
+                echo Form::label('number_of_position', 'จำนวนที่รับ');
                 echo Form::text('number_of_position', null, array(
                   'placeholder' => 'จำนวนที่รับ',
                   'autocomplete' => 'off'
                 ));
+                echo '<p class="notice info">สามารถกรอกเป็นประโยคได้</p>';
               ?>
             </div>
 
