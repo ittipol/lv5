@@ -55,15 +55,14 @@ class CompanyController extends Controller
 
     $action = app('request')->route()->getAction();
 
-    $districtRecords = District::all();
-
-    $districts = array();
-    foreach ($districtRecords as $district) {
-      $districts[$district->id] = $district->name;
+    $districts = District::all();
+    $_districts = array();
+    foreach ($districts as $district) {
+      $_districts[$district->id] = $district->name;
     }
 
     $this->data = array(
-      'districts' => $districts
+      'districts' => $_districts
     );
 
     // set form token
@@ -92,7 +91,6 @@ class CompanyController extends Controller
     }
 
     return Redirect::to('company/list');
-
   }
 
   public function formEdit($companyId) {

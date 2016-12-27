@@ -166,7 +166,7 @@ Images.prototype.uploadImage = function(parent,input,data) {
 
   		var _input = document.createElement('input');
 		  _input.setAttribute('type','hidden');
-		  _input.setAttribute('name','filenames['+(Images.runningNumber-1)+']');
+		  _input.setAttribute('name','filenames['+(_this.runningNumber-1)+']');
 		  _input.setAttribute('value',response.filename);
 		  parent.append(_input);
 

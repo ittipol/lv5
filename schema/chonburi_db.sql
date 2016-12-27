@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 26, 2016 at 03:57 AM
+-- Generation Time: Dec 27, 2016 at 12:16 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -137,6 +137,19 @@ CREATE TABLE `company_has_departments` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `company_has_jobs`
+--
+
+CREATE TABLE `company_has_jobs` (
+  `id` int(11) NOT NULL,
+  `company_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `days`
 --
 
@@ -182,6 +195,20 @@ CREATE TABLE `departments` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `department_has_jobs`
+--
+
+CREATE TABLE `department_has_jobs` (
+  `id` int(11) NOT NULL,
+  `company_has_job_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `districts`
 --
 
@@ -215,6 +242,20 @@ INSERT INTO `districts` (`id`, `name`, `name_en`, `description`, `created`, `mod
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `employment_types`
+--
+
+CREATE TABLE `employment_types` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `images`
 --
 
@@ -225,6 +266,30 @@ CREATE TABLE `images` (
   `alias` varchar(255) DEFAULT NULL,
   `type` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jobs`
+--
+
+CREATE TABLE `jobs` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `salary` varchar(255) NOT NULL,
+  `employment_type_id` int(11) NOT NULL,
+  `nationality` varchar(255) NOT NULL,
+  `age` varchar(255) NOT NULL,
+  `gender` varchar(2) NOT NULL,
+  `educational_level` varchar(255) NOT NULL,
+  `experience` varchar(255) NOT NULL,
+  `number_of_position` int(3) NOT NULL,
+  `welfare` text,
+  `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -245,6 +310,7 @@ CREATE TABLE `lookups` (
   `keyword_2` varchar(255) DEFAULT NULL,
   `keyword_3` varchar(255) DEFAULT NULL,
   `keyword_4` varchar(255) DEFAULT NULL,
+  `description_1` text,
   `address` text,
   `tags` text,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -303,6 +369,7 @@ CREATE TABLE `person_has_companies` (
 
 CREATE TABLE `person_has_departments` (
   `id` int(11) NOT NULL,
+  `person_has_company_id` int(11) NOT NULL,
   `person_id` int(11) NOT NULL,
   `department_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
@@ -1358,6 +1425,12 @@ ALTER TABLE `company_has_departments`
   ADD UNIQUE KEY `company_id` (`company_id`,`department_id`);
 
 --
+-- Indexes for table `company_has_jobs`
+--
+ALTER TABLE `company_has_jobs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `days`
 --
 ALTER TABLE `days`
@@ -1370,15 +1443,33 @@ ALTER TABLE `departments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `department_has_jobs`
+--
+ALTER TABLE `department_has_jobs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `districts`
 --
 ALTER TABLE `districts`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `employment_types`
+--
+ALTER TABLE `employment_types`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `images`
 --
 ALTER TABLE `images`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1504,12 +1595,12 @@ ALTER TABLE `wording_relation_relates`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `business_types`
 --
 ALTER TABLE `business_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `categories`
 --
@@ -1519,17 +1610,22 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `company_has_business_types`
 --
 ALTER TABLE `company_has_business_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `company_has_departments`
 --
 ALTER TABLE `company_has_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `company_has_jobs`
+--
+ALTER TABLE `company_has_jobs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 --
 -- AUTO_INCREMENT for table `days`
 --
@@ -1539,27 +1635,42 @@ ALTER TABLE `days`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `department_has_jobs`
+--
+ALTER TABLE `department_has_jobs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `districts`
 --
 ALTER TABLE `districts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
+-- AUTO_INCREMENT for table `employment_types`
+--
+ALTER TABLE `employment_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT for table `lookups`
 --
 ALTER TABLE `lookups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `office_hours`
 --
 ALTER TABLE `office_hours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `people`
 --
@@ -1569,12 +1680,12 @@ ALTER TABLE `people`
 -- AUTO_INCREMENT for table `person_has_companies`
 --
 ALTER TABLE `person_has_companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `person_has_departments`
 --
 ALTER TABLE `person_has_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `person_interests`
 --
@@ -1609,7 +1720,7 @@ ALTER TABLE `synonyms`
 -- AUTO_INCREMENT for table `taggings`
 --
 ALTER TABLE `taggings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT for table `tags`
 --
@@ -1619,7 +1730,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `temp_files`
 --
 ALTER TABLE `temp_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -1634,17 +1745,17 @@ ALTER TABLE `villages`
 -- AUTO_INCREMENT for table `wikis`
 --
 ALTER TABLE `wikis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `wording_relations`
 --
 ALTER TABLE `wording_relations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `wording_relation_relates`
 --
 ALTER TABLE `wording_relation_relates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

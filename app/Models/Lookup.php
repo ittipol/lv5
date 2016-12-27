@@ -38,7 +38,7 @@ class Lookup extends Model
     $tags = $model->getRalatedDataByModelName('Tagging');
 
     $_tags = array();
-    if(empty($tags)){
+    if(!empty($tags)){
       foreach ($tags as $tag) {
         $_tags[] = $tag->tag->name;
       }

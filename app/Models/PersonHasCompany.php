@@ -30,11 +30,7 @@ class PersonHasCompany extends Model
   public function saveSpecial($companyId,$personId,$role) {
 
     $role = new Role;
-
-    if(empty($personId)) {
-      $personId = Session::get('Person.id');
-    }
-
+    
     if(!$this->checkPersonInCompany($companyId,$personId)) {
 
       $value = array(

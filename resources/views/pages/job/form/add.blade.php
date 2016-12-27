@@ -35,8 +35,8 @@
       <div class="form-row">
         
         <?php 
-          echo Form::label('department', 'เลือกแผนกที่เกี่ยวข้องกับงานนี้');
-          echo Form::select('department', $departments , null);
+          echo Form::label('department_id', 'เลือกแผนกที่เกี่ยวข้องกับงานนี้');
+          echo Form::select('department_id', $departments , null);
         ?>
 
       </div>
@@ -82,12 +82,8 @@
       <div class="form-row">
         
         <?php 
-          echo Form::label('contract_type', 'ประเภทการจ้าง');
-          echo Form::select('contract_type', array(
-            'พนักงานประจำ',
-            'พนักงานสัญญาจ้าง',
-            'พาร์ทไทม์'
-          ) , null);
+          echo Form::label('employment_type_id', 'ประเภทการจ้างงาน');
+          echo Form::select('employment_type_id', $employmentTypes , null);
         ?>
 
       </div>
