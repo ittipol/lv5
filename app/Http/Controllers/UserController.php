@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Models\Person;
 use App\Models\PersonInterest;
-use App\Models\Tag;
+use App\Models\Word;
 use App\library\date;
 use App\library\Token;
 use App\library\message;
@@ -129,13 +129,13 @@ class UserController extends Controller
 
       $tags = array();
       if(!empty($request->input('interests'))){
-        $tag = new Tag;
-        $tags = $tag->saveTags($request->input('interests'));
+        $word = new Word;
+        $words = $word->saveSpecial($request->input('interests'));
       }
 
-      foreach ($tags as $tagId => $tag) {
+      foreach ($words as $wordId => $word) {
         $personInterest = new PersonInterest;
-        $personInterest->checkAndSave($person->id,$tagId);
+        $personInterest->checkAndSave($person->id,$wordId);
       }
 
     }

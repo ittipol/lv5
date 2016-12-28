@@ -35,17 +35,17 @@ class Lookup extends Model
       $data = array_merge($data,$options['data']);
     }
 
-    $tags = $model->getRalatedDataByModelName('Tagging');
+    $taggings = $model->getRalatedDataByModelName('Tagging');
 
-    $_tags = array();
-    if(!empty($tags)){
-      foreach ($tags as $tag) {
-        $_tags[] = $tag->tag->name;
+    $_words = array();
+    if(!empty($taggings)){
+      foreach ($taggings as $tagging) {
+        $_words[] = $tagging->word->word;
       }
     }
 
-    if(!empty($_tags)){
-      $value['tags'] = implode(' ',$_tags);
+    if(!empty($_words)){
+      $value['words'] = implode(' ',$_words);
     }
 
     $_addresses = $this->__getAddress($model);

@@ -175,12 +175,12 @@ class JobController extends Controller
 
     // Get Tag
     $taggings = $job->getRalatedDataByModelName('Tagging');
-    $_tags = array();
+    $_words = array();
     if(!empty($taggings)){
       foreach ($taggings as $tagging) {
-        $_tags[] = array(
-          'id' =>  $tagging->tag->id,
-          'name' =>  $tagging->tag->name
+        $_words[] = array(
+          'id' =>  $tagging->word->id,
+          'name' =>  $tagging->word->word
         );
       }
     }

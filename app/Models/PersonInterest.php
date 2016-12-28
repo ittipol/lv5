@@ -7,7 +7,7 @@ use App\Models\Model;
 class PersonInterest extends Model
 {
   protected $table = 'person_interests';
-  protected $fillable = ['person_id','tag_id'];
+  protected $fillable = ['person_id','word_id'];
   public $timestamps  = false;
 
   public function __construct() {  

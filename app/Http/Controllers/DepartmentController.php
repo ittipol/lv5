@@ -184,25 +184,12 @@ class DepartmentController extends Controller
       }
     }
 
-    // Get Tag
-    $taggings = $department->getRalatedDataByModelName('Tagging');
-    $_tags = array();
-    if(!empty($taggings)){
-      foreach ($taggings as $tagging) {
-        $_tags[] = array(
-          'id' =>  $tagging->tag->id,
-          'name' =>  $tagging->tag->name
-        );
-      }
-    }
-
     $this->data = array(
       'companyName' => $company->name,
       'department' => $department,
       'address' => $address,
       'logoJson' => json_encode($_logo),
       'imageJson' => json_encode($_images),
-      'tagJson' => json_encode($_tags),
       'geographic' => json_encode($geographic),
       'districts' => $districts,
     );

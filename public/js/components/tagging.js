@@ -5,6 +5,8 @@ function Tagging () {
 	this.runningNumber = 0;
 	this.placeholder = 'แท๊ก';
 	this.dataName = 'Tagging';
+	this.panel = '_tags';
+	this.code = null;
 }
 // Tagging.prototype.
 Tagging.prototype.load = function(tagJson){
@@ -25,10 +27,10 @@ Tagging.prototype.load = function(tagJson){
 
 Tagging.prototype.init = function(){
 	this.tagChipsWidth = 0;
+	this.code = this.generateCode();
 }
 
-Tagging.prototype.bind = function(){
-}
+Tagging.prototype.bind = function(){}
 
 Tagging.prototype.createHiddenField = function(index,id,tagName) {
 	var input = document.createElement('input');
@@ -45,9 +47,9 @@ Tagging.prototype.removeHiddenField = function(id) {
 
 Tagging.prototype.crateTagList = function(){
 	var span = document.createElement('span');
-	span.setAttribute('id','tag_list');
+	span.setAttribute('id',this.code+'_tag_list');
 	
-	document.getElementById('tags').appendChild(span);
+	document.getElementById(this.panel).appendChild(span);
 }
 
 Tagging.prototype.crateInputTagField = function(){
@@ -56,7 +58,7 @@ Tagging.prototype.crateInputTagField = function(){
 
 	var input = document.createElement('input');
 	input.setAttribute('type','search');
-	input.setAttribute('id','tag_input');
+	input.setAttribute('id',this.code+'_tag_input');
 	input.setAttribute('tabindex','0');
 	input.setAttribute('autocomplete','off');
 	input.setAttribute('autocorrect','off');
@@ -64,7 +66,7 @@ Tagging.prototype.crateInputTagField = function(){
 	input.setAttribute('spellcheck','false');
 	input.setAttribute('role','textbox');
 	input.setAttribute('placeholder',this.placeholder);
-	input.style.width = $('#tags').width()+'px';
+	input.style.width = $('#'+this.panel).width()+'px';
 
 	input.addEventListener("keydown", function(e){
 
@@ -84,8 +86,8 @@ Tagging.prototype.crateInputTagField = function(){
 				var obj = document.getElementById(_this.tagList[_this.tagList.length-1]);
 
 				if(obj != null){
-					document.getElementById('tag_input').value = $(obj).find('span.tag-name').text();
-					document.getElementById('tag_input').select();
+					document.getElementById(this.code+'_tag_input').value = $(obj).find('span.tag-name').text();
+					document.getElementById(this.code+'_tag_input').select();
 
 					_this.tagChipsWidth -= $(obj).width()+_this.padding; 
 					_this.calInputFielsWidth();
@@ -108,19 +110,20 @@ Tagging.prototype.crateInputTagField = function(){
 
 	$(input).on('blur',function(){
 		if(this.value != ''){
-			this.createTagChip(this.value);
+			_this.createTagChip(this.value);
 			this.value = '';
 		}
 	});
 
-	document.getElementById('tags').appendChild(input);
+	document.getElementById(this.panel).appendChild(input);
 }
 
 Tagging.prototype.createTagChip = function(tagName){
 
 	var _this = this;
 
-	var id = 'tag_'+this.generateCode();
+	// var id = 'tag_'+this.generateCode();
+	var id = 'tag_'+this.code+'_'+this.runningNumber;
 	this.tagList.push(id);
 
 	var tagChip = document.createElement('span');
@@ -143,7 +146,7 @@ Tagging.prototype.createTagChip = function(tagName){
 		_this.calInputFielsWidth();
 
 		// 
-		$('#tag_input').focus();
+		$('#'+this.code+'_tag_input').focus();
 
 		// remove hidden field
 		_this.removeHiddenField($(this).parent().attr('id'));
@@ -155,7 +158,7 @@ Tagging.prototype.createTagChip = function(tagName){
 
 	tagChip.appendChild(tagNameElem);
 	tagChip.appendChild(tagDelete);
-	document.getElementById('tag_list').appendChild(tagChip);
+	document.getElementById(this.code+'_tag_list').appendChild(tagChip);
 
 	this.createHiddenField(this.runningNumber++,id,tagName);
 
@@ -182,12 +185,24 @@ Tagging.prototype.generateCode = function() {
 }
 
 Tagging.prototype.calInputFielsWidth = function(){
-	var inputFieldWidth = $('#tags').width() - (this.tagChipsWidth % $('#tags').width());
+	var inputFieldWidth = $('#'+this.panel).width() - (this.tagChipsWidth % $('#'+this.panel).width());
 
 	if(inputFieldWidth > 120){
-		$('#tag_input').css('width',inputFieldWidth);
-		document.getElementById('tag_input').style.width = inputFieldWidth+'px';
+		$('#'+this.code+'_tag_input').css('width',inputFieldWidth);
+		document.getElementById(this.code+'_tag_input').style.width = inputFieldWidth+'px';
 	}else{
-		document.getElementById('tag_input').style.width = $('#tags').width()+'px';
+		document.getElementById(this.code+'_tag_input').style.width = $('#'+this.panel).width()+'px';
 	}
+}
+
+Tagging.prototype.setPlaceHolder = function(placeholder){
+	this.placeholder = placeholder; 
+}
+
+Tagging.prototype.setDataName = function(dataName) {
+	this.dataName = dataName;
+}
+
+Tagging.prototype.setPanel = function(panel) {
+	this.panel = panel;
 }

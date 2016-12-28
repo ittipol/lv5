@@ -155,8 +155,8 @@
 
       <div class="form-row">
       <?php 
-        echo Form::label('phone_number', 'เบอร์โทรศัพท์');
-        echo Form::text('phone_number', null, array(
+        echo Form::label('Contact[phone_number]', 'เบอร์โทรศัพท์');
+        echo Form::text('Contact[phone_number]', null, array(
           'placeholder' => 'เบอร์โทรศัพท์',
           'autocomplete' => 'off'
         ));
@@ -165,8 +165,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('website', 'เว็บไซต์');
-        echo Form::text('website', null, array(
+        echo Form::label('Contact[website]', 'เว็บไซต์');
+        echo Form::text('Contact[website]', null, array(
           'placeholder' => 'เว็บไซต์',
           'autocomplete' => 'off'
         ));
@@ -175,8 +175,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('email', 'อีเมล');
-        echo Form::text('email', null, array(
+        echo Form::label('Contact[email]', 'อีเมล');
+        echo Form::text('Contact[email]', null, array(
           'placeholder' => 'อีเมล',
           'autocomplete' => 'off'
         ));
@@ -185,8 +185,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('facebook', 'Facebook');
-        echo Form::text('facebook', null, array(
+        echo Form::label('Contact[facebook]', 'Facebook');
+        echo Form::text('Contact[facebook]', null, array(
           'placeholder' => 'Facebook',
           'autocomplete' => 'off'
         ));
@@ -195,8 +195,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('instagram', 'Instagram');
-        echo Form::text('instagram', null, array(
+        echo Form::label('Contact[instagram]', 'Instagram');
+        echo Form::text('Contact[instagram]', null, array(
           'placeholder' => 'Instagram',
           'autocomplete' => 'off'
         ));
@@ -205,8 +205,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('line', 'Line');
-        echo Form::text('line', null, array(
+        echo Form::label('Contact[line]', 'Line');
+        echo Form::text('Contact[line]', null, array(
           'placeholder' => 'Line',
           'autocomplete' => 'off'
         ));
@@ -287,9 +287,9 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('tags', 'แท๊กที่เกี่ยวข้องกับร้านค้าหรือสถานประกอบการของคุณ');
+          echo Form::label('_tags', 'แท๊กที่เกี่ยวข้องกับร้านค้าหรือสถานประกอบการของคุณ');
         ?>
-        <div id="tags" class="tag"></div>
+        <div id="_tags" class="tag"></div>
         <p class="notice info">แท็กจะช่วยให้การค้นหาร้านค้าหรือสถานประกอบการของคุณง่ายขึ้น</p>
       </div>
 
@@ -318,9 +318,11 @@
     var images = new Images('_image_group','images',5,'default');
     images.load('<?php echo $imageJson; ?>');
 
+    var tagging = new Tagging();
+    tagging.load('<?php echo $tagJson; ?>');
+
     District.load('<?php echo $address['sub_district_id']; ?>');
     Map.load('<?php echo $geographic; ?>');
-    Tagging.load('<?php echo $tagJson; ?>');
     OfficeHour.load('<?php echo $officeHoursJson; ?>','<?php echo $sameTime; ?>');
     Form.load();
   });

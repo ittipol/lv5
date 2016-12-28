@@ -215,9 +215,9 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('tags', 'แท๊กที่เกี่ยวข้องกับงานนี้');
+          echo Form::label('_tags', 'แท๊กที่เกี่ยวข้องกับงานนี้');
         ?>
-        <div id="tags" class="tag"></div>
+        <div id="_tags" class="tag"></div>
         <p class="notice info">แท็กจะช่วยให้การค้นหาประกาศงานของคุณง่ายขึ้น</p>
       </div>
 
@@ -243,7 +243,9 @@
     var images = new Images('_image_group','images',5,'default');
     images.load();
 
-    Tagging.load();
+    var tagging = new Tagging();
+    tagging.load();
+    
     Form.load();
   });
 </script>

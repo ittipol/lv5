@@ -11,11 +11,11 @@ use Session;
 class Company extends Model
 {
   public $table = 'companies';
-  protected $fillable = ['name','description','business_entity_id','business_type','phone_number','email','website','facebook','instagram','line','ip_address','created_by'];
+  protected $fillable = ['name','description','business_entity_id','business_type','ip_address','created_by'];
   public $timestamps  = false;
 
   // Allowed Data
-  public $allowedRelatedModel = array('Address','Tagging','OfficeHour');
+  public $allowedRelatedModel = array('Address','Tagging','OfficeHour','Contact');
   public $allowedDir = array(
     'dir_names' => array('logo','cover','images')
   );

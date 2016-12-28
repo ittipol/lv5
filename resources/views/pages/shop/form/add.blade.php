@@ -54,11 +54,11 @@
     <div class="form-row">
 
       <?php 
-        echo Form::label('tags', 'ร้านค้าของคุณขายอะไรบ้าง');
+        echo Form::label('_tag_items', 'ร้านค้าของคุณขายอะไรบ้าง');
       ?>
       <p class="error-message">* สามารถแก้ไขได้ในภายหลัง</p>
-      <div id="tags" class="tag"></div>
-      <p class="notice info">ข้อมูลนี้จะให้ลูกค้ารู้ว่าคุณขายอะไรบ้างและทำให้การค้นหาร้านค้าของหาง่ายขึ้น</p>
+      <div id="_tag_items" class="tag"></div>
+      <p class="notice info">ข้อมูลนี้จะให้ลูกค้ารู้ว่าคุณขายอะไรบ้างและทำให้พบสินค้าของคุณง่ายขึ้น</p>
     </div>
 
     <div class="form-row">
@@ -115,8 +115,8 @@
 
       <div class="form-row">
       <?php 
-        echo Form::label('phone_number', 'เบอร์โทรศัพท์');
-        echo Form::text('phone_number', null, array(
+        echo Form::label('Contact[phone_number]', 'เบอร์โทรศัพท์');
+        echo Form::text('Contact[phone_number]', null, array(
           'placeholder' => 'เบอร์โทรศัพท์',
           'autocomplete' => 'off'
         ));
@@ -125,8 +125,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('website', 'เว็บไซต์');
-        echo Form::text('website', null, array(
+        echo Form::label('Contact[website]', 'เว็บไซต์');
+        echo Form::text('Contact[website]', null, array(
           'placeholder' => 'เว็บไซต์',
           'autocomplete' => 'off'
         ));
@@ -135,8 +135,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('email', 'อีเมล');
-        echo Form::text('email', null, array(
+        echo Form::label('Contact[email]', 'อีเมล');
+        echo Form::text('Contact[email]', null, array(
           'placeholder' => 'อีเมล',
           'autocomplete' => 'off'
         ));
@@ -145,8 +145,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('facebook', 'Facebook');
-        echo Form::text('facebook', null, array(
+        echo Form::label('Contact[facebook]', 'Facebook');
+        echo Form::text('Contact[facebook]', null, array(
           'placeholder' => 'Facebook',
           'autocomplete' => 'off'
         ));
@@ -155,8 +155,8 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('instagram', 'Instagram');
-        echo Form::text('instagram', null, array(
+        echo Form::label('Contact[instagram]', 'Instagram');
+        echo Form::text('Contact[instagram]', null, array(
           'placeholder' => 'Instagram',
           'autocomplete' => 'off'
         ));
@@ -165,12 +165,32 @@
 
       <div class="form-row">
       <?php
-        echo Form::label('line', 'Line');
-        echo Form::text('line', null, array(
+        echo Form::label('Contact[line]', 'Line');
+        echo Form::text('Contact[line]', null, array(
           'placeholder' => 'Line',
           'autocomplete' => 'off'
         ));
       ?>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="form-section">
+
+    <div class="title">
+      แท๊ก
+    </div>
+
+    <div class="form-section-inner">
+
+      <div class="form-row">
+        <?php 
+          echo Form::label('_tags', 'แท๊กที่เกี่ยวข้องกับร้านค้า');
+        ?>
+        <div id="_tags" class="tag"></div>
+        <p class="notice info">แท็กจะช่วยให้การค้นหาร้านค้าของคุณง่ายขึ้น</p>
       </div>
 
     </div>
@@ -198,7 +218,12 @@
     var images = new Images('_image_cover','images',1,'default');
     images.load();
 
-    // Tagging.placeholder = 'สินค้าอะไรบ้างที่ขายในร้าน';
+    var shopHasItem = new Tagging();
+    shopHasItem.setPanel('_tag_items');
+    shopHasItem.setDataName('shopHasItem');
+    shopHasItem.setPlaceHolder('สินค้าอะไรบ้างที่ขายในร้าน');
+    shopHasItem.load();
+
     var tagging = new Tagging();
     tagging.load();
 

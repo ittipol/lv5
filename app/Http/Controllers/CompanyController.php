@@ -99,8 +99,8 @@ class CompanyController extends Controller
     return Redirect::to('company/list');
   }
 
-  public function formEdit($slug) {
-    dd($slug);
+  public function formEdit($companyId) {
+  
     $company = Company::find($companyId);
 
     $districtRecords = District::all();
@@ -140,12 +140,12 @@ class CompanyController extends Controller
 
     // Get Tag
     $taggings = $company->getRalatedDataByModelName('Tagging');
-    $_tags = array();
+    $_words = array();
     if(!empty($taggings)){
       foreach ($taggings as $tagging) {
-        $_tags[] = array(
-          'id' =>  $tagging->tag->id,
-          'name' =>  $tagging->tag->name
+        $_words[] = array(
+          'id' =>  $tagging->word->id,
+          'name' =>  $tagging->word->word
         );
       }
     }
@@ -177,7 +177,7 @@ class CompanyController extends Controller
       'sameTime' => $officeHour['same_time'],
       'logoJson' => json_encode($_logo),
       'imageJson' => json_encode($_images),
-      'tagJson' => json_encode($_tags),
+      'tagJson' => json_encode($_words),
       'geographic' => json_encode($geographic),
       'officeHoursJson' => json_encode($_officeHours),
       'districts' => $districts

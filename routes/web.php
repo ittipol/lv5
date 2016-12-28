@@ -110,6 +110,12 @@ Route::group(['middleware' => 'auth'], function () {
   //   'as' => '{slug}.edit',
   //   'uses' => 'CompanyController@edit'
   // ]);
+
+  Route::get('company/edit/{company_id}','CompanyController@formEdit');
+  Route::patch('company/edit/{company_id}',[
+    'as' => 'company.edit',
+    'uses' => 'CompanyController@edit'
+  ]);
 });
 
 
