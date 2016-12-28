@@ -54,8 +54,6 @@ class CompanyController extends Controller
 
   public function formAdd() {
 
-    $action = app('request')->route()->getAction();
-
     $districts = District::all();
     $_districts = array();
     foreach ($districts as $district) {

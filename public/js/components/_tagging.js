@@ -1,59 +1,56 @@
-function Tagging () {
-	this.tagChipsWidth = 0;
-	this.tagList = [];
-	this.padding = 22;
-	this.runningNumber = 0;
-	this.placeholder = 'แท๊ก';
-	this.dataName = 'Tagging';
+var Tagging = {
+	tagChipsWidth: 0,
+	tagList: [],
+	padding: 22,
+	runningNumber: 0,
+	placeholder: 'แท๊ก',
+	dataName: 'Tagging'
 }
-// Tagging.prototype.
-Tagging.prototype.load = function(tagJson){
 
-	this.init();
-	this.bind();
-	this.crateTagList();
-	this.crateInputTagField();
+Tagging.load = function(tagJson){
+
+	Tagging.init();
+	Tagging.bind();
+	Tagging.crateTagList();
+	Tagging.crateInputTagField();
 
 	if (typeof tagJson != 'undefined') {
 		var _tags = JSON.parse(tagJson);
 		for (var i = 0; i < _tags.length; i++) {
-			this.createTagChip(_tags[i]['name']);
+			Tagging.createTagChip(_tags[i]['name']);
 		}
 	}
 
 }
 
-Tagging.prototype.init = function(){
-	this.tagChipsWidth = 0;
+Tagging.init = function(){
+	Tagging.tagChipsWidth = 0;
 }
 
-Tagging.prototype.bind = function(){
+Tagging.bind = function(){
 }
 
-Tagging.prototype.createHiddenField = function(index,id,tagName) {
+Tagging.createHiddenField = function(index,id,tagName) {
 	var input = document.createElement('input');
   input.setAttribute('type','hidden');
-  input.setAttribute('name',this.dataName+'['+index+']');
+  input.setAttribute('name',Tagging.dataName+'['+index+']');
   input.setAttribute('id',id+'_name');
   input.setAttribute('value',tagName);
   $('form').append(input);
 }
 
-Tagging.prototype.removeHiddenField = function(id) {
+Tagging.removeHiddenField = function(id) {
 	$('#'+id+'_name').remove();
 }
 
-Tagging.prototype.crateTagList = function(){
+Tagging.crateTagList = function(){
 	var span = document.createElement('span');
 	span.setAttribute('id','tag_list');
 	
 	document.getElementById('tags').appendChild(span);
 }
 
-Tagging.prototype.crateInputTagField = function(){
-
-	var _this = this;
-
+Tagging.crateInputTagField = function(){
 	var input = document.createElement('input');
 	input.setAttribute('type','search');
 	input.setAttribute('id','tag_input');
@@ -63,7 +60,7 @@ Tagging.prototype.crateInputTagField = function(){
 	input.setAttribute('autocapitalize','off');
 	input.setAttribute('spellcheck','false');
 	input.setAttribute('role','textbox');
-	input.setAttribute('placeholder',this.placeholder);
+	input.setAttribute('placeholder',Tagging.placeholder);
 	input.style.width = $('#tags').width()+'px';
 
 	input.addEventListener("keydown", function(e){
@@ -72,7 +69,7 @@ Tagging.prototype.crateInputTagField = function(){
 			e.preventDefault();
 
 			if(this.value != ''){
-				_this.createTagChip(this.value);
+				Tagging.createTagChip(this.value);
 				this.value = '';
 			}
 			// return false;
@@ -81,23 +78,23 @@ Tagging.prototype.crateInputTagField = function(){
 			if(this.value == ''){
 				e.preventDefault();
 
-				var obj = document.getElementById(_this.tagList[_this.tagList.length-1]);
+				var obj = document.getElementById(Tagging.tagList[Tagging.tagList.length-1]);
 
 				if(obj != null){
 					document.getElementById('tag_input').value = $(obj).find('span.tag-name').text();
 					document.getElementById('tag_input').select();
 
-					_this.tagChipsWidth -= $(obj).width()+_this.padding; 
-					_this.calInputFielsWidth();
+					Tagging.tagChipsWidth -= $(obj).width()+Tagging.padding; 
+					Tagging.calInputFielsWidth();
 
 					// remove hidden field
-					_this.removeHiddenField(_this.tagList[_this.tagList.length-1]);
+					Tagging.removeHiddenField(Tagging.tagList[Tagging.tagList.length-1]);
 
 					// remove tag chip
 					$(obj).remove();
 
 					// remove from array
-					_this.tagList.splice(_this.tagList.length-1,1);
+					Tagging.tagList.splice(Tagging.tagList.length-1,1);
 				}
 
 			}
@@ -108,7 +105,7 @@ Tagging.prototype.crateInputTagField = function(){
 
 	$(input).on('blur',function(){
 		if(this.value != ''){
-			this.createTagChip(this.value);
+			Tagging.createTagChip(this.value);
 			this.value = '';
 		}
 	});
@@ -116,12 +113,10 @@ Tagging.prototype.crateInputTagField = function(){
 	document.getElementById('tags').appendChild(input);
 }
 
-Tagging.prototype.createTagChip = function(tagName){
+Tagging.createTagChip = function(tagName){
 
-	var _this = this;
-
-	var id = 'tag_'+this.generateCode();
-	this.tagList.push(id);
+	var id = 'tag_'+Tagging.generateCode();
+	Tagging.tagList.push(id);
 
 	var tagChip = document.createElement('span');
 	tagChip.setAttribute('class','tag-chip');
@@ -137,16 +132,16 @@ Tagging.prototype.createTagChip = function(tagName){
 
 	tagDelete.addEventListener("click", function(e){
 
-		_this.tagList.splice(_this.tagList.indexOf($(this).parent().attr('id')),1);
+		Tagging.tagList.splice(Tagging.tagList.indexOf($(this).parent().attr('id')),1);
 
-		_this.tagChipsWidth -= $(this).parent().width()+_this.padding; 
-		_this.calInputFielsWidth();
+		Tagging.tagChipsWidth -= $(this).parent().width()+Tagging.padding; 
+		Tagging.calInputFielsWidth();
 
 		// 
 		$('#tag_input').focus();
 
 		// remove hidden field
-		_this.removeHiddenField($(this).parent().attr('id'));
+		Tagging.removeHiddenField($(this).parent().attr('id'));
 
 		// remove tag chip
 		$(this).parent().remove();
@@ -157,15 +152,15 @@ Tagging.prototype.createTagChip = function(tagName){
 	tagChip.appendChild(tagDelete);
 	document.getElementById('tag_list').appendChild(tagChip);
 
-	this.createHiddenField(this.runningNumber++,id,tagName);
+	Tagging.createHiddenField(Tagging.runningNumber++,id,tagName);
 
-	this.tagChipsWidth += $(tagChip).width()+this.padding; 
-	this.calInputFielsWidth();
+	Tagging.tagChipsWidth += $(tagChip).width()+Tagging.padding; 
+	Tagging.calInputFielsWidth();
 	
 }
 
 
-Tagging.prototype.generateCode = function() {
+Tagging.generateCode = function() {
 
 	var codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
@@ -181,8 +176,8 @@ Tagging.prototype.generateCode = function() {
 	return code;
 }
 
-Tagging.prototype.calInputFielsWidth = function(){
-	var inputFieldWidth = $('#tags').width() - (this.tagChipsWidth % $('#tags').width());
+Tagging.calInputFielsWidth = function(){
+	var inputFieldWidth = $('#tags').width() - (Tagging.tagChipsWidth % $('#tags').width());
 
 	if(inputFieldWidth > 120){
 		$('#tag_input').css('width',inputFieldWidth);

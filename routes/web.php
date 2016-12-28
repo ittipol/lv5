@@ -52,12 +52,27 @@ Route::group(['middleware' => 'auth'], function () {
   Route::post('ad/add','AdvertisingController@add');
 });
 
+// Shop
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('shop/list','ShopController@listView');
+
+  Route::get('shop/add','ShopController@formAdd');;
+  Route::post('shop/add','ShopController@add');
+
+  // Route::get('{slug}','ShopController@home');
+
+  // Route::get('{slug}/edit','ShopController@formEdit');
+  // Route::patch('{slug}/edit',[
+  //   'as' => '{slug}.edit',
+  //   'uses' => 'ShopController@edit'
+  // ]);
+});
 
 // Product
 Route::group(['middleware' => 'auth'], function () {
   Route::get('product/list/{company_id}','ProductController@listView');
 
-  Route::get('product/add/{company_id}','ProductController@formAdd');;
+  Route::get('product/add/{company_id}','ProductController@formAdd');
   Route::post('product/add/{company_id}','ProductController@add');
 
   Route::get('product/edit/{product_id}','ProductController@formEdit');
@@ -81,7 +96,6 @@ Route::group(['middleware' => 'auth'], function () {
   ]);
 });
 
-
 // Company
 Route::group(['middleware' => 'auth'], function () {
   Route::get('company/list','CompanyController@listView');
@@ -89,13 +103,13 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('company/add','CompanyController@formAdd');;
   Route::post('company/add','CompanyController@add');
 
-  Route::get('{slug}','CompanyController@home');
+  // Route::get('{slug}','CompanyController@home');
 
-  Route::get('{slug}/edit','CompanyController@formEdit');
-  Route::patch('{slug}/edit',[
-    'as' => '{slug}.edit',
-    'uses' => 'CompanyController@edit'
-  ]);
+  // Route::get('{slug}/edit','CompanyController@formEdit');
+  // Route::patch('{slug}/edit',[
+  //   'as' => '{slug}.edit',
+  //   'uses' => 'CompanyController@edit'
+  // ]);
 });
 
 
