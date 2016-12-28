@@ -89,9 +89,11 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('company/add','CompanyController@formAdd');;
   Route::post('company/add','CompanyController@add');
 
-  Route::get('company/edit/{company_id}','CompanyController@formEdit');
-  Route::patch('company/edit/{company_id}',[
-    'as' => 'company.edit',
+  Route::get('{slug}','CompanyController@home');
+
+  Route::get('{slug}/edit','CompanyController@formEdit');
+  Route::patch('{slug}/edit',[
+    'as' => '{slug}.edit',
     'uses' => 'CompanyController@edit'
   ]);
 });

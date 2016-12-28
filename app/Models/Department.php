@@ -14,22 +14,28 @@ class Department extends Model
   public $table = 'departments';
   protected $fillable = ['name','description','phone_number','email','website','facebook','line','company_address','created_by'];
   public $timestamps  = false;
-  public $createLookup = true;
-  public $lookupFormat = array(
-    'keyword' => '{{name}}',
-    'keyword_1' => '{{Company.name|Department.id=>CompanyHasDepartment.department_id,CompanyHasDepartment.company_id=>Company.id}}',
-    'keyword_2' => '{{Company.business_type|Department.id=>CompanyHasDepartment.department_id,CompanyHasDepartment.company_id=>Company.id}}',
-    'description' => '{{description}}',
-  );
-  public $createDir = true;
-  public $dirNames = array('logo','cover','images');
-  public $wikiFormat = array(
-    'subject' => '{{name}}',
-    'description' => '{{description}}',
-  );
-  public $createImage = true;
-  public $allowedRelatedModel = array('Address');
   public $temporaryData = array('company_id');
+
+  // allowed Data
+  public $allowedRelatedModel = array('Address');
+  public $allowedDir = array(
+    'dir_names' => array('logo','cover','images')
+  );
+  public $allowedImage = true;
+  public $allowedLookup = array(
+    'format' =>  array(
+      'keyword' => '{{name}}',
+      'keyword_1' => '{{Company.name|Department.id=>CompanyHasDepartment.department_id,CompanyHasDepartment.company_id=>Company.id}}',
+      'keyword_2' => '{{Company.business_type|Department.id=>CompanyHasDepartment.department_id,CompanyHasDepartment.company_id=>Company.id}}',
+      'description' => '{{description}}'
+    )
+  );
+  public $allowedWiki = array(
+    'format' =>  array(
+      'subject' => '{{name}}',
+      'description' => '{{description}}',
+    )
+  );
 
   public function __construct() {  
     parent::__construct();

@@ -56,7 +56,7 @@
       <div class="form-row">
         <?php 
           echo Form::label('business_entity_id', 'รูปแบบธุรกิจ');
-          echo Form::select('business_entity_id', $districts ,null, array(
+          echo Form::select('business_entity_id', $businessEntities ,null, array(
             'id' => 'district'
           ));
         ?>

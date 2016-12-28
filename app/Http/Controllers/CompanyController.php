@@ -6,6 +6,7 @@ use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
 use App\Models\PersonHasCompany;
 use App\Models\District;
+use App\Models\BusinessEntity;
 use App\Models\Lookup;
 use App\Models\Wiki;
 use App\Models\TempFile;
@@ -61,8 +62,15 @@ class CompanyController extends Controller
       $_districts[$district->id] = $district->name;
     }
 
+    $businessEntities = BusinessEntity::all();
+    $_businessEntities = array();
+    foreach ($businessEntities as $businessEntity) {
+      $_businessEntities[$businessEntity->id] = $businessEntity->name;
+    }
+
     $this->data = array(
-      'districts' => $_districts
+      'districts' => $_districts,
+      'businessEntities' => $_businessEntities
     );
 
     // set form token
@@ -93,8 +101,8 @@ class CompanyController extends Controller
     return Redirect::to('company/list');
   }
 
-  public function formEdit($companyId) {
-    
+  public function formEdit($slug) {
+    dd($slug);
     $company = Company::find($companyId);
 
     $districtRecords = District::all();

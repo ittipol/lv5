@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Model;
 
 class BusinessEntity extends Model
 {
-    //
+  public $table = 'business_entities';
+  protected $fillable = ['name','description'];
+  public $timestamps  = false;
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2016 at 12:16 PM
+-- Generation Time: Dec 28, 2016 at 07:23 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -40,6 +40,33 @@ CREATE TABLE `addresses` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `business_entities`
+--
+
+CREATE TABLE `business_entities` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `business_entities`
+--
+
+INSERT INTO `business_entities` (`id`, `name`, `description`, `created`, `modified`) VALUES
+(1, 'บุคคลธรรมดา', NULL, '2016-12-28 09:41:08', '2016-12-28 09:41:08'),
+(2, 'ห้างหุ้นส่วน', NULL, '2016-12-28 09:41:08', '2016-12-28 09:41:08'),
+(3, 'บริษัทเอกชนจำกัด', NULL, '2016-12-28 09:42:10', '2016-12-28 09:42:10'),
+(4, 'บริษัทมหาชนจำกัด', NULL, '2016-12-28 09:42:10', '2016-12-28 09:42:10'),
+(5, 'สหกรณ์', NULL, '2016-12-28 09:42:30', '2016-12-28 09:42:30'),
+(6, 'รัฐวิสาหกิจ', NULL, '2016-12-28 09:45:55', '2016-12-28 09:45:55'),
+(7, 'หน่วยงานของรัฐ', NULL, '2016-12-28 09:49:07', '2016-12-28 09:49:07');
 
 -- --------------------------------------------------------
 
@@ -95,6 +122,7 @@ CREATE TABLE `companies` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `business_entity_id` int(11) NOT NULL,
   `business_type` varchar(255) DEFAULT NULL,
   `phone_number` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -253,6 +281,15 @@ CREATE TABLE `employment_types` (
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `employment_types`
+--
+
+INSERT INTO `employment_types` (`id`, `name`, `description`, `created`, `modified`) VALUES
+(1, 'พนักงานประจำ', '', '2016-12-27 12:10:57', '2016-12-27 12:10:57'),
+(2, 'พนักงานสัญญาจ้าง', '', '2016-12-27 12:10:57', '2016-12-27 12:10:57'),
+(3, 'พาร์ทไทม์', '', '2016-12-27 12:11:03', '2016-12-27 12:11:03');
+
 -- --------------------------------------------------------
 
 --
@@ -287,7 +324,7 @@ CREATE TABLE `jobs` (
   `gender` varchar(2) NOT NULL,
   `educational_level` varchar(255) NOT NULL,
   `experience` varchar(255) NOT NULL,
-  `number_of_position` int(3) NOT NULL,
+  `number_of_position` varchar(255) DEFAULT NULL,
   `welfare` text,
   `created_by` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -347,6 +384,20 @@ CREATE TABLE `people` (
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `people`
+--
+
+INSERT INTO `people` (`id`, `user_id`, `profile_id`, `created`, `modified`) VALUES
+(1, 1, 1, '2016-12-08 12:57:33', '2016-12-08 12:57:33'),
+(2, 2, 2, '2016-12-08 23:35:18', '2016-12-08 23:35:18'),
+(3, 3, 3, '2016-12-08 23:35:38', '2016-12-08 23:35:38'),
+(4, 4, 4, '2016-12-08 23:35:56', '2016-12-08 23:35:56'),
+(5, 5, 5, '2016-12-08 23:40:18', '2016-12-08 23:40:18'),
+(6, 6, 6, '2016-12-08 23:41:28', '2016-12-08 23:41:28'),
+(7, 7, 7, '2016-12-08 23:42:07', '2016-12-08 23:42:07'),
+(8, 8, 8, '2016-12-08 23:42:33', '2016-12-08 23:42:33');
+
 -- --------------------------------------------------------
 
 --
@@ -391,6 +442,15 @@ CREATE TABLE `person_interests` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `person_interests`
+--
+
+INSERT INTO `person_interests` (`id`, `person_id`, `tag_id`, `created_by_system`, `interested_times`, `created`) VALUES
+(1, 8, 9, 0, 0, '2016-12-08 23:42:33'),
+(2, 8, 14, 0, 0, '2016-12-08 23:42:33'),
+(3, 8, 15, 0, 0, '2016-12-08 23:42:33');
+
 -- --------------------------------------------------------
 
 --
@@ -405,6 +465,13 @@ CREATE TABLE `profiles` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `profiles`
+--
+
+INSERT INTO `profiles` (`id`, `name`, `gender`, `birth_date`, `created`, `modified`) VALUES
+(1, 'Fname Lname', 'm', '2500-01-01', '2016-12-08 12:57:33', '2016-12-24 19:26:17');
 
 -- --------------------------------------------------------
 
@@ -426,6 +493,20 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`id`, `name`, `alias`, `created`, `modified`) VALUES
 (1, 'admin', 'admin', '2016-12-06 10:44:05', '2016-12-06 10:44:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `slugs`
+--
+
+CREATE TABLE `slugs` (
+  `id` int(11) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -632,6 +713,20 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `password`, `receive_email`, `remember_token`, `api_token`, `created`, `modified`) VALUES
+(1, '1', '$2y$10$JzjB5lnDBSuvrCk5BeGdYOKlkrilHaRILTNaLuo6k9o0PcfKWZRc6', NULL, 'WbKpR8YKJOhHifRKiOifX6wKehZoNlO0XhpU1teqo9ocbXYKTEi1KslzaU5I', 'SQG7YAmFlUOEQpCIOAm90yG16DDd3MjBfNPPIkKWoP7FWrqnH46tRT0kq575p', '2016-12-08 12:57:33', '2016-12-10 07:57:17'),
+(2, 'test@mail.com', '$2y$10$l95v9klfBYfMbYCi.jI46e6Z5.XJkwrIvhYlNY7lxAUqgRbCzhHc2', NULL, NULL, '00ZrCsHCOp7Mli6v4rf0W8mAorwXCt5hMZijYjlFSkiKKQYYs7j3IgDPKSThC', '2016-12-08 23:35:18', '2016-12-08 23:35:18'),
+(3, 'texst@mail.com', '$2y$10$TqFYDHaUIIoR4yJ890AUIOc40xt0VJ6G/3vFrtH9R6/xOOxuBZaWm', NULL, NULL, 'YAmFlUOEQpCIOAm90yG16DDd3MjBfNPPIkKWoP7FWrqnH46tRT0kq575pKZ7F', '2016-12-08 23:35:38', '2016-12-08 23:35:38'),
+(4, '111@mail.com', '$2y$10$k7e/nR8wkGYyO04O0pL27eoU1s33xCDaChyRJO1MWZ6yB/YR8XlXm', NULL, NULL, 'HnTSA2HtWKGOBb3gULizHWq2ubY1DZPgXrXFjTVP7rQOZzsuQLxDWtGzB5tSI', '2016-12-08 23:35:56', '2016-12-08 23:35:56'),
+(5, 'nu@mail.com', '$2y$10$PuWszUGe23OpiVxpUayQ5O3oFJShH471SZSiZVCAohKGzN/fYQTmO', NULL, NULL, 'IUWbViyly8fP1CflVtZXkfUxcW0iQtD43lihpbbraNSFgYN5x6x5kUIUuhzzm', '2016-12-08 23:40:18', '2016-12-08 23:40:18'),
+(6, 'nu1@mail.com', '$2y$10$KVKcCbhnt38dTtZve63Elea1hS2t46NZXh6os1HnJ/7wjzKWV2yby', NULL, NULL, 'WynIZ3JbStCFA5Cc9iXXNOuMKBXvxiAYk3z8eojy94bvDRLLJz94OKlQxYOHw', '2016-12-08 23:41:28', '2016-12-08 23:41:28'),
+(7, 'nu2@mail.com', '$2y$10$.KInPbfgzMto.6Mw4SV5Ie/aB5cLG1h6fsSmSwk60dYWONYwKiJNG', NULL, NULL, 'FkyqW3Lcw1jjdty9AMRLeexIeVrSI61oACkoMzvRSCrAZ2PxGFuGf2E4M6gqQ', '2016-12-08 23:42:07', '2016-12-08 23:42:07'),
+(8, 'nu3@mail.com', '$2y$10$cjLIBTTgopOVmVjJeI1TjOl8qp7VrSVghRzQfFeWpQvSg5d/jPGna', NULL, NULL, 'oLTy2JDyi9xRpTRlqNrkkQylzjxeWtYjrzysvdwPDugBhOtXpDoKaw8tQf74K', '2016-12-08 23:42:33', '2016-12-08 23:42:33');
 
 -- --------------------------------------------------------
 
@@ -1393,6 +1488,12 @@ ALTER TABLE `addresses`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `business_entities`
+--
+ALTER TABLE `business_entities`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `business_types`
 --
 ALTER TABLE `business_types`
@@ -1522,6 +1623,14 @@ ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `slugs`
+--
+ALTER TABLE `slugs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `model` (`model`,`model_id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- Indexes for table `stories`
 --
 ALTER TABLE `stories`
@@ -1595,7 +1704,12 @@ ALTER TABLE `wording_relation_relates`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `business_entities`
+--
+ALTER TABLE `business_entities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `business_types`
 --
@@ -1610,7 +1724,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `company_has_business_types`
 --
@@ -1620,12 +1734,12 @@ ALTER TABLE `company_has_business_types`
 -- AUTO_INCREMENT for table `company_has_departments`
 --
 ALTER TABLE `company_has_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `company_has_jobs`
 --
 ALTER TABLE `company_has_jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `days`
 --
@@ -1635,12 +1749,12 @@ ALTER TABLE `days`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `department_has_jobs`
 --
 ALTER TABLE `department_has_jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `districts`
 --
@@ -1655,22 +1769,22 @@ ALTER TABLE `employment_types`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `lookups`
 --
 ALTER TABLE `lookups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `office_hours`
 --
 ALTER TABLE `office_hours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `people`
 --
@@ -1680,12 +1794,12 @@ ALTER TABLE `people`
 -- AUTO_INCREMENT for table `person_has_companies`
 --
 ALTER TABLE `person_has_companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `person_has_departments`
 --
 ALTER TABLE `person_has_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `person_interests`
 --
@@ -1701,6 +1815,11 @@ ALTER TABLE `profiles`
 --
 ALTER TABLE `roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `slugs`
+--
+ALTER TABLE `slugs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `stories`
 --
@@ -1720,17 +1839,17 @@ ALTER TABLE `synonyms`
 -- AUTO_INCREMENT for table `taggings`
 --
 ALTER TABLE `taggings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `temp_files`
 --
 ALTER TABLE `temp_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --

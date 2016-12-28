@@ -11,21 +11,32 @@ use Session;
 class Company extends Model
 {
   public $table = 'companies';
-  protected $fillable = ['name','description','business_type','phone_number','email','website','facebook','instagram','line','ip_address','created_by'];
+  protected $fillable = ['name','description','business_entity_id','business_type','phone_number','email','website','facebook','instagram','line','ip_address','created_by'];
   public $timestamps  = false;
-  public $lookupFormat = array(
-    'keyword' => '{{name}}',
-    'keyword_1' => '{{business_type}}',
-    'description' => '{{description}}',
-  );
-  public $createDir = true;
-  public $dirNames = array('logo','cover','images');
-  public $wikiFormat = array(
-    'subject' => '{{name}}',
-    'description' => '{{description}}',
-  );
-  public $createImage = true;
+
+  // Allowed Data
   public $allowedRelatedModel = array('Address','Tagging','OfficeHour');
+  public $allowedDir = array(
+    'dir_names' => array('logo','cover','images')
+  );
+  public $allowedImage = true;
+  public $allowedLookup = array(
+    'format' =>  array(
+      'keyword' => '{{name}}',
+      'keyword_1' => '{{business_type}}',
+      'description' => '{{description}}',
+    )
+  );
+  public $allowedWiki = array(
+    'format' =>  array(
+      'subject' => '{{name}}',
+      'description' => '{{description}}',
+    )
+  );
+  public $allowedSlug = array(
+    'field' => 'name'
+  );
+  
 
   public function __construct() {  
     parent::__construct();

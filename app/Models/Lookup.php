@@ -75,11 +75,11 @@ class Lookup extends Model
 
   private function parser($model,$data = array()) {
 
-    if(empty($model->lookupFormat)){
+    if(empty($model->allowedLookup['format'])){
       return false;
     }
 
-    $formats = $model->lookupFormat;
+    $formats = $model->allowedLookup['format'];
 
     $parseFormat = '/{{[\w\d|._,=>]+}}/';
     $parseValue = '/[\w\d|._,=>]+/';

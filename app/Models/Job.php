@@ -11,18 +11,23 @@ class Job extends Model
   public $table = 'jobs';
   protected $fillable = ['name','description','salary','employment_type_id','nationality','age','gender','educational_level','experience','number_of_position','welfare'];
   public $timestamps  = false;
-  public $lookupFormat = array(
-    'keyword' => '{{name}} {{salary}} {{nationality}} {{educational_level}}',
-    'keyword_1' => '{{EmploymentType.name|Job.employment_type_id=>EmploymentType.id}}',
-    'keyword_2' => '{{Company.name|Job.id=>CompanyHasJob.job_id,CompanyHasJob.company_id=>Company.id}}',
-    'keyword_3' => '{{Department.name|Job.id=>DepartmentHasJob.job_id,CompanyHasJob.department_id=>Department.id}}',
-    'description' => '{{description}}',
-  );
-  public $createDir = true;
-  public $dirNames = array('images');
-  public $createImage = true;
-  public $allowedRelatedModel = array('Tagging');
   public $temporaryData = array('company_id','department_id');
+
+  // allowed Data
+  public $allowedRelatedModel = array('Tagging');
+  public $allowedDir = array(
+    'dir_names' => array('images')
+  );
+  public $allowedImage = true;
+  public $allowedLookup = array(
+    'format' =>  array(
+      'keyword' => '{{name}} {{salary}} {{nationality}} {{educational_level}}',
+      'keyword_1' => '{{EmploymentType.name|Job.employment_type_id=>EmploymentType.id}}',
+      'keyword_2' => '{{Company.name|Job.id=>CompanyHasJob.job_id,CompanyHasJob.company_id=>Company.id}}',
+      'keyword_3' => '{{Department.name|Job.id=>DepartmentHasJob.job_id,CompanyHasJob.department_id=>Department.id}}',
+      'description' => '{{description}}'
+    )
+  );
 
   public function __construct() {  
     parent::__construct();

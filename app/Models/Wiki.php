@@ -16,12 +16,10 @@ class Wiki extends Model
 
   public function __saveRelatedData($model,$options = array()) {
 
-    $value = array();
-
     $data = $model->getAttributes();
-
     $result = $this->parser($model,$data);
 
+    $value = array();
     if(!empty($result)){
       foreach ($result as $key => $_value){
         $value[$key] = $_value;
@@ -41,11 +39,11 @@ class Wiki extends Model
 
   private function parser($model,$data = array()) {
 
-    if(empty($model->wikiFormat)){
+    if(empty($model->allowedWiki['format'])){
       return false;
     }
 
-    $formats = $model->wikiFormat;
+    $formats = $model->allowedWiki['format'];
 
     $parseFormat = '/{{[\w\d|._,=>]+}}/';
     $parseValue = '/[\w\d|._,=>]+/';

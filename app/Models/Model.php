@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as _Model;
+use App\Models\Slug;
 use App\Models\Image;
 use App\Models\Address;
-// use App\Models\Tag;
 use App\Models\Tagging;
 use App\Models\Wiki;
 use App\Models\Lookup;
@@ -24,14 +24,16 @@ class Model extends _Model
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
-  public $dirNames;
   public $relatedData;
-  public $allowedRelatedModel = array();
-  public $createImage = false;
-  public $createDir = false;
-  public $createWiki = false;
   public $temporaryData;
 
+  public $allowedRelatedModel = false;
+  public $allowedDir = false;
+  public $allowedImage = false;
+  public $allowedLookup = false;
+  public $allowedWiki = false;
+  public $allowedSlug = false;
+  
   public function __construct(array $attributes = []) { 
 
     parent::__construct($attributes);
@@ -82,7 +84,7 @@ class Model extends _Model
     // after saving
     parent::saved(function($model){
 
-      if(($model->state == 'create') && $model->createDir) {
+      if($model->state == 'create') {
         $model->createDir();  
       }
       $model->saveRelatedData();
@@ -105,14 +107,16 @@ class Model extends _Model
       }
     }
 
-    foreach ($this->allowedRelatedModel as $allowed) {
+    if(!empty($this->allowedRelatedModel)) {
+      foreach ($this->allowedRelatedModel as $allowed) {
 
-      if(empty($attributes[$allowed])) {
-        continue;
+        if(empty($attributes[$allowed])) {
+          continue;
+        }
+
+        $this->relatedData[$allowed] = $attributes[$allowed];
+        unset($attributes[$allowed]);
       }
-
-      $this->relatedData[$allowed] = $attributes[$allowed];
-      unset($attributes[$allowed]);
     }
 
     if(!empty($attributes['__token'])) {
@@ -142,25 +146,32 @@ class Model extends _Model
       return false;
     }
 
-    if($this->createImage) {
+    if(($this->state == 'create') && $this->allowedSlug) {
+      $slug = new Slug;
+      $slug->setFormToken($this->formToken)->__saveRelatedData($this);
+    }
+
+    if($this->allowedImage) {
       $imageModel = new Image;
       $imageModel->setFormToken($this->formToken)->__saveRelatedData($this,Session::get('Person.id'));
     }
 
-    if($this->createWiki){
+    if($this->allowedWiki){
       $wiki = new Wiki;
       $wiki->setFormToken($this->formToken)->__saveRelatedData($this);
     }
 
-    foreach ($this->allowedRelatedModel as $allowed) {
+    if(!empty($this->allowedRelatedModel)){
+      foreach ($this->allowedRelatedModel as $allowed) {
 
-      if(empty($this->relatedData[$allowed])) {
-        continue;
+        if(empty($this->relatedData[$allowed])) {
+          continue;
+        }
+
+        $this->_saveRelatedData($allowed,$this->relatedData[$allowed]);
       }
-
-      $this->_saveRelatedData($allowed,$this->relatedData[$allowed]);
     }
-
+    
   }
 
   private function _saveRelatedData($model,$value) {
@@ -180,29 +191,27 @@ class Model extends _Model
     return $this;
   }
 
-  public function createDir($model = null) {
+  public function createDir() {
 
-    if(empty($model)) {
-      $model = $this;
-    }
-
-    if(!$model->createDir) {
+    if(empty($this->allowedDir)) {
       return false;
     }
 
-    $path = storage_path($model->dirPath).'/'.$model->id;
+    $path = storage_path($this->dirPath).'/'.$this->id;
     if(!is_dir($path)){
       mkdir($path,0777,true);
     }
 
-    if(!empty($model->dirNames)){
-      foreach ($model->dirNames as $dir) {
+    if(!empty($this->allowedDir['dir_names'])){
+      foreach ($this->allowedDir['dir_names'] as $dir) {
         $dirName = $path.'/'.$dir;
         if(!is_dir($dirName)){
           mkdir($dirName,0777,true);
         }
       }
     }
+
+    return true;
 
   }
 
