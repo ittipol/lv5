@@ -25,7 +25,20 @@ class Tagging extends Model
     $tag->setFormToken($this->formToken);
     $tagIds = $tag->saveSpecial($value);
 
-    return $this->clearAndSaves($model,$tagIds);
+    foreach ($tagIds as $tagId) {
+
+      if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName,[['tag_id','=',$tagId]])){
+        $model->getRalatedDataByModelName($this->modelName,true,[['tag_id','=',$tagId]])
+        ->setFormToken($this->formToken)
+        ->fill($value)
+        ->save();
+      }else{
+        $this->_save($model->includeModelAndModelId(array('tag_id' => $tagId)));
+      }
+
+    }
+
+    return true;
     
   }
 

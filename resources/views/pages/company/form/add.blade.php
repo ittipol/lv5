@@ -55,12 +55,22 @@
 
       <div class="form-row">
         <?php 
+          echo Form::label('business_entity_id', 'รูปแบบธุรกิจ');
+          echo Form::select('business_entity_id', $districts ,null, array(
+            'id' => 'district'
+          ));
+        ?>
+      </div>
+
+      <div class="form-row">
+        <?php 
           echo Form::label('business_type', 'ประเภทธุรกิจ');
           echo Form::text('business_type', null, array(
             'placeholder' => 'ประเภทธุรกิจ',
             'autocomplete' => 'off'
           ));
         ?>
+        <p class="notice info">เช่น ก่อสร้าง, การขนส่ง, ไอที</p>
         <p class="notice info">ประเภทธุรกิจจะมีผลโดยตรงต่อการค้นหา</p>
       </div>
 

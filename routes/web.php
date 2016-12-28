@@ -53,10 +53,18 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-// shopping
+// Product
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('shopping/add','ShoppingController@formAdd');
-  Route::post('shopping/add','ShoppingController@add');
+  Route::get('product/list/{company_id}','ProductController@listView');
+
+  Route::get('product/add/{company_id}','ProductController@formAdd');;
+  Route::post('product/add/{company_id}','ProductController@add');
+
+  Route::get('product/edit/{product_id}','ProductController@formEdit');
+  Route::patch('product/edit/{product_id}',[
+    'as' => 'product.edit',
+    'uses' => 'ProductController@edit'
+  ]);
 });
 
 // Job

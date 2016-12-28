@@ -24,6 +24,7 @@ class DepartmentHasJob extends Model
         ['department_id','=',$departmentId],
         ['job_id','=',$jobId]
       ])
+      ->first()
       ->setFormToken($this->formToken)
       ->fill($value)
       ->save();
@@ -31,18 +32,6 @@ class DepartmentHasJob extends Model
       return $this->fill($model->includeModelAndModelId($value))->save();
     }
 
-    // if(!$this->checkDepartmentHasJob($companyHasJobId,$departmentId,$jobId)) {
-
-    //   $value = array(
-    //     'company_has_job_id' => $companyHasJobId,
-    //     'department_id' => $departmentId,
-    //     'job_id' => $jobId
-    //   );
-
-    //   return $this->_save($value);
-    // }
-
-    return true;
   }
 
   public function checkDepartmentHasJob($companyHasJobId,$departmentId,$jobId) {

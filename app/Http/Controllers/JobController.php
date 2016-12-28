@@ -211,7 +211,7 @@ class JobController extends Controller
 
     $job->fill($request->all());
 
-    if($job->save()){dd('edited');
+    if($job->save()){
       // delete temp dir & records
       $job->deleteTempData();
       // reomove form token
