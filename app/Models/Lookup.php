@@ -81,8 +81,8 @@ class Lookup extends Model
 
     $formats = $model->allowedLookup['format'];
 
-    $parseFormat = '/{{[\w\d|._,=>]+}}/';
-    $parseValue = '/[\w\d|._,=>]+/';
+    $parseFormat = '/{{[\w\d|._,=>@]+}}/';
+    $parseValue = '/[\w\d|._,=>@]+/';
 
     $result = array();
 
@@ -218,6 +218,17 @@ class Lookup extends Model
   private function __lookupFormatParser($class,$key1,$key2,$records = array()) {
 
     $temp = array();
+
+    if(substr($key1, 0, 1) == '@') {
+      $func = substr($key1, 1);
+      $records = $class->{$func}($key2);
+      
+      foreach ($records as $key => $_record) {
+        $temp[] = $_record;
+      }
+
+      return $temp;
+    }
 
     list($class1,$field1) = explode('.', $key1);
     list($class2,$field2) = explode('.', $key2);
