@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Auth;
+use Validator;
 
-class CompanyRequest extends FormRequest
+class OnlineShopRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
@@ -14,14 +15,13 @@ class CompanyRequest extends FormRequest
    */
   public function authorize()
   {
-    // Only allow logged in users
     return Auth::check();
   }
 
   public function messages()
   {
     return [
-      'name.required' => 'กรุณากรอกชื่อสถานประกอบการหรือร้านค้าของคุณ',
+      'name.required' => 'กรุณากรอกชื่อร้านค้า',
       'Contact.email.email' => 'อีเมลไม่ถูกต้อง',
       'Contact.email.unique' => 'อีเมลถูกใช้งานแล้ว',
     ];

@@ -25,7 +25,6 @@ class Controller extends BaseController
     }
 
     protected function view($view) {
-
     	// Control layouts
     	$this->data['header'] = $this->header;
 		$this->data['footer'] = $this->footer;   

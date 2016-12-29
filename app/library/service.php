@@ -41,4 +41,31 @@ class Service
     return $name.'.'.$file->getClientOriginalExtension(); 
   }
 
+  public static function generateModelDirName($modelName) {
+
+    $alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $len = strlen($modelName);
+
+    $posStart = 0;
+
+    $parts = array();
+    for ($i=0; $i < $len; $i++) { 
+
+      if(strpos($alpha, $modelName[$i]) && ($i > 0)) {
+        $parts[] = strtolower(substr($modelName, $posStart, $i));
+        $posStart = $i;
+      }
+
+      // if($i == $len-1) {
+      //   $parts[] = strtolower(substr($modelName, $posStart, $i));
+      // }
+
+    }
+
+    $parts[] = strtolower(substr($modelName, $posStart, $i));
+
+    return implode('_', $parts);
+
+  }
+
 }

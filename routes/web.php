@@ -39,25 +39,18 @@ Route::post('login','UserController@auth');
 Route::get('register','UserController@registerForm')->middleware('guest');
 Route::post('register','UserController@registerAdd')->middleware('guest');
 
-// Story
+// Page
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('story/add','StoryController@formAdd');
-  Route::post('story/add','StoryController@add');
-});
-
-
-// Advertising
-Route::group(['middleware' => 'auth'], function () {
-  Route::get('ad/add','AdvertisingController@formAdd');
-  Route::post('ad/add','AdvertisingController@add');
+  Route::get('{slug}','PageController@home');
+  // Route::get('{slug}/{action}','PageController@home');
 });
 
 // Shop
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('shop/list','ShopController@listView');
+  Route::get('online-shop/list','OnlineShopController@listView');
 
-  Route::get('shop/add','ShopController@formAdd');;
-  Route::post('shop/add','ShopController@add');
+  Route::get('online-shop/add','OnlineShopController@formAdd');;
+  Route::post('online-shop/add','OnlineShopController@add');
 
   // Route::get('{slug}','ShopController@home');
 
@@ -75,11 +68,11 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('product/add/{company_id}','ProductController@formAdd');
   Route::post('product/add/{company_id}','ProductController@add');
 
-  Route::get('product/edit/{product_id}','ProductController@formEdit');
-  Route::patch('product/edit/{product_id}',[
-    'as' => 'product.edit',
-    'uses' => 'ProductController@edit'
-  ]);
+  // Route::get('product/edit/{product_id}','ProductController@formEdit');
+  // Route::patch('product/edit/{product_id}',[
+  //   'as' => 'product.edit',
+  //   'uses' => 'ProductController@edit'
+  // ]);
 });
 
 // Job
@@ -89,11 +82,11 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('job/add/{company_id}','JobController@formAdd');;
   Route::post('job/add/{company_id}','JobController@add');
 
-  Route::get('job/edit/{job_id}','JobController@formEdit');
-  Route::patch('job/edit/{job_id}',[
-    'as' => 'job.edit',
-    'uses' => 'JobController@edit'
-  ]);
+  // Route::get('job/edit/{job_id}','JobController@formEdit');
+  // Route::patch('job/edit/{job_id}',[
+  //   'as' => 'job.edit',
+  //   'uses' => 'JobController@edit'
+  // ]);
 });
 
 // Company
@@ -125,11 +118,11 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('department/add/{company_id}','DepartmentController@formAdd');
   Route::post('department/add/{company_id}','DepartmentController@add');
 
-  Route::get('department/edit/{department_id}','DepartmentController@formEdit');
-  Route::patch('department/edit/{department_id}',[
-    'as' => 'department.edit',
-    'uses' => 'DepartmentController@edit'
-  ]);
+  // Route::get('department/edit/{department_id}','DepartmentController@formEdit');
+  // Route::patch('department/edit/{department_id}',[
+  //   'as' => 'department.edit',
+  //   'uses' => 'DepartmentController@edit'
+  // ]);
 });
 
 // Matches /api/{route} URL

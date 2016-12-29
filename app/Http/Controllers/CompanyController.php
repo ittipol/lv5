@@ -92,7 +92,7 @@ class CompanyController extends Controller
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
       $message = new Message;
-      $message->error('ไม่สามารถเพิ่มร้านค้าหรือสถานประกอบการได้ กรุณาลองใหม่อีกครั้ง');
+      $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
       return Redirect::to('company/add');
     }
 
@@ -205,7 +205,7 @@ class CompanyController extends Controller
       $message->editingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
       $message = new Message;
-      $message->error('ไม่สามารถแก้ไขร้านค้าหรือสถานประกอบการได้ กรุณาลองใหม่อีกครั้ง');
+      $message->error('ไม่สามารถแก้ไขสถานประกอบการได้หรือร้านค้า กรุณาลองใหม่อีกครั้ง');
       return Redirect::to('company/edit/'.$companyId);
     }
 

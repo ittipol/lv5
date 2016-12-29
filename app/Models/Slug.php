@@ -11,6 +11,13 @@ class Slug extends Model
   protected $fillable = ['model','model_id','name'];
   public $timestamps  = false;
 
+  // ** reserved word **
+  // company
+  // online-shop
+  // job
+  // ad
+  // product
+
   public function __saveRelatedData($model) {
     $includeToken = false;
 

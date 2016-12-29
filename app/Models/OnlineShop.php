@@ -19,8 +19,27 @@ class OnlineShop extends Model
   public $allowedLookup = array(
     'format' =>  array(
       'keyword' => '{{name}}',
-      // 'keyword_1' => 'Class.Field|@getRalatedDataByModelName',
+      'keyword_1' => '{{Word.word|@getRalatedDataByModelName=>Tagging,Tagging.word_id=>Word.id}}',
       'description' => '{{description}}',
     )
   );
+  public $allowedSlug = array(
+    'field' => 'name'
+  );
+
+  public static function boot() {
+
+    parent::boot();
+
+    OnlineShop::saved(function($onlineShop){
+
+      // if($onlineShop->state == 'create') {
+
+      // }
+
+      $lookup = new Lookup;
+      $lookup->setFormToken($onlineShop->formToken)->__saveRelatedData($onlineShop);
+
+    });
+  }
 }

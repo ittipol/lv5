@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2016 at 04:34 PM
+-- Generation Time: Dec 29, 2016 at 04:32 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -54,19 +54,6 @@ CREATE TABLE `business_entities` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `business_entities`
---
-
-INSERT INTO `business_entities` (`id`, `name`, `description`, `created`, `modified`) VALUES
-(1, 'บุคคลธรรมดา', NULL, '2016-12-28 09:41:08', '2016-12-28 09:41:08'),
-(2, 'ห้างหุ้นส่วน', NULL, '2016-12-28 09:41:08', '2016-12-28 09:41:08'),
-(3, 'บริษัทเอกชนจำกัด', NULL, '2016-12-28 09:42:10', '2016-12-28 09:42:10'),
-(4, 'บริษัทมหาชนจำกัด', NULL, '2016-12-28 09:42:10', '2016-12-28 09:42:10'),
-(5, 'สหกรณ์', NULL, '2016-12-28 09:42:30', '2016-12-28 09:42:30'),
-(6, 'รัฐวิสาหกิจ', NULL, '2016-12-28 09:45:55', '2016-12-28 09:45:55'),
-(7, 'หน่วยงานของรัฐ', NULL, '2016-12-28 09:49:07', '2016-12-28 09:49:07');
 
 -- --------------------------------------------------------
 
@@ -295,15 +282,6 @@ CREATE TABLE `employment_types` (
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `employment_types`
---
-
-INSERT INTO `employment_types` (`id`, `name`, `description`, `created`, `modified`) VALUES
-(1, 'พนักงานประจำ', '', '2016-12-27 12:10:57', '2016-12-27 12:10:57'),
-(2, 'พนักงานสัญญาจ้าง', '', '2016-12-27 12:10:57', '2016-12-27 12:10:57'),
-(3, 'พาร์ทไทม์', '', '2016-12-27 12:11:03', '2016-12-27 12:11:03');
-
 -- --------------------------------------------------------
 
 --
@@ -319,6 +297,20 @@ CREATE TABLE `images` (
   `name` varchar(255) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_sells`
+--
+
+CREATE TABLE `item_sells` (
+  `id` int(11) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `word_id` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -666,19 +658,6 @@ CREATE TABLE `taggings` (
   `model` varchar(25) NOT NULL,
   `model_id` int(11) NOT NULL,
   `word_id` int(11) NOT NULL,
-  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tags`
---
-
-CREATE TABLE `tags` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1574,6 +1553,12 @@ ALTER TABLE `images`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `item_sells`
+--
+ALTER TABLE `item_sells`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -1667,12 +1652,6 @@ ALTER TABLE `taggings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tags`
---
-ALTER TABLE `tags`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `temp_files`
 --
 ALTER TABLE `temp_files`
@@ -1742,7 +1721,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `company_has_business_types`
 --
@@ -1762,7 +1741,7 @@ ALTER TABLE `company_has_jobs`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `days`
 --
@@ -1792,6 +1771,11 @@ ALTER TABLE `employment_types`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `item_sells`
+--
+ALTER TABLE `item_sells`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -1802,7 +1786,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `lookups`
 --
 ALTER TABLE `lookups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `office_hours`
 --
@@ -1812,7 +1796,7 @@ ALTER TABLE `office_hours`
 -- AUTO_INCREMENT for table `online_shops`
 --
 ALTER TABLE `online_shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `people`
 --
@@ -1847,7 +1831,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `slugs`
 --
 ALTER TABLE `slugs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `stories`
 --
@@ -1867,17 +1851,12 @@ ALTER TABLE `synonyms`
 -- AUTO_INCREMENT for table `taggings`
 --
 ALTER TABLE `taggings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `tags`
---
-ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `temp_files`
 --
 ALTER TABLE `temp_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -1907,7 +1886,7 @@ ALTER TABLE `wording_relation_relates`
 -- AUTO_INCREMENT for table `words`
 --
 ALTER TABLE `words`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

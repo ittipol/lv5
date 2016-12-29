@@ -6,8 +6,8 @@ use App\Models\Model;
 
 class Contact extends Model
 {
-  public $table = 'contact';
-  protected $fillable = ['phone_number','email','website','facebook','instagram','line'];
+  public $table = 'contacts';
+  protected $fillable = ['model','model_id','phone_number','email','website','facebook','instagram','line'];
   public $timestamps  = false;
 
   public function __saveRelatedData($model,$value) {

@@ -39,7 +39,7 @@ class Model extends _Model
     parent::__construct($attributes);
     
     $this->modelName = class_basename(get_class($this));
-    $this->alias = $this->disk = strtolower($this->modelName);
+    $this->alias = $this->disk = Service::generateModelDirName($this->modelName);
     $this->dirPath = $this->storagePath.$this->disk.'/';
 
   }
