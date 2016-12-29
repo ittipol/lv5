@@ -18,6 +18,10 @@ class Slug extends Model
   // ad
   // product
 
+  public function __construct() {  
+    parent::__construct();
+  }
+
   public function __saveRelatedData($model) {
     $includeToken = false;
 

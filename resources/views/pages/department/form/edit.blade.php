@@ -158,78 +158,6 @@
   <div class="form-section">
 
     <div class="title">
-      ที่อยู่แผนก
-    </div>
-
-    <div class="form-section-inner">
-
-      <div class="form-row">
-        <p class="error-message">* เมื่อคุณเลือกตัวเลือกนี้ ข้อมูลที่อยู่แผนกจะไม่ถูกบันทึก</p>
-        <?php
-        echo Form::checkbox('company_address', 1, null, array(
-          'id' => 'company_address'
-        ));
-        echo Form::label('company_address', 'ที่อยู่เดียวกับสถานประกอบการ');
-      ?>
-      </div>
-
-      <div class="line"></div>
-
-      <div class="form-row">
-        <?php 
-          echo Form::label('Address[address]', 'ที่อยู่');
-          echo Form::textarea('Address[address]', $address['address'], array(
-            'class' => 'ckeditor'
-          ));
-        ?>
-      </div>
-
-      <div class="form-row">
-        <?php 
-          echo Form::label('province', 'จังหวัด');
-          echo Form::text('province', 'ชลบุรี', array(
-            'placeholder' => 'จังหวัด',
-            'autocomplete' => 'off',
-            'disabled' => 'disabled'
-          ));
-        ?>
-      </div>
-
-      <div class="form-row">
-        <?php 
-          echo Form::label('Address[district_id]', 'อำเภอ', array(
-            'class' => 'required'
-          ));
-          echo Form::select('Address[district_id]', $districts ,$address['district_id'], array(
-            'id' => 'district'
-          ));
-        ?>
-      </div>
-
-      <div class="form-row">
-        <?php 
-          echo Form::label('Address[sub_district_id]', 'ตำบล', array(
-            'class' => 'required'
-          ));
-          echo Form::select('Address[sub_district_id]', array('0' => '-') , null, array(
-            'id' => 'sub_district'
-          ));
-        ?>
-      </div>
-
-      <div class="form-row">
-        <?php echo Form::label('', 'ระบุตำแหน่แผนกบนแผนที่'); ?>
-        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-        <div id="map"></div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="form-section">
-
-    <div class="title">
       แท๊ก
     </div>
 
@@ -261,16 +189,19 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    var logo = new Images('_image_logo','logo',1,'default');
+    const logo = new Images('_image_logo','logo',1,'default');
     logo.load('<?php echo $logoJson; ?>');
 
-    var images = new Images('_image_group','images',5,'default');
+    const images = new Images('_image_group','images',5,'default');
     images.load('<?php echo $imageJson; ?>');
 
-    District.load('<?php echo $address['sub_district_id']; ?>');
     Map.load('<?php echo $geographic; ?>');
-    Tagging.load('<?php echo $tagJson; ?>');
-    Form.load();
+    
+    const tagging = new Tagging();
+    tagging.load();
+
+    const form = new Form();
+    form.load();
   });
 </script>
 @stop

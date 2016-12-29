@@ -17,8 +17,8 @@ Tagging.prototype.load = function(tagJson){
 	this.crateInputTagField();
 
 	if (typeof tagJson != 'undefined') {
-		var _tags = JSON.parse(tagJson);
-		for (var i = 0; i < _tags.length; i++) {
+		let _tags = JSON.parse(tagJson);
+		for (let i = 0; i < _tags.length; i++) {
 			this.createTagChip(_tags[i]['name']);
 		}
 	}
@@ -33,7 +33,7 @@ Tagging.prototype.init = function(){
 Tagging.prototype.bind = function(){}
 
 Tagging.prototype.createHiddenField = function(index,id,tagName) {
-	var input = document.createElement('input');
+	let input = document.createElement('input');
   input.setAttribute('type','hidden');
   input.setAttribute('name',this.dataName+'['+index+']');
   input.setAttribute('id',id+'_name');
@@ -46,7 +46,7 @@ Tagging.prototype.removeHiddenField = function(id) {
 }
 
 Tagging.prototype.crateTagList = function(){
-	var span = document.createElement('span');
+	let span = document.createElement('span');
 	span.setAttribute('id',this.code+'_tag_list');
 	
 	document.getElementById(this.panel).appendChild(span);
@@ -54,9 +54,9 @@ Tagging.prototype.crateTagList = function(){
 
 Tagging.prototype.crateInputTagField = function(){
 
-	var _this = this;
+	let _this = this;
 
-	var input = document.createElement('input');
+	let input = document.createElement('input');
 	input.setAttribute('type','search');
 	input.setAttribute('id',this.code+'_tag_input');
 	input.setAttribute('tabindex','0');
@@ -77,17 +77,18 @@ Tagging.prototype.crateInputTagField = function(){
 				_this.createTagChip(this.value);
 				this.value = '';
 			}
-			// return false;
+		
 		}else if(e.keyCode == 8){
 
 			if(this.value == ''){
 				e.preventDefault();
 
-				var obj = document.getElementById(_this.tagList[_this.tagList.length-1]);
+				let obj = document.getElementById(_this.tagList[_this.tagList.length-1]);
 
 				if(obj != null){
-					document.getElementById(this.code+'_tag_input').value = $(obj).find('span.tag-name').text();
-					document.getElementById(this.code+'_tag_input').select();
+
+					document.getElementById(_this.code+'_tag_input').value = $(obj).find('span.tag-name').text();
+					document.getElementById(_this.code+'_tag_input').select();
 
 					_this.tagChipsWidth -= $(obj).width()+_this.padding; 
 					_this.calInputFielsWidth();
@@ -120,21 +121,21 @@ Tagging.prototype.crateInputTagField = function(){
 
 Tagging.prototype.createTagChip = function(tagName){
 
-	var _this = this;
+	let _this = this;
 
-	// var id = 'tag_'+this.generateCode();
-	var id = 'tag_'+this.code+'_'+this.runningNumber;
+	// let id = 'tag_'+this.generateCode();
+	let id = 'tag_'+this.code+'_'+this.runningNumber;
 	this.tagList.push(id);
 
-	var tagChip = document.createElement('span');
+	let tagChip = document.createElement('span');
 	tagChip.setAttribute('class','tag-chip');
 	tagChip.setAttribute('id',id);
 
-	var tagNameElem = document.createElement('span');
+	let tagNameElem = document.createElement('span');
 	tagNameElem.setAttribute('class','tag-name');
 	tagNameElem.innerHTML = tagName;
 
-	var tagDelete = document.createElement('span');
+	let tagDelete = document.createElement('span');
 	tagDelete.setAttribute('class','tag-delete-chip');
 	tagDelete.innerHTML = '×';
 
@@ -170,14 +171,14 @@ Tagging.prototype.createTagChip = function(tagName){
 
 Tagging.prototype.generateCode = function() {
 
-	var codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	let codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
   codeAlphabet += "0123456789";
 
-  var code = '';
-  var len = codeAlphabet.length;
+  let code = '';
+  let len = codeAlphabet.length;
 
-  for (var i = 0; i <= 7; i++) {
+  for (let i = 0; i <= 7; i++) {
   	code += codeAlphabet[Math.floor(Math.random() * (len - 0) + 0)];
   };
 
@@ -185,7 +186,7 @@ Tagging.prototype.generateCode = function() {
 }
 
 Tagging.prototype.calInputFielsWidth = function(){
-	var inputFieldWidth = $('#'+this.panel).width() - (this.tagChipsWidth % $('#'+this.panel).width());
+	let inputFieldWidth = $('#'+this.panel).width() - (this.tagChipsWidth % $('#'+this.panel).width());
 
 	if(inputFieldWidth > 120){
 		$('#'+this.code+'_tag_input').css('width',inputFieldWidth);

@@ -212,22 +212,23 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    var logo = new Images('_image_logo','logo',1,'default');
+    const logo = new Images('_image_logo','logo',1,'default');
     logo.load();
 
-    var images = new Images('_image_cover','images',1,'default');
+    const images = new Images('_image_cover','images',1,'default');
     images.load();
 
-    var shopHasItem = new Tagging();
+    const shopHasItem = new Tagging();
     shopHasItem.setPanel('_tag_items');
     shopHasItem.setDataName('shopHasItem');
     shopHasItem.setPlaceHolder('สินค้าอะไรบ้างที่ขายในร้าน');
     shopHasItem.load();
 
-    var tagging = new Tagging();
+    const tagging = new Tagging();
     tagging.load();
 
-    Form.load();
+    const form = new Form();
+    form.load();
 
   });
 </script>

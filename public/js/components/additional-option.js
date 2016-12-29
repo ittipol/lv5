@@ -8,7 +8,7 @@ AdditionalOption.load = function(){
 
 AdditionalOption.bind = function(){
   $('.additional-option').on('click',function(){
-    var _this = this;
+    let _this = this;
     $(this).find('.additional-option-items').slideDown(220);
     setTimeout(function(){
       AdditionalOption._this = _this;

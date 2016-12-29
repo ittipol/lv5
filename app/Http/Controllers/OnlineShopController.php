@@ -14,7 +14,7 @@ class OnlineShopController extends Controller
     // set form token
     Session::put($this->formToken,1);
 
-    return $this->view('pages.shop.form.add');
+    return $this->view('pages.online-shop.form.add');
   }
 
   public function add(OnlineShopRequest $request) {

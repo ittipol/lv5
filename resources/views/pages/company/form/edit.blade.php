@@ -312,19 +312,26 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    var logo = new Images('_image_logo','logo',1,'default');
+    const logo = new Images('_image_logo','logo',1,'default');
     logo.load('<?php echo $logoJson; ?>');
 
-    var images = new Images('_image_group','images',5,'default');
+    const images = new Images('_image_group','images',5,'default');
     images.load('<?php echo $imageJson; ?>');
 
-    var tagging = new Tagging();
+    const tagging = new Tagging();
     tagging.load('<?php echo $tagJson; ?>');
 
-    District.load('<?php echo $address['sub_district_id']; ?>');
-    Map.load('<?php echo $geographic; ?>');
-    OfficeHour.load('<?php echo $officeHoursJson; ?>','<?php echo $sameTime; ?>');
-    Form.load();
+    const district = new District();
+    district.load('<?php echo $address['sub_district_id']; ?>');
+
+    const map = new Map();
+    map.load('<?php echo $geographic; ?>');
+
+    const officeHour = new OfficeHour();
+    officeHour.load('<?php echo $officeHoursJson; ?>','<?php echo $sameTime; ?>');
+
+    const form = new Form()
+    form.load()
   });
 </script>
 

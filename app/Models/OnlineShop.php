@@ -27,6 +27,10 @@ class OnlineShop extends Model
     'field' => 'name'
   );
 
+  public function __construct() {  
+    parent::__construct();
+  }
+
   public static function boot() {
 
     parent::boot();

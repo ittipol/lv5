@@ -244,13 +244,14 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    var images = new Images('_image_group','images',5,'default');
+    const images = new Images('_image_group','images',5,'default');
     images.load('<?php echo $imageJson; ?>');
 
-    var tagging = new Tagging();
+    const tagging = new Tagging();
     tagging.load('<?php echo $tagJson; ?>');
 
-    Form.load();
+    const form = new Form();
+    form.load();
   });
 </script>
 

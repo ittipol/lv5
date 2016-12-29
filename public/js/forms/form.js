@@ -1,14 +1,16 @@
-var Form = {}
+class Form {
+	constructor() {}
 
-Form.load = function() {
-	Form.init();
-}
+	load() {
+		this.init()
+	}
 
-Form.init = function() {
-	$('form input').keydown(function(event){
-	  if(event.keyCode == 13) {
-	    event.preventDefault();
-	    return false;
-	  }
-	});
+	init() {
+	  $('form input').keydown(function(event){
+  	  if(event.keyCode == 13) {
+  	    event.preventDefault()
+  	    return false;
+  	  }
+  	})
+	}
 }

@@ -1,67 +1,74 @@
-var District = {
-  subDistrictId: null
-}
-
-District.load = function(subDistrictId){
-  District.init();
-  District.bind();
-
-  if (typeof subDistrictId != 'undefined') {
-    District.subDistrictId = subDistrictId;
+class District {
+  constructor() {
+    this.subDistrictId = null
   }
-}
 
-District.init = function(){
-  var districtId = $('#district').val();
-  District.getSubDistrict(districtId);
-} 
+  load(subDistrictId) {
+    this.init();
+    this.bind();
 
-District.bind = function(){
-  $('#district').on('change',function(){
-  	District.getSubDistrict($(this).val());
-  });
-} 
+    if (typeof subDistrictId != 'undefined') {
+      this.subDistrictId = subDistrictId;
+    }
+  }
 
-District.getSubDistrict = function(districtId){
+  init(){
+    this.getSubDistrict($('#district').val());
+  } 
 
-  var CSRF_TOKEN = $('input[name="_token"]').val();        
+  bind(){
 
-	var request = $.ajax({
-    url: "/api/get_sub_district/"+districtId,
-    type: "get",
-    // data: {_token:CSRF_TOKEN},
-    dataType:'json'
-  });
+    let _this = this;
 
-  // Callback handler that will be called on success
-  request.done(function (response, textStatus, jqXHR){
-    $('#sub_district').empty();
-    $.each(response, function(key,value) {
-      
-      var option = $("<option></option>");
+    $('#district').on('change',function(){
+      _this.getSubDistrict($(this).val());
+    });
+  } 
 
-      if(key == District.subDistrictId){
-        option.prop('selected',true);
-      }
+  getSubDistrict(districtId){
 
-      $('#sub_district').append(option.attr("value", key).text(value));
+    let _this = this;
 
+    let CSRF_TOKEN = $('input[name="_token"]').val();        
+
+    let request = $.ajax({
+      url: "/api/get_sub_district/"+districtId,
+      type: "get",
+      // data: {_token:CSRF_TOKEN},
+      dataType:'json'
     });
 
-    District.subDistrictId = null;
-    
-  });
+    // Callback handler that will be called on success
+    request.done(function (response, textStatus, jqXHR){
+      $('#sub_district').empty();
+      $.each(response, function(key,value) {
+        
+        let option = $("<option></option>");
 
-  // Callback handler that will be called on failure
-  request.fail(function (jqXHR, textStatus, errorThrown){
-    // Log the error to the console
-    console.error(
-        "The following error occurred: "+
-        textStatus, errorThrown
-    );
-  });
+        if(key == _this.subDistrictId){
+          option.prop('selected',true);
+        }
 
-  // Callback handler that will be called regardless
-  // if the request failed or succeeded
-  request.always(function () {});
+        $('#sub_district').append(option.attr("value", key).text(value));
+
+      });
+
+      District.subDistrictId = null;
+      
+    });
+
+    // Callback handler that will be called on failure
+    request.fail(function (jqXHR, textStatus, errorThrown){
+      // Log the error to the console
+      console.error(
+          "The following error occurred: "+
+          textStatus, errorThrown
+      );
+    });
+
+    // Callback handler that will be called regardless
+    // if the request failed or succeeded
+    request.always(function () {});
+  }
+
 }

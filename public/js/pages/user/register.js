@@ -1,11 +1,11 @@
 $(document).ready(function(){
 	$('form').submit(function(){
 
-		var day = $('#birth_day').val();
-		var month = $('#birth_month').val();
-		var year = $('#birth_year').val();
+		let day = $('#birth_day').val();
+		let month = $('#birth_month').val();
+		let year = $('#birth_year').val();
 
-		var input = document.createElement("input");
+		let input = document.createElement("input");
 		input.setAttribute("type", "hidden");
 		input.setAttribute("name", "birth_date");
 		input.setAttribute("value", year+'-'+month+'-'+day);

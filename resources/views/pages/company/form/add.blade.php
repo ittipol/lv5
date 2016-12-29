@@ -56,9 +56,7 @@
       <div class="form-row">
         <?php 
           echo Form::label('business_entity_id', 'รูปแบบธุรกิจ');
-          echo Form::select('business_entity_id', $businessEntities ,null, array(
-            'id' => 'district'
-          ));
+          echo Form::select('business_entity_id', $businessEntities ,null);
         ?>
       </div>
 
@@ -327,7 +325,7 @@
   </div>
 
   <?php
-    echo Form::submit('เพิ่มร้านค้าหรือสถานประกอบการ', array(
+    echo Form::submit('เพิ่มสถานประกอบการหรือร้านค้าของคุณ', array(
       'class' => 'button'
     ));
   ?>
@@ -342,19 +340,26 @@
 
   $(document).ready(function(){
 
-    var logo = new Images('_image_logo','logo',1,'default');
+    const logo = new Images('_image_logo','logo',1,'default');
     logo.load();
 
-    var images = new Images('_image_group','images',5,'default');
+    const images = new Images('_image_group','images',5,'default');
     images.load();
     
-    var tagging = new Tagging();
+    const tagging = new Tagging();
     tagging.load();
 
-    District.load();
-    Map.load();
-    OfficeHour.load();
-    Form.load();
+    const district = new District();
+    district.load();
+
+    const map = new Map();
+    map.load();
+    
+    const officeHour = new OfficeHour();
+    officeHour.load();
+
+    const form = new Form();
+    form.load();
   });
 </script>
 

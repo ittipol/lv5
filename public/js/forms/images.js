@@ -15,16 +15,12 @@ function Images (panel,type,limit,style) {
 
 Images.prototype.load = function(imageJson){
 
-	// if(typeof $('input[name="__token"]').val() == 'undefined') {
-	// 	return false;
-	// } 
-
 	this.init();
 	this.bind();
 
 	if (typeof imageJson != 'undefined') {
-		var _images = JSON.parse(imageJson);
-		for (var i = 0; i < _images.length; i++) {
+		let _images = JSON.parse(imageJson);
+		for (let i = 0; i < _images.length; i++) {
 			this.imagesPlaced.push(this.index);
 			this.index = this._createUploader(this.index,_images[i]);
 		}
@@ -41,7 +37,7 @@ Images.prototype.init = function(){
 
 Images.prototype.bind = function(){
 
-	var _this = this;
+	let _this = this;
 
 	$(document).on('change', '.'+this.code+'-image', function(){
 		_this.preview(this);
@@ -62,21 +58,21 @@ Images.prototype.preview = function(input){
 			return false;
 		} 
 
-		var _this = this;
+		let _this = this;
 
-		var parent = $(input).parent();
-		var CSRF_TOKEN = $('input[name="_token"]').val();    
-		var formToken = $('input[name="__token"]').val();
-		var proceed = true;
+		let parent = $(input).parent();
+		let CSRF_TOKEN = $('input[name="_token"]').val();    
+		let formToken = $('input[name="__token"]').val();
+		let proceed = true;
 
 		if(!window.File && window.FileReader && window.FileList && window.Blob){ //if browser doesn't supports File API
 		  alert("Your browser does not support new File API! Please upgrade.");
 			proceed = false;
 		}else{
-		  var fileSize = input.files[0].size;
-		  var mimeType = input.files[0].type;
+		  let fileSize = input.files[0].size;
+		  let mimeType = input.files[0].type;
 
-		  var reader = new FileReader();
+		  let reader = new FileReader();
 
 		  reader.onload = function (e) {
 
@@ -103,7 +99,7 @@ Images.prototype.preview = function(input){
 		}
 
 		if(proceed) {
-			var formData = new FormData();
+			let formData = new FormData();
 			formData.append('_token', CSRF_TOKEN);formToken
 			formData.append('formToken', formToken);
 			formData.append('file', input.files[0]);
@@ -118,11 +114,11 @@ Images.prototype.preview = function(input){
 
 Images.prototype.uploadImage = function(parent,input,data) {
 
-	var _this = this;
+	let _this = this;
 	
-	var id = input.getAttribute('id');
+	let id = input.getAttribute('id');
 
-	var request = $.ajax({
+	let request = $.ajax({
     url: "/upload_image",
     type: "POST",
     data: data,
@@ -138,12 +134,12 @@ Images.prototype.uploadImage = function(parent,input,data) {
     mimeType:"multipart/form-data",
     xhr: function(){
     	//upload Progress
-    	var xhr = $.ajaxSettings.xhr();
+    	let xhr = $.ajaxSettings.xhr();
     	if (xhr.upload) {
     		xhr.upload.addEventListener('progress', function(event) {
-    			var percent = 0;
-    			var position = event.loaded || event.position;
-    			var total = event.total;
+    			let percent = 0;
+    			let position = event.loaded || event.position;
+    			let total = event.total;
     			if (event.lengthComputable) {
     				percent = Math.ceil(position / total * 100);
     			}
@@ -164,7 +160,7 @@ Images.prototype.uploadImage = function(parent,input,data) {
   		parent.find('a').css('display','block');
   		parent.parent().find('.progress-bar').css('display','none');
 
-  		var _input = document.createElement('input');
+  		let _input = document.createElement('input');
 		  _input.setAttribute('type','hidden');
 		  _input.setAttribute('name','filenames['+(_this.runningNumber-1)+']');
 		  _input.setAttribute('value',response.filename);
@@ -209,10 +205,10 @@ Images.prototype.removePreview = function(input){
 
 		this.allowedClick = false;
 
-		var parent = $(input).parent(); 
+		let parent = $(input).parent(); 
 		parent.fadeOut(220);  
 
-		var data = {
+		let data = {
 			'_token': $('input[name="_token"]').val(),
 			'formToken': $('input[name="__token"]').val(),
 			'filename': parent.find('input[type="hidden"]').val(),
@@ -227,9 +223,9 @@ Images.prototype.removePreview = function(input){
 
 Images.prototype.deleteImage = function(parent,input,data) {
 
-	var _this = this;
+	let _this = this;
 
-	var request = $.ajax({
+	let request = $.ajax({
 	  url: "/delete_image",
 	  type: "POST",
 	  data: data,
@@ -245,7 +241,7 @@ Images.prototype.deleteImage = function(parent,input,data) {
 				_this.index = _this.createUploader(_this.index);
 			}
 
-			// var parent = $(input).parent();
+			// let parent = $(input).parent();
 			_this.imagesPlaced.splice(_this.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
 
 			parent.parent().remove();
@@ -272,7 +268,7 @@ Images.prototype.deleteImage = function(parent,input,data) {
 
 Images.prototype.createUploader = function(index){
 
-	var html = '';
+	let html = '';
 	html += '<div id="'+this.code+'_panel_'+this.runningNumber+'" class="image-panel">';
 	html += '<label id="'+this.code+'_'+this.runningNumber+'" class="image-label">';
 	html += '<input id="'+this.code+'_image_'+this.runningNumber+'" class="'+this.code+'-image" type="file">';
@@ -292,7 +288,7 @@ Images.prototype.createUploader = function(index){
 
 Images.prototype._createUploader = function(index,image){
 
-	var html = '';
+	let html = '';
 	html += '<div id="'+this.code+'_panel_'+this.runningNumber+'" class="image-panel">';
 	html += '<label id="'+this.code+'_'+this.runningNumber+'" class="image-label added">';
 	html +=	'<img id="'+this.code+'_preview_'+this.runningNumber+'" class="preview-image" src="'+image.url+'">';
@@ -310,14 +306,14 @@ Images.prototype._createUploader = function(index,image){
 }
 
 Images.prototype.generateCode = function() {
-	var codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	let codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
   codeAlphabet += "0123456789";
 
-  var code = '';
-  var len = codeAlphabet.length;
+  let code = '';
+  let len = codeAlphabet.length;
 
-  for (var i = 0; i <= 7; i++) {
+  for (let i = 0; i <= 7; i++) {
   	code += codeAlphabet[Math.floor(Math.random() * (len - 0) + 0)];
   };
 
@@ -325,11 +321,11 @@ Images.prototype.generateCode = function() {
 }
 
 Images.prototype.checkImageType = function(type){
-	var allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg'];
+	let allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg'];
 
-	var allowed = false;
+	let allowed = false;
 
-	for (var i = 0; i < allowedFileTypes.length; i++) {
+	for (let i = 0; i < allowedFileTypes.length; i++) {
 		if(type == allowedFileTypes[i]){
 			allowed = true;
 			break;						
@@ -341,9 +337,9 @@ Images.prototype.checkImageType = function(type){
 
 Images.prototype.checkImageSize = function(size) {
 	// 3MB
-	var maxSize = 3145728;
+	let maxSize = 3145728;
 
-	var allowed = false;
+	let allowed = false;
 
 	if(size <= maxSize){
 		allowed = true;

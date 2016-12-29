@@ -5,7 +5,6 @@
 <script type="text/javascript" src="{{ URL::asset('js/jquery-3.1.1.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.modal.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
-<!-- <script type="text/javascript" src="{{ URL::asset('js/google.map.js') }}"></script> -->
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/form.js') }}"></script>
@@ -43,12 +42,23 @@
 @if(Session::has('message.title') && Session::has('message.type'))
 <script type="text/javascript">
   $(document).ready(function(){
-    NotificationBottom.title = '{{ Session::get("message.title") }}';
-    NotificationBottom.type = '{{ Session::get("message.type") }}';
+    // NotificationBottom.title = '{{ Session::get("message.title") }}';
+    // NotificationBottom.type = '{{ Session::get("message.type") }}';
+    // @if(Session::has('message.desc'))
+    //   NotificationBottom.desc = '{{ Session::get("message.desc") }}';
+    // @endif
+    // NotificationBottom.load();
+
+    let title = '{{ Session::get("message.title") }}';
+    let type = '{{ Session::get("message.type") }}';
+    let desc = '';
     @if(Session::has('message.desc'))
-      NotificationBottom.desc = '{{ Session::get("message.desc") }}';
+      desc = '{{ Session::get("message.desc") }}';
     @endif
-    NotificationBottom.load();
+
+    const notificationBottom = new NotificationBottom(title,desc,type);
+    notificationBottom.load();
+
   });
 </script>
 @endif
