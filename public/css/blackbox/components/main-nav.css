@@ -1,0 +1,65 @@
+.main-navigation {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+	width: 280px;
+	background-color: #0D47A1;
+}
+
+.navigation-top .logo {
+	padding: 35px 0 33px;
+	text-align: center;
+}
+
+.navigation-top a.logo-link {
+	color: #ffffff;
+	font-size: 26px;
+}
+
+.navigation-primarymenu ul {
+	padding: 0;
+}
+
+.navigation-primarymenu ul > li {
+	padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.navigation-primarymenu ul > li > a { 
+	position: relative;
+  padding: 14px 0 14px 20px;
+  line-height: 22px;
+  display: block;
+  color: #c3c6ce;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.navigation-primarymenu ul > li > a:hover,
+.navigation-primarymenu ul > li > a.active { 
+	color: #ffffff;
+  background-color: #1A237E;
+}
+
+.navigation-primarymenu ul.submenu > li > a { 
+	position: relative;
+  padding: 8px 0 8px 40px;
+  font-size: 14px;
+  line-height: 18px;
+  display: block;
+  color: #c3c6ce;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+
+
+
+
+
+}

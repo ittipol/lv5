@@ -117,7 +117,7 @@
 				echo Form::label('tags', 'สิ่งที่คุณสนใจ (เช่น รองเท้า, อาหารเสริม, คอมพิวเตอร์, กล้อง)');
 			?>
 			<p class="error-message">* สามารถเพิ่ม หรือ แก้ไขได้ในภายหลัง</p>
-			<div id="tags" class="tag"></div>
+			<div id="_tags" class="tag"></div>
 			<p class="notice info">สิ่งที่คุณสนใจจะช่วยให้ระบบสามารถแสดงข้อมูลต่างๆ ที่ตรงกับความต้องการของคุณ</p>
 		</div>
 
@@ -216,9 +216,11 @@
 
 			$(document).ready(function(){
 				Avatar.load();
-				Tag.placeholder = 'สิ่งที่คุณสนใจ';
-				Tag.dataName = 'interests';
-				Tag.load();
+
+				const tagging = new Tagging();
+				tagging.setDataName('PersonInterest');
+				tagging.setPlaceHolder('สิ่งที่คุณสนใจ');
+				tagging.load();
 			});
 
 		</script>

@@ -1,7 +1,7 @@
-@extends('layouts.default')
+@extends('layouts.blackbox.main')
 @section('content')
 
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="container-header">
       <div class="col-lg-6">
@@ -22,7 +22,7 @@
 
       <?php foreach ($companies as $company): ?>
 
-      <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
         <div class="card medium">
           <div class="image-tile">
             <div class="image" style="background-image:url('<?php echo $company['image']; ?>');"></div>

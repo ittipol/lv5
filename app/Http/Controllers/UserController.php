@@ -30,6 +30,7 @@ class UserController extends Controller
 
   public function login() {
 
+    $this->header = false;
     $this->footer = false;
 
     if(Auth::check()){

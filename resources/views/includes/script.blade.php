@@ -12,7 +12,6 @@
 <script type="text/javascript" src="{{ URL::asset('js/forms/office_hour.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/forms/district.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/tagging.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/components/floating-menu.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>
 
@@ -35,6 +34,9 @@
 <link rel="stylesheet" href="{{ URL::asset('css/components/switch.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/additional-option.css') }}" />
 
+<link rel="stylesheet" href="{{ URL::asset('css/blackbox/wrapper.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/main-nav.css') }}" />
+
 <?php if(file_exists($cssPath)): ?>
 <link rel="stylesheet" href="<?php echo $root.$cssPath; ?>" />
 <?php endif; ?>
@@ -42,12 +44,6 @@
 @if(Session::has('message.title') && Session::has('message.type'))
 <script type="text/javascript">
   $(document).ready(function(){
-    // NotificationBottom.title = '{{ Session::get("message.title") }}';
-    // NotificationBottom.type = '{{ Session::get("message.type") }}';
-    // @if(Session::has('message.desc'))
-    //   NotificationBottom.desc = '{{ Session::get("message.desc") }}';
-    // @endif
-    // NotificationBottom.load();
 
     let title = '{{ Session::get("message.title") }}';
     let type = '{{ Session::get("message.type") }}';
@@ -62,9 +58,3 @@
   });
 </script>
 @endif
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    FloatingMenu.load();
-  });
-</script>

@@ -2,7 +2,8 @@
 @section('content')
 <div class="login-form">
 	<div class="login-form-inner">
-		<h1>เข้าสู่ระบบ</h1>
+		<h2><a class="logo" href="{{URL::to('/')}}">CHONBURI SQUARE</a></h2>
+		<h2>เข้าสู่ระบบ</h2>
 
 		<?php if(!empty($errors->all())): ?>
 			<div class="form-error-messages">
@@ -66,6 +67,5 @@
 				echo Form::close();
 			?>
 		</div>
-	<div>
 </div>
 @stop

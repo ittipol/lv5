@@ -1,4 +1,3 @@
-<!-- <div class="top-header"></div> -->
 <div class="header">
 	<div class="header-inner">
 		<div class="container">

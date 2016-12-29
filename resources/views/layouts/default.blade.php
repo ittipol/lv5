@@ -13,7 +13,7 @@
 
 	<header> 
 		<?php if(!isset($header) || ($header)): ?>
-			@include('layouts.header') 
+			@include('layouts.default_header') 
 		<?php endif; ?>
 	</header>
 	<main>
@@ -21,25 +21,9 @@
   </main>
   <footer> 
   	<?php if(isset($footer) && ($footer)): ?>
-  		@include('layouts.footer') 
+  		@include('layouts.default_footer') 
   	<?php endif; ?>
   </footer>
-
-  @if (Auth::check())
-  <div class="floating-button">
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-  </div>
-
-  <div id="overlay_menu" class="overlay-menu">
-    <a href="{{URL::to('account/add')}}">ไปยังร้านค้าออนไลน์</a>
-    <a href="{{URL::to('account/add')}}">ไปยังร้านค้าหรือสถานประกอบการของคุณ</a>
-    <a href="{{URL::to('account/add')}}">แสดงการขายของคุณ</a>
-    <a href="{{URL::to('account/add')}}">แสดงโฆษณาของคุณ</a>
-    <a href="{{URL::to('account/add')}}">แสดงการประกาศงานของคุณ</a>
-  </div>
-  @endif
 
 </body>
 </html>

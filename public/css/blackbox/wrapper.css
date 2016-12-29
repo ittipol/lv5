@@ -1,0 +1,8 @@
+.wrapper {
+	display: none;
+}
+
+.main-content {
+	padding-left: 280px;
+	overflow-x: hidden;
+}
