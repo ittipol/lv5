@@ -13,13 +13,6 @@ class EntityController extends Controller
 {
   private $slug;
   private $model;
-  // private $require = array(
-  //   'name',
-  //   'description' => array(
-  //     'description',
-  //     'short_description' => 'String:subString|description,120'
-  //   )
-  // )
 
   public function __construct(array $attributes = []) { 
     $param = Route::current()->parameters();
@@ -30,14 +23,6 @@ class EntityController extends Controller
     $this->slug = $slug['name'];
     $this->model = service::loadModel($slug['model'])->find($slug['model_id']);
   }
-
-  // public function checkSlug($slug) {
-  //   if(empty($slug)) {
-  //     // \View::make("messages.message")->with("name", 'xxx');
-  //     // return $this->view('messages.message');
-  //     // return Redirect::to('company/list')->send();
-  //   }
-  // }
 
   public function home() {
 

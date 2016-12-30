@@ -40,7 +40,7 @@
     left: -280px
   }
   .main-content {
-    padding-left: 0;
+    left: 0;
   }
 
   .action-bar {

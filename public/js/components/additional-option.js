@@ -46,9 +46,7 @@ class AdditionalOption {
   closePrevBox() {
     if(this.obj != null){
       $(this.obj).fadeOut(220);
-      setTimeout(function(){
-        this.obj = null;
-      },300);
+      this.obj = null;
     }
   }
 

@@ -62,7 +62,11 @@ class Image extends Model
 
     foreach ($images as $image) {
 
-      $filename = $image['attributes']['name'];
+      if(!in_array($image->type,$model->allowedImage['type'])) {
+        continue;
+      }
+
+      $filename = $image->name;
 
       $path = storage_path($tempFileModel->tempFileDir).$token.'/'.$filename;
 
@@ -120,10 +124,10 @@ class Image extends Model
       $this->where([
         ['model','=',$model->modelName],
         ['model_id','=',$model->id],
-        ['name','=',$image['attributes']['name']]
+        ['name','=',$image->name]
       ])->delete();
 
-      File::Delete(storage_path($model->dirPath).$model->id.'/images/'.$image['attributes']['name']);
+      File::Delete(storage_path($model->dirPath).$model->id.'/images/'.$image->name);
     }
 
     // delete temp file records

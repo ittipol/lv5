@@ -6,6 +6,7 @@
 	z-index: 1000;
 	width: 280px;
 	background-color: #1A237E;
+  transition: left .2s ease-out;
 }
 
 .main-navigation nav {

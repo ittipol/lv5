@@ -15,7 +15,11 @@ class Controller extends BaseController
 
     protected $header = true;
     protected $footer = true;
-    protected $entityPermission = false; // permission edit, delete, manage page
+    protected $pagePermission = array(
+      'add' => true,
+      'edit' => true,
+      'delete' => true,
+    );
     protected $actionBarText;
     protected $data = array();
     protected $ident;
@@ -23,14 +27,16 @@ class Controller extends BaseController
 
     public function __construct(array $attributes = []) { 
         $this->ident = Token::generatePageIdentity(Session::get('Person.id'));
-        $this->formToken = Token::generateformToken(Session::get('Person.id'));
+        // $this->formToken = Token::generateformToken(Session::get('Person.id'));
     }
 
     protected function view($view) {
     	// Control layouts
     	$this->data['header'] = $this->header;
-		$this->data['footer'] = $this->footer;   
-        $this->data['__token'] = $this->formToken;
+		  $this->data['footer'] = $this->footer;   
+      $this->data['actionBarText'] = $this->actionBarText;   
+      $this->data['pagePermission'] = $this->pagePermission;  
+      $this->data['__token'] = $this->formToken;
 
     	return view($view,$this->data);
     }

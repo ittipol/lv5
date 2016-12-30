@@ -4,7 +4,11 @@
       <div class="col-lg-3">
         <ul class="action-bar-nav">
           <li class="icon">
-            <a href="javascript:void(0);">&#9776;</a>
+            <!-- <a id="hamburger_menu_trigger" href="javascript:void(0);">&#9776;</a> -->
+            <label for="hamburger_menu_trigger_id">
+              &#9776;
+              <input type="checkbox" id="hamburger_menu_trigger_id" class="nav-trigger" style="display:none;" />
+            </label>
           </li>
         </ul>
         <div class="action-bar-text pull-left">

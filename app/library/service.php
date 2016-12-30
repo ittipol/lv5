@@ -68,4 +68,18 @@ class Service
 
   }
 
+  public static function generateModelByModelAlias($modelAlias) {
+
+    $modelAlias = str_replace('-', ' ', $modelAlias);
+    $parts = explode(' ', $modelAlias);
+
+    $modelName = '';
+    foreach ($parts as $part) {
+      $modelName .= ucfirst($part); 
+    }
+
+    return $modelName;
+
+  }
+
 }

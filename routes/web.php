@@ -45,58 +45,45 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('entity/{slug}/{action}','EntityController@home');
 });
 
+// Model Controller
+Route::group(['middleware' => 'auth'], function () {
+  // Route::get('{modelAlias}/add','FormController@formAdd');
+  // Route::post('{modelAlias}/add','FormController@add');
+
+  // Route::get('{modelAlias}/add/{param}','FormController@formAdd');
+  // Route::post('{modelAlias}/add/{param}','FormController@add');
+});
+
 // Shop
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('online-shop/list','OnlineShopController@listView');
+  // Route::get('online-shop/list','OnlineShopController@listView');
 
-  Route::get('online-shop/add','OnlineShopController@formAdd');
-  Route::post('online-shop/add','OnlineShopController@add');
-
-  // Route::get('{slug}','ShopController@home');
-
-  // Route::get('{slug}/edit','ShopController@formEdit');
-  // Route::patch('{slug}/edit',[
-  //   'as' => '{slug}.edit',
-  //   'uses' => 'ShopController@edit'
-  // ]);
+  // Route::get('online-shop/add','OnlineShopController@formAdd');
+  // Route::post('online-shop/add','OnlineShopController@add');
 });
 
 // Product
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('product/list/{company_id}','ProductController@listView');
+  // Route::get('product/list/{company_id}','ProductController@listView');
 
-  Route::get('product/add/{company_id}','ProductController@formAdd');
-  Route::post('product/add/{company_id}','ProductController@add');
-
-  // Route::get('product/edit/{product_id}','ProductController@formEdit');
-  // Route::patch('product/edit/{product_id}',[
-  //   'as' => 'product.edit',
-  //   'uses' => 'ProductController@edit'
-  // ]);
+  // Route::get('product/add/{company_id}','ProductController@formAdd');
+  // Route::post('product/add/{company_id}','ProductController@add');
 });
 
 // Job
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('job/list/{company_id}','JobController@listView');
+  // Route::get('job/list/{company_id}','JobController@listView');
 
-  Route::get('job/add/{company_id}','JobController@formAdd');;
-  Route::post('job/add/{company_id}','JobController@add');
-
-  // Route::get('job/edit/{job_id}','JobController@formEdit');
-  // Route::patch('job/edit/{job_id}',[
-  //   'as' => 'job.edit',
-  //   'uses' => 'JobController@edit'
-  // ]);
+  // Route::get('job/add/{company_id}','JobController@formAdd');;
+  // Route::post('job/add/{company_id}','JobController@add');
 });
 
 // Company
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('company/list','CompanyController@listView');
+  // Route::get('company/list','CompanyController@listView');
 
   Route::get('company/add','CompanyController@formAdd');;
   Route::post('company/add','CompanyController@add');
-
-  // Route::get('{slug}','CompanyController@home');
 
   // Route::get('{slug}/edit','CompanyController@formEdit');
   // Route::patch('{slug}/edit',[
@@ -104,25 +91,14 @@ Route::group(['middleware' => 'auth'], function () {
   //   'uses' => 'CompanyController@edit'
   // ]);
 
-  Route::get('company/edit/{company_id}','CompanyController@formEdit');
-  Route::patch('company/edit/{company_id}',[
-    'as' => 'company.edit',
-    'uses' => 'CompanyController@edit'
-  ]);
 });
 
 
 // Department
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('department/list/{company_id}','DepartmentController@listView');
-  Route::get('department/add/{company_id}','DepartmentController@formAdd');
-  Route::post('department/add/{company_id}','DepartmentController@add');
-
-  // Route::get('department/edit/{department_id}','DepartmentController@formEdit');
-  // Route::patch('department/edit/{department_id}',[
-  //   'as' => 'department.edit',
-  //   'uses' => 'DepartmentController@edit'
-  // ]);
+  // Route::get('department/list/{company_id}','DepartmentController@listView');
+  // Route::get('department/add/{company_id}','DepartmentController@formAdd');
+  // Route::post('department/add/{company_id}','DepartmentController@add');
 });
 
 // Matches /api/{route} URL

@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 
-  class Layout {
+  class Blackbox {
 
     constructor() {
       this.mainNavWidth = 280;
@@ -41,6 +41,20 @@
           height: h
         });
       });
+
+      $('#hamburger_menu_trigger_id').on('click',function(){
+      
+        if($(this).is(':checked')) {
+          $('.main-navigation').css('left',0);
+          $('.main-content').css('left',280);
+          $('.action-bar').css('left',280);
+        }else{
+          $('.main-navigation').css('left',-280);
+          $('.main-content').css('left',0);
+          $('.action-bar').css('left',0);
+        }
+      });
+
     }
 
     setLayout() {
@@ -62,8 +76,8 @@
   }
 
   $(document).ready(function(){
-    const layout = new Layout;
-    layout.load();
+    const blackbox = new Blackbox;
+    blackbox.load();
   });
 
 </script>

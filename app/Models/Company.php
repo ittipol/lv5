@@ -19,7 +19,9 @@ class Company extends Model
   public $allowedDir = array(
     'dir_names' => array('logo','cover','images')
   );
-  public $allowedImage = true;
+  public $allowedImage = array(
+    'type' => array('logo','cover','images')
+  );
   public $allowedLookup = array(
     'format' =>  array(
       'keyword' => '{{name}}',
