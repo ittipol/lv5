@@ -13,6 +13,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/components/tagging.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/components/scroll.js') }}"></script>
 
 <?php if(file_exists($jsPath)): ?>
 <script type="text/javascript" src="<?php echo $root.$jsPath; ?>"></script>
@@ -29,6 +30,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/components/button.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/switch.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/additional-option.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/components/scroll.css') }}" />
 
 <link rel="stylesheet" href="{{ URL::asset('css/pages/entity.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/wrapper.css') }}" />

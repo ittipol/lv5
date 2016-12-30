@@ -49,11 +49,4 @@
   </div>
 
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    AdditionalOption.load();
-  });
-</script>
-
 @stop

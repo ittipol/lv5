@@ -13,17 +13,49 @@
 }
 
 .navigation-top .logo {
-	padding: 35px 0 33px;
-	text-align: center;
+	padding: 20px 20px 10px;
+	/*text-align: center;*/
 }
 
 .navigation-top a.logo-link {
 	color: #ffffff;
-	font-size: 26px;
+	font-size: 20px;
+  text-transform: uppercase;
+}
+
+.navigation-top .account-info {
+  position: relative;
+  margin: 20px 0px 20px 20px;
+  color: #ffffff;
+}
+
+.navigation-top .account-info .avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  background-color: #ffffff;
+}
+
+.navigation-top .account-info .account-description {
+  margin-left: 10px;
+}
+
+.navigation-top .account-info .account-description div {
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.navigation-top .account-info .account-description a {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.navigation-top .account-info .account-description a:hover {
+  color: #7986CB;
 }
 
 .navigation-primary-menu {
-  height: 45%;
+  height: 60%;
   padding-bottom: 8px;
   overflow-y: auto;
 }
@@ -36,11 +68,7 @@
 	padding: 0;
   margin: 0;
   list-style: none;
-}
-
-.navigation-primary-menu ul > li > span{
   position: relative;
-  display: block;
 }
 
 .navigation-primary-menu ul > li a { 
@@ -71,7 +99,7 @@
   background-color: #3F51B5;
 }
 
-.navigation-primary-menu ul.submenu > li a { 
+.navigation-primary-menu ul.submenu > li > a { 
 	position: relative;
   padding: 8px 0 8px 40px;
   font-size: 13px;
@@ -82,4 +110,11 @@
   text-decoration: none;
   font-weight: 400;
   transition: all .3s ease-in-out;
+}
+
+.navigation-primary-menu .line {
+  background-color: #ffffff;
+  width: 85%;
+  margin-right: auto;
+  margin-left: auto;
 }
