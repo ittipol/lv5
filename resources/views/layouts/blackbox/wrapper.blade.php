@@ -1,8 +1,10 @@
 <div class="wrapper clearfix">
+
   <div class="main-navigation pull-left">
     @include('layouts.blackbox.components.main-nav')
   </div>
   <div class="main-content pull-left">
+    @include('layouts.blackbox.components.action-bar')
     @yield('content')
   </div>
 </div>

@@ -4,7 +4,8 @@ namespace App\Models;
 
 use App\Models\Model;
 use App\Models\TempFile;
-use App\library\Token;
+use App\library\token;
+use App\library\service;
 use Auth;
 use Storage;
 use File;
@@ -146,7 +147,7 @@ class Image extends Model
 
   public function getImageUrl() {
 
-    $dirPath = $this->storagePath.strtolower($this->model).'/';
+    $dirPath = $this->storagePath.Service::generateModelDirName($this->model).'/';
     $path = storage_path($dirPath.$this->model_id.'/'.$this->type.'/'.$this->name);
 
     if(File::exists($path)){

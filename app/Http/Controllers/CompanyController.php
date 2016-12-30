@@ -21,8 +21,6 @@ class CompanyController extends Controller
 {
   public function listView() {
 
-    $string = new String;
-
     // Get company
     $personHasCompany = PersonHasCompany::where('person_id','=',Session::get('Person.id'))->get();
 
@@ -38,7 +36,7 @@ class CompanyController extends Controller
       $companies[] = array(
         'id' => $company->id,
         'name' => $company->name,
-        'description' => $string->subString($company->description,120),
+        'description' => String::subString($company->description,120),
         'business_type' => $company->business_type,
         'total_department' => $company->companyHasDepartments->count(),
         'image' => $image,

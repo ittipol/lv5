@@ -79,6 +79,11 @@ class Model extends _Model
         $model->state = 'update';
       }
 
+      // if(Schema::hasColumn($model->getTable(), 'description')) {
+      //   $model->description = htmlspecialchars($model->description);
+      // }
+      
+
     });
 
     // after saving

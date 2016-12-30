@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Slug;
+use App\library\service;
+use App\library\string;
 use Route;
 use Redirect;
 use Session;
@@ -10,8 +12,14 @@ use Session;
 class EntityController extends Controller
 {
   private $slug;
-  private $pageModel;
-  private $pageModelId;
+  private $model;
+  // private $require = array(
+  //   'name',
+  //   'description' => array(
+  //     'description',
+  //     'short_description' => 'String:subString|description,120'
+  //   )
+  // )
 
   public function __construct(array $attributes = []) { 
     $param = Route::current()->parameters();
@@ -20,8 +28,7 @@ class EntityController extends Controller
     // check don't have permission in this page
 
     $this->slug = $slug['name'];
-    $this->pageModel = $slug['model'];
-    $this->pageModelId = $slug['model_id'];
+    $this->model = service::loadModel($slug['model'])->find($slug['model_id']);
   }
 
   // public function checkSlug($slug) {
@@ -33,7 +40,17 @@ class EntityController extends Controller
   // }
 
   public function home() {
-    // dd($this->slug);
+
+    $logo = $this->model->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
+
+    $this->data = array(
+      'name' => $this->model->name,
+      'description' => $this->model->description,
+      'short_description' => String::subString($this->model->description,800),
+      'logo' => $logo,
+      // 'cover' =< ,
+      // 'entity' => $this->model->getAttributes()
+    );
 
     return $this->view('pages.entity.index');
 

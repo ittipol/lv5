@@ -3,7 +3,7 @@
 <div class="login-form">
 	<div class="login-form-inner">
 		<h2><a class="logo" href="{{URL::to('/')}}">CHONBURI SQUARE</a></h2>
-		<h2>เข้าสู่ระบบ</h2>
+		<h3>เข้าสู่ระบบ</h3>
 
 		<?php if(!empty($errors->all())): ?>
 			<div class="form-error-messages">

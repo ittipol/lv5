@@ -3,7 +3,6 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"></script>
 
 <script type="text/javascript" src="{{ URL::asset('js/jquery-3.1.1.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/jquery.modal.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
@@ -20,24 +19,22 @@
 <?php endif; ?>
 
 <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/jquery.modal.css') }}" /><link rel="stylesheet" href="{{ URL::asset('css/core.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/core.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/map.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/messages/message.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/layouts/header.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/layouts/footer.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/notification-bottom.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/form.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/tag.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/card.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/button.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/modal.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/switch.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/additional-option.css') }}" />
 
 <link rel="stylesheet" href="{{ URL::asset('css/pages/entity.css') }}" />
-
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/wrapper.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/action-bar.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/main-nav.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/blackbox/responsive.css') }}" />
 
 <?php if(file_exists($cssPath)): ?>
 <link rel="stylesheet" href="<?php echo $root.$cssPath; ?>" />
