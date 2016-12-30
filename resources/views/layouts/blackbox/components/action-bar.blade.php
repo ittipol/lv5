@@ -7,8 +7,8 @@
             <a href="javascript:void(0);">&#9776;</a>
           </li>
         </ul>
-        <div class="action-bar-logo pull-left">
-          <a class="logo-link" href="{{URL::to('/')}}">Chonburi Square</a>
+        <div class="action-bar-text pull-left">
+          <a class="link" href="{{URL::to('/')}}">Go-Go shop</a>
         </div>
       </div>
       <div class="col-lg-9">

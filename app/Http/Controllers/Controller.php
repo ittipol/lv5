@@ -15,6 +15,8 @@ class Controller extends BaseController
 
     protected $header = true;
     protected $footer = true;
+    protected $entityPermission = false; // permission edit, delete, manage page
+    protected $actionBarText;
     protected $data = array();
     protected $ident;
     protected $formToken;

@@ -9,15 +9,25 @@
 	z-index: 9999;
 }
 
-.action-bar-logo {
+.action-bar-text {
+  line-height: 60px;
+}
+
+.action-bar-text > a.link {
+  margin: 0 30px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+/*.action-bar-logo {
 	line-height: 60px;
 }
 
-.action-bar-logo > .logo-link{
+.action-bar-logo > a.logo-link {
 	margin: 0 30px;
 	color: #ffffff;
 	font-size: 20px;
-}
+}*/
 
 .action-bar .avatar {
 	/*margin: 0 20px;*/
