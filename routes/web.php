@@ -41,15 +41,15 @@ Route::post('register','UserController@registerAdd')->middleware('guest');
 
 // Page
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('{slug}','PageController@home');
-  // Route::get('{slug}/{action}','PageController@home');
+  Route::get('entity/{slug}','EntityController@home');
+  Route::get('entity/{slug}/{action}','EntityController@home');
 });
 
 // Shop
 Route::group(['middleware' => 'auth'], function () {
   Route::get('online-shop/list','OnlineShopController@listView');
 
-  Route::get('online-shop/add','OnlineShopController@formAdd');;
+  Route::get('online-shop/add','OnlineShopController@formAdd');
   Route::post('online-shop/add','OnlineShopController@add');
 
   // Route::get('{slug}','ShopController@home');

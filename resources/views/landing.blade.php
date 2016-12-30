@@ -12,7 +12,7 @@
 			<div class="banner"></div>
 			<div class="bg-overlay"></div>
 
-			@include('layouts.header') 
+			@include('layouts.default_header') 
 
 			<div class="header-primary-content">
 				<div class="container">
@@ -37,7 +37,7 @@
 		@include('layouts.landing_content') 
   </main>
   <footer> 
-  	@include('layouts.footer') 
+  	@include('layouts.default_footer') 
   </footer>
 </body>
 </html>

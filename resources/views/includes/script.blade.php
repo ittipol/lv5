@@ -34,6 +34,8 @@
 <link rel="stylesheet" href="{{ URL::asset('css/components/switch.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/components/additional-option.css') }}" />
 
+<link rel="stylesheet" href="{{ URL::asset('css/pages/entity.css') }}" />
+
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/wrapper.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/main-nav.css') }}" />
 

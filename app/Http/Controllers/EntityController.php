@@ -7,7 +7,7 @@ use Route;
 use Redirect;
 use Session;
 
-class PageController extends Controller
+class EntityController extends Controller
 {
   private $slug;
   private $pageModel;
@@ -33,6 +33,9 @@ class PageController extends Controller
   // }
 
   public function home() {
-    dd($this->slug);
+    // dd($this->slug);
+
+    return $this->view('pages.entity.index');
+
   } 
 }

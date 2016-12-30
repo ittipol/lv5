@@ -1,7 +1,7 @@
 @extends('layouts.blackbox.main')
 @section('content')
 
-<div class="container-fluid ">
+<div class="container">
   
   <div class="row">
     <div class="container-header">

@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.blackbox.main')
 @section('content')
 
 <div class="container">

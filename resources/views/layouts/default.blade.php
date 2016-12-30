@@ -11,19 +11,21 @@
 </head>
 <body>
 
-	<header> 
-		<?php if(!isset($header) || ($header)): ?>
-			@include('layouts.default_header') 
-		<?php endif; ?>
-	</header>
+	<?php if(!isset($header) || ($header)): ?>
+    <header> 
+		 @include('layouts.default_header')
+    </header> 
+	<?php endif; ?>
+	
 	<main>
 		@yield('content')
   </main>
-  <footer> 
-  	<?php if(isset($footer) && ($footer)): ?>
-  		@include('layouts.default_footer') 
-  	<?php endif; ?>
-  </footer>
+  
+	<?php if(isset($footer) && ($footer)): ?>
+    <footer> 
+		@include('layouts.default_footer')
+    </footer> 
+	<?php endif; ?>
 
 </body>
 </html>

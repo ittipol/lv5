@@ -28,6 +28,11 @@
         let w = window.innerWidth;
         let h = window.innerHeight;
 
+        $('.main-navigation').css({
+          width: this.mainNavWidth,
+          height: h
+        });
+
         $('.main-content').css({
           width: w,
           height: h
@@ -54,7 +59,7 @@
   }
 
   $(document).ready(function(){
-    let layout = new Layout;
+    const layout = new Layout;
     layout.load();
   });
 

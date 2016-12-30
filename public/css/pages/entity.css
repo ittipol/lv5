@@ -1,0 +1,17 @@
+.entity-header {
+	width: 100%;
+	height: 600px;
+	background-color: #aaaaaa;
+	border-bottom: 5px solid #1A237E;
+}
+
+.entity-cover {
+	width: 100%;
+	height: 100%;
+	background-size: 100% auto;
+	background-position: center;
+}
+
+@media only screen and (max-width: 999px) {
+	
+}
