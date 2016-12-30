@@ -18,8 +18,8 @@
                 <li><a href="{{URL::to('user/account')}}">{{Session::get('Person.Profile.name')}}</a><li>
                 <li><a href="{{URL::to('logout')}}">ออกจากระบบ</a><li>
                 @endif
-                <li><a href="#">Feedback</a></li> 
-                <li><a href="#">Contact us</a></li> 
+                <li><a href="#">ข้อเสนอแนะ</a></li> 
+                <li><a href="#">ติดต่อเรา</a></li> 
               </ul>
           </nav>
         </div>

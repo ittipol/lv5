@@ -57,6 +57,7 @@
 .navigation-primary-menu {
   height: 60%;
   padding-bottom: 8px;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 

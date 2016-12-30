@@ -13,9 +13,7 @@
       </div>
       <div class="col-lg-9">
         <nav class="pull-right">
-
           <a class="avatar" href="{{URL::to('user/account')}}"><img src="/avatar" /></a>
-
         </nav>
       </div>
     </div>
