@@ -23,6 +23,7 @@ class Slug extends Model
   }
 
   public function __saveRelatedData($model) {
+    
     $includeToken = false;
 
     do {

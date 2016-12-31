@@ -51,9 +51,9 @@ class Company extends Model
     Company::saved(function($company){
 
       if($company->state == 'create') {
-        $personHasCompany = new PersonHasCompany;
-        $personHasCompany->setFormToken($company->formToken);
-        $personHasCompany->saveSpecial($company->id,Session::get('Person.id'),'admin');
+        // $personHasCompany = new PersonHasCompany;
+        // $personHasCompany->setFormToken($company->formToken);
+        // $personHasCompany->saveSpecial($company->id,Session::get('Person.id'),'admin');
       }
 
       $companyHasBusinessType = new CompanyHasBusinessType;

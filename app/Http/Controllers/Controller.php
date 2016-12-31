@@ -41,6 +41,15 @@ class Controller extends BaseController
       // $this->ident = Token::generatePageIdentity(Session::get('Person.id'));
       // $this->formToken = Token::generateformToken(Session::get('Person.id'));
 
+      // Get slug and then get model and then check permission
+      // check person if in this entity
+      // PersonHasEntity::where([
+      //   ['model'],
+      //   ['model_id'],
+      //   ['model']
+      // ]);
+      // $company->checkRelatedDataExist('PersonHasEntity',[['person_id','=',$personId]])
+
       if(!empty($this->param['slug'])) {
         $_model = service::loadModel(service::generateModelByModelAlias($this->param['slug']));
 

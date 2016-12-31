@@ -9,6 +9,7 @@ use App\Models\Address;
 use App\Models\Tagging;
 use App\Models\Wiki;
 use App\Models\Lookup;
+use App\Models\PersonHasEntity;
 use App\library\token;
 use App\library\service;
 use Auth;
@@ -78,11 +79,6 @@ class Model extends _Model
       }else{
         $model->state = 'update';
       }
-
-      // if(Schema::hasColumn($model->getTable(), 'description')) {
-      //   $model->description = htmlspecialchars($model->description);
-      // }
-      
 
     });
 
@@ -154,6 +150,8 @@ class Model extends _Model
     if(($this->state == 'create') && $this->allowedSlug) {
       $slug = new Slug;
       $slug->setFormToken($this->formToken)->__saveRelatedData($this);
+      $personHasEntity = new PersonHasEntity;
+      $personHasEntity->setFormToken($this->formToken)->__saveRelatedData($this,Session::get('Person.id'),'admin');
     }
 
     if($this->allowedImage) {
