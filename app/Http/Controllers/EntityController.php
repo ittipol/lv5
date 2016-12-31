@@ -5,36 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Slug;
 use App\library\service;
 use App\library\string;
-use Route;
 use Redirect;
 use Session;
 
 class EntityController extends Controller
 {
-  private $slug;
-  private $model;
-
   public function __construct(array $attributes = []) { 
-    $param = Route::current()->parameters();
-    $slug = Slug::where('name','like',$param['slug'])->first();
-
+    parent::__construct();
     // check don't have permission in this page
-
-    $this->slug = $slug['name'];
-    $this->model = service::loadModel($slug['model'])->find($slug['model_id']);
   }
 
   public function home() {
 
-    $logo = $this->model->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
+    $logo = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
 
     $this->data = array(
-      'name' => $this->model->name,
-      'description' => $this->model->description,
-      'short_description' => String::subString($this->model->description,800),
+      'name' => $this->slugModel->name,
+      'description' => $this->slugModel->description,
+      'short_description' => String::subString($this->slugModel->description,800),
       'logo' => $logo,
       // 'cover' =< ,
-      // 'entity' => $this->model->getAttributes()
+      // 'entity' => $this->slugModel->getAttributes()
     );
 
     return $this->view('pages.entity.index');

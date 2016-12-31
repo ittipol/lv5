@@ -3,25 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\library\service;
-use Route;
 use Redirect;
 use Session;
 
 class FormController extends Controller
 {
-  private $model;
-  private $modelAlias;
+
+  protected $allowedModel = array('Company','Department','Job','Product'); 
 
   public function __construct(array $attributes = []) { 
 
+    parent::__construct();
+
+    // Generate Form token
     $this->formToken = Token::generateformToken(Session::get('Person.id'));
-
-    $param = Route::current()->parameters();
-
-    $modelName = service::generateModelByModelAlias($param['modelAlias']);
-
-    $this->modelAlias = $param['modelAlias'];
-    $this->model = service::loadModel($modelName);
   }
 
   public function formAdd() {
@@ -58,7 +53,7 @@ class FormController extends Controller
 
     // pass value
     if($pass){
-      $this->data['districts'] = $_districts;
+      $this->formData['districts'] = $_districts;
     }
     
     return $_districts;

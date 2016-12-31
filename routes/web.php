@@ -41,17 +41,29 @@ Route::post('register','UserController@registerAdd')->middleware('guest');
 
 // Page
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('entity/{slug}','EntityController@home');
-  Route::get('entity/{slug}/{action}','EntityController@home');
+  Route::get('{slug}','EntityController@home');
+  // Route::get('{slug}/{action}','EntityController@home');
+  Route::get('{slug}/delete','EntityController@home');
+
+  Route::get('{slug}/{modelAlias}/list','EntityController@home');
+  Route::get('{slug}/{modelAlias}/add','EntityController@home');
+  Route::get('{slug}/{modelAlias}/edit/{param}','EntityController@home');
+  Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@home');
 });
 
-// Model Controller
+// Form Controller
 Route::group(['middleware' => 'auth'], function () {
-  // Route::get('{modelAlias}/add','FormController@formAdd');
-  // Route::post('{modelAlias}/add','FormController@add');
 
-  // Route::get('{modelAlias}/add/{param}','FormController@formAdd');
-  // Route::post('{modelAlias}/add/{param}','FormController@add');
+});
+
+// List Controller
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('{modelAlias}/list','ListController@listView');
+});
+
+// Search Controller
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('search/{keyword}','HomeController@search');
 });
 
 // Shop

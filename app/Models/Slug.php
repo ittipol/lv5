@@ -47,6 +47,10 @@ class Slug extends Model
 
     $slug = str_replace(' ', '-', $model->{$field});
 
+    if(strlen($slug) <= 15) {
+      $includeToken = true;
+    }
+
     if($includeToken) {
       $slug .= '-'.Token::generateNumber(10);
     }
