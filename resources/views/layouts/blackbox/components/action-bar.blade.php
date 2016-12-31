@@ -17,7 +17,14 @@
       </div>
       <div class="col-lg-9">
         <nav class="pull-right">
-          <a class="avatar" href="{{URL::to('user/account')}}"><img src="/avatar" /></a>
+        <!-- <a class="avatar" href="{{URL::to('user/account')}}"><img src="/avatar" /></a> -->
+     <!--    border-radius: 30px;
+            height: 30px;
+            width: 250px;
+            margin-top: 15px;
+            margin-right: 20px; -->
+        <input type="text" />
+
         </nav>
       </div>
     </div>
