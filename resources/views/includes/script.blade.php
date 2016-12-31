@@ -36,6 +36,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/wrapper.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/action-bar.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/main-nav.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/main-panel.css') }}" />
 <link rel="stylesheet" href="{{ URL::asset('css/blackbox/responsive.css') }}" />
 
 <?php if(file_exists($cssPath)): ?>

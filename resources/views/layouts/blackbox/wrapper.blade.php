@@ -1,13 +1,7 @@
 <div class="wrapper clearfix">
-
   @include('layouts.blackbox.components.action-bar')
-
-  <div class="main-navigation pull-left">
-    @include('layouts.blackbox.components.main-nav')
-  </div>
-  <div class="main-content pull-left">
-    @yield('content')
-  </div>
+  @include('layouts.blackbox.components.main-nav')
+  @include('layouts.blackbox.components.main-panel')
 </div>
 
 <script type="text/javascript">
@@ -36,25 +30,38 @@
           height: h
         });
 
-        $('.main-content').css({
+        $('.main-panel').css({
           width: w,
           height: h
         });
+
+        if(w > 992) {
+          if($('#hamburger_menu_trigger').is(':checked')) {
+            $('#hamburger_menu_trigger').trigger('click');
+          }
+        }
+
       });
 
-      $('#hamburger_menu_trigger_id').on('click',function(){
-      
+      $('#hamburger_menu_trigger').on('click',function(){
         if($(this).is(':checked')) {
-          $('.main-navigation').css('left',0);
-          $('.main-content').css('left',280);
-          $('.action-bar').css('left',280);
+          $('.main-navigation').addClass('is-main-nav-open');
+          $('.main-panel').addClass('is-main-nav-open');
+          $('.action-bar').addClass('is-main-nav-open');
+          $('.main-panel-overlay').addClass('isvisible');
         }else{
-          $('.main-navigation').css('left',-280);
-          $('.main-content').css('left',0);
-          $('.action-bar').css('left',0);
+          $('.main-navigation').removeClass('is-main-nav-open');
+          $('.main-panel').removeClass('is-main-nav-open');
+          $('.action-bar').removeClass('is-main-nav-open');
+          $('.main-panel-overlay').removeClass('isvisible');
         }
       });
 
+      $('.main-panel-overlay').on('click',function(){
+        if($('#hamburger_menu_trigger').is(':checked')) {
+          $('#hamburger_menu_trigger').trigger('click');
+        }
+      });
     }
 
     setLayout() {
@@ -66,7 +73,7 @@
         height: h
       });
 
-      $('.main-content').css({
+      $('.main-panel').css({
         width: w,
         height: h
       });

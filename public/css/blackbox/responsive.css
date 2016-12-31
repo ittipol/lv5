@@ -39,12 +39,28 @@
   .main-navigation {
     left: -280px
   }
-  .main-content {
+  .main-panel {
     left: 0;
+    padding-left: 0;
   }
-
   .action-bar {
   	left: 0;
+  	padding-left: 0;
+  }
+
+  .main-navigation.is-main-nav-open {
+    left: 0;
+  }
+  .main-panel.is-main-nav-open {
+  	left: 280px;
+  }
+  .action-bar.is-main-nav-open {
+    left: 280px;
+  }
+
+  .main-panel-overlay.isvisible {
+  	visibility: visible;
+  	opacity: 1;
   }
 }
 
