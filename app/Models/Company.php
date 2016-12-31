@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Model;
-use App\Models\PersonHasCompany;
 use App\Models\BusinessType;
 use App\Models\WordingRelation;
 use Session;
@@ -50,11 +49,7 @@ class Company extends Model
 
     Company::saved(function($company){
 
-      if($company->state == 'create') {
-        // $personHasCompany = new PersonHasCompany;
-        // $personHasCompany->setFormToken($company->formToken);
-        // $personHasCompany->saveSpecial($company->id,Session::get('Person.id'),'admin');
-      }
+      // if($company->state == 'create') {}
 
       $companyHasBusinessType = new CompanyHasBusinessType;
       $companyHasBusinessType->setFormToken($company->formToken);

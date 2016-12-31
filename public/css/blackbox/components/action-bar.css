@@ -34,6 +34,32 @@
 	background-color: #ffffff;
 }
 
+.action-bar label[for="search_input"] {
+  position: relative;
+}
+
+.action-bar .search-input {
+  width: 300px;
+  height: 30px;
+  border-radius: 30px;
+  margin-top: 15px;
+  margin-right: 20px;
+  padding: 0;
+  padding-left: 36px;
+  outline: none;
+  position: relative;
+}
+
+.action-bar label[for="search_input"]::after {
+  content: "\1F50D";
+  position: absolute;
+  top: 18px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+}
+
 
 /* Remove margins and padding from the list, and add a black background color */
 ul.action-bar-nav {
@@ -96,6 +122,10 @@ ul.action-bar-nav li.icon {display: none;}
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
+
+  .action-bar .search-input {
+    width: 200px;
+  }
 
   .action-bar-text > a.link {
     margin: 0;

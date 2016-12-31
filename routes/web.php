@@ -45,9 +45,9 @@ Route::group(['middleware' => 'auth'], function () {
   // Route::get('{slug}/{action}','EntityController@home');
   Route::get('{slug}/delete','EntityController@home');
 
-  Route::get('{slug}/{modelAlias}/list','EntityController@home');
-  Route::get('{slug}/{modelAlias}/add','EntityController@home');
-  Route::get('{slug}/{modelAlias}/edit/{param}','EntityController@home');
+  Route::get('{slug}/{modelAlias}/list','ListController@home');
+  Route::get('{slug}/{modelAlias}/add','FormController@home');
+  Route::get('{slug}/{modelAlias}/edit/{param}','FormController@home');
   Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@home');
 });
 

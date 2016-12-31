@@ -16,18 +16,10 @@
 	transition: all .5s ease;
 }
 
-/*.entity-cover {
-	width: 100%;
-	height: 100%;
-	background-size: 100% auto;
-	background-position: center;
-	background-repeat: no-repeat;
-}*/
-
 .entity-logo {
 	width: 200px;
   height: 200px;
-  background-color: #eaeaea;
+  background-color: #cacaca;
   background-repeat: no-repeat;
   background-position: center;
   background-size: auto 100%;

@@ -15,6 +15,10 @@ class PersonHasEntity extends Model
     parent::__construct();
   }
 
+  public function role() {
+    return $this->hasOne('App\Models\Role','id','role_id');
+  }
+
   public function __saveRelatedData($model,$personId,$roleAlias) {
 
     $role = new Role;

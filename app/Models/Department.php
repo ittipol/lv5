@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Models\Model;
 use App\Models\CompanyHasDepartment;
-use App\Models\PersonHasCompany;
-use App\Models\PersonHasDepartment;
 use App\Models\Lookup;
 use Session;
 
@@ -55,19 +53,9 @@ class Department extends Model
         // get company id
         $companyId = $department->temporaryData['company_id'];
 
-        // find person has company
-        $personHasCompany = PersonHasCompany::where([
-          ['person_id','=',Session::get('Person.id')],
-          ['company_id','=',$companyId]
-        ])->first();
-
         $companyHasDepartment = new CompanyHasDepartment;
         $companyHasDepartment->setFormToken($department->formToken);
         $companyHasDepartment->saveSpecial($companyId,$department->id);
-
-        $personHasDepartment = new PersonHasDepartment;
-        $personHasDepartment->setFormToken($department->formToken);
-        $personHasDepartment->saveSpecial($personHasCompany->id,$department->id,Session::get('Person.id'),'admin');
 
       }
 

@@ -36,14 +36,14 @@
         });
 
         if(w > 992) {
-          if($('#hamburger_menu_trigger').is(':checked')) {
-            $('#hamburger_menu_trigger').trigger('click');
+          if($('#main_nav_trigger').is(':checked')) {
+            $('#main_nav_trigger').trigger('click');
           }
         }
 
       });
 
-      $('#hamburger_menu_trigger').on('click',function(){
+      $('#main_nav_trigger').on('click',function(){
         if($(this).is(':checked')) {
           $('.main-navigation').addClass('is-main-nav-open');
           $('.main-panel').addClass('is-main-nav-open');
@@ -58,8 +58,8 @@
       });
 
       $('.main-panel-overlay').on('click',function(){
-        if($('#hamburger_menu_trigger').is(':checked')) {
-          $('#hamburger_menu_trigger').trigger('click');
+        if($('#main_nav_trigger').is(':checked')) {
+          $('#main_nav_trigger').trigger('click');
         }
       });
     }

@@ -12,12 +12,16 @@ class EntityController extends Controller
 {
   public function __construct(array $attributes = []) { 
     parent::__construct();
+
     // check don't have permission in this page
   }
 
   public function home() {
-
-    $logo = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
+// dd($this->slugModel);
+    $logo = '';
+    if(!empty($this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']]))) {
+      $logo = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
+    }
 
     $this->data = array(
       'name' => $this->slugModel->name,
