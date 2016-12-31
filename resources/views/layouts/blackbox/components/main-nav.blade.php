@@ -86,9 +86,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    setTimeout(function(){
-      $(".nano").nanoScroller();
-    },1000);
     const additionalOption = new AdditionalOption();
     additionalOption.load();
   });

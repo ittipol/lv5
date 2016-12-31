@@ -15,5 +15,11 @@
     @include('layouts.blackbox.wrapper')
   </main>
 
+  <script type="text/javascript">
+    setTimeout(function(){
+      $(".nano").nanoScroller();
+    },1000);
+  </script>
+
 </body>
 </html>
