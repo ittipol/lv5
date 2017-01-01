@@ -58,6 +58,10 @@
             if($('#filter_panel_trigger').is(':checked')) {
               $('#filter_panel_trigger').trigger('click');
             }
+
+            $('.filter-panel').css({
+              height: h - $('.filter-panel').offset().top
+            });
           }
 
         });
@@ -67,7 +71,7 @@
           if($('#filter_panel_trigger').is(':checked')) {
             $('#filter_panel_trigger').trigger('click');
           }
-          
+
           if($(this).is(':checked')) {
             $('.main-navigation').addClass('is-main-nav-open');
             $('.main-panel').addClass('is-main-nav-open');
