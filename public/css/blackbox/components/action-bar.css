@@ -88,6 +88,10 @@
   background-position: center;
 }
 
+.nav-trigger {
+  display: none;
+}
+
 
 /* Remove margins and padding from the list, and add a black background color */
 ul.action-bar-nav {

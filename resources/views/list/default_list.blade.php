@@ -20,7 +20,7 @@
   <div class="line"></div>
 
   @include('layouts.blackbox.components.filter-panel')
-
+  
   <section class="card-list">
 
     <div class="card-container row">
@@ -62,7 +62,7 @@
       <?php else: ?>
 
         <div class="col-lg-12">
-          <h3>คุณยังไม่ได้เพิ่มบริษัทหรือร้านค้าของคุณของคุณ</h3>
+          <h3>ไม่พบข้อมูล</h3>
         </div>
 
       <?php endif; ?>

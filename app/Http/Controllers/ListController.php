@@ -55,7 +55,7 @@ class ListController extends Controller
       }
 
       // loop data
-      for ($i=0; $i < 10; $i++) { 
+      for ($i=0; $i < 5; $i++) { 
 
         $entities[] = array(
           'id' => $entity->id,

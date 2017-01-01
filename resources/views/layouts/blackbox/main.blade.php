@@ -27,7 +27,7 @@
         this.bind();
         this.setLayout();
 
-        $('.wrapper').fadeIn(1);
+        // $('.wrapper').fadeIn(1);
       }
 
       bind() {
@@ -46,15 +46,28 @@
             height: h
           });
 
+          $('.filter-panel').css({
+            height: h - 60
+          });
+
           if(w > 992) {
             if($('#main_nav_trigger').is(':checked')) {
               $('#main_nav_trigger').trigger('click');
+            }
+
+            if($('#filter_panel_trigger').is(':checked')) {
+              $('#filter_panel_trigger').trigger('click');
             }
           }
 
         });
 
         $('#main_nav_trigger').on('click',function(){
+
+          if($('#filter_panel_trigger').is(':checked')) {
+            $('#filter_panel_trigger').trigger('click');
+          }
+          
           if($(this).is(':checked')) {
             $('.main-navigation').addClass('is-main-nav-open');
             $('.main-panel').addClass('is-main-nav-open');
@@ -74,6 +87,10 @@
           if($('#main_nav_trigger').is(':checked')) {
             $('#main_nav_trigger').trigger('click');
           }
+
+          if($('#filter_panel_trigger').is(':checked')) {
+            $('#filter_panel_trigger').trigger('click');
+          }
         });
 
         $('.action-bar-overlay').on('click',function(){
@@ -81,6 +98,16 @@
             $('#main_nav_trigger').trigger('click');
           }
         });
+
+        $('#filter_panel_trigger').on('click',function(){
+          if($(this).is(':checked')) {
+            $('.filter-panel').addClass('is-filter-panel-open');
+            $('.main-panel-overlay').addClass('isvisible');
+          }else{
+            $('.filter-panel').removeClass('is-filter-panel-open');
+            $('.main-panel-overlay').removeClass('isvisible');
+          }
+        }); 
 
         $(".nano").on("update", function(event, vals){ 
            console.log("pos=" + vals.position + ", direction=" + vals.direction + "\n" )
@@ -107,6 +134,10 @@
         $('.main-panel').css({
           width: w,
           height: h
+        });
+
+        $('.filter-panel').css({
+          height: h - $('.filter-panel').offset().top
         });
 
       }

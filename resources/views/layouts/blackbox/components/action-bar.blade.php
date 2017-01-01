@@ -8,7 +8,7 @@
           <li class="icon">
             <label for="main_nav_trigger">
               &#9776;
-              <input type="checkbox" id="main_nav_trigger" class="nav-trigger" style="display:none;" />
+              <input type="checkbox" id="main_nav_trigger" class="nav-trigger" />
             </label>
           </li>
         </ul>
