@@ -19,6 +19,7 @@ use Redirect;
 
 class UserController extends Controller
 {
+
   public function account(){
 
 

@@ -6,7 +6,7 @@
     <div class="container-header">
       <div class="col-lg-6">
         <div class="title">
-          บริษัทหรือร้านค้าของคุณของคุณ
+          <?php echo $title; ?>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
 
         <div class="col-lg-3 col-md-6 col-sm-4 col-xs-12">
           <div class="card medium">
-            <div class="image-tile" style="background-image: url('/images/bb1.jpg');">
+            <div class="image-tile" style="background-image: url('/images/a3.jpg');">
               <!-- <div class="image" style="background-image:url('<?php echo $entity['image']; ?>');"></div> -->
               <div class="title"><?php echo $entity['name']; ?></div>
             </div>
@@ -49,7 +49,7 @@
                 </div>
               </div>
               <?php if(!empty($entity['slug'])): ?>
-                <a href="{{URL::to('entity/delete')}}/<?php echo $entity['slug']['url']; ?>">
+                <a href="<?php echo $entity['slug']['url']; ?>">
                   <img src="/images/icons/home.png">
                 </a>
               <?php endif; ?>
@@ -62,7 +62,7 @@
       <?php else: ?>
 
         <div class="col-lg-12">
-          <h3>ไม่พบข้อมูล</h3>
+          <h3>ไม่พบข้อมูล<?php echo $title; ?></h3>
         </div>
 
       <?php endif; ?>

@@ -12,7 +12,7 @@ class ListController extends Controller
   protected $allowedModel = array('Company','Department','Job','Product'); 
 
   public function __construct(array $attributes = []) { 
-    parent::__construct();
+    parent::__construct($attributes);
   }
 
   public function listView() {
@@ -31,6 +31,7 @@ class ListController extends Controller
       ['model','=',$this->model->modelName]
     ])->get();
 
+    $entities = array();
     foreach ($records as $record) {
       // Get Entity
       $entity = $this->model->find($record->model_id);
@@ -49,6 +50,11 @@ class ListController extends Controller
         $logo = $entity->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
       }
 
+      $cover = '';
+      if(!empty($entity->checkRelatedDataExist('Image',[['type','=','cover']]))) {
+        $cover = $entity->getRalatedDataByModelName('Image',true,[['type','=','cover']])->getImageUrl();
+      }
+
       $image = '';
       if(!empty($entity->checkRelatedDataExist('Image',[['type','=','images']]))) {
         $image = $entity->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
@@ -63,6 +69,7 @@ class ListController extends Controller
           'name' => $entity->name,
           'description' => String::subString($entity->description,120),
           'logo' => $logo,
+          'cover' => $cover,
           'image' => $image,
           // 'options' => array(
           //   'delete' => array(
@@ -102,7 +109,8 @@ class ListController extends Controller
     // )
 
     $this->data = array(
-      'entities' => $entities
+      'entities' => $entities,
+      'title' => $this->getTitle($this->model->modelName)
     );
 
     return $this->view('list.default_list');
@@ -146,6 +154,23 @@ class ListController extends Controller
   //   }
 
   // }
+  
+  private function getTitle($modelName) {
+
+    $title = '';
+    switch ($modelName) {
+      case 'Company':
+        $title = 'บริษัทหรือร้านค้าของคุณของคุณ';
+        break;
+      
+      case 'OnlineShop':
+        $title = 'ร้านค้าออนไลน์ของคุณ';
+        break;
+    }
+
+    return $title;
+
+  }
 
   private function getImages($type = 'images',$pass = true) {
     $images = '';

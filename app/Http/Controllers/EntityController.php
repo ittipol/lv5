@@ -11,7 +11,7 @@ use Session;
 class EntityController extends Controller
 {
   public function __construct(array $attributes = []) { 
-    parent::__construct();
+    parent::__construct($attributes);
 
     // check don't have permission in this page
   }

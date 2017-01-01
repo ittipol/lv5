@@ -29,7 +29,7 @@
           <div class="dot"></div>
           <div class="dot"></div>
           <div class="additional-option-content">
-            <a href="javascript:void(0);">ออกจากระบบ</a>
+            <a href="{{URL::to('logout')}}">ออกจากระบบ</a>
           </div>
         </div>
       </div>

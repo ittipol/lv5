@@ -31,7 +31,7 @@
 	position: relative;
 	background-color: #9e9e9e;
 	background-position: center;
-  background-size: auto 105%;
+  background-size: 105%;
   background-repeat: no-repeat;
 	/*border-bottom: 1px solid #0D47A1;*/
 	overflow: hidden;
@@ -57,11 +57,6 @@
   left: 0;
   padding: 10px 20px;
 }
-
-/*.card .image-tile img {
-	width: 100%;
-	height: 100%;
-}*/
 
 .card .inner {
 	padding: 20px;
@@ -103,7 +98,7 @@
 }
 
 .card.medium .image-tile .title {
-	font-size: 22px;
+	font-size: 20px;
 }
 
 .card.small {
@@ -115,5 +110,5 @@
 }
 
 .card.small .image-tile .title {
-	font-size: 22px;
+	font-size: 20px;
 }

@@ -8,16 +8,16 @@ use Hash;
 class User extends Model
 {
     protected $table = 'users';
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    protected $fillable = ['email','password'];
     protected $hidden = ['password','remember_token'];
-    protected $fillable = ['email','password','remember_token'];
     public $timestamps  = false;
-    public $createDir = true;
-    public $dirNames = array('avatar','images');
+
+    public $allowedDir = array(
+      'dir_names' => array('avatar','images')
+    );
+    public $allowedImage = array(
+      'type' => array('avatar','images')
+    );
 
     public function __construct() {  
       parent::__construct();

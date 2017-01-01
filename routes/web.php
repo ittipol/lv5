@@ -13,7 +13,7 @@
 
 Route::get('logout',function(){
   Auth::logout();
-  Session::flush();
+  // Session::flush();
   return redirect('/');
 });
 

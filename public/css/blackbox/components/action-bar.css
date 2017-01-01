@@ -116,6 +116,7 @@ ul.action-bar-nav li label {
     transition: 0.3s;
     font-size: 14px;
     line-height: 60px;
+    cursor: pointer;
 }
 
 /* Change background color of links on hover */
