@@ -81,6 +81,18 @@
             $('#main_nav_trigger').trigger('click');
           }
         });
+
+        $(".nano").on("update", function(event, vals){ 
+           console.log("pos=" + vals.position + ", direction=" + vals.direction + "\n" )
+        });
+
+        $(".nano").bind("scrolltop", function(e){
+            console.log('top');
+        });
+
+        $(".nano").bind("scrollend", function(e){
+            console.log('end');
+        });
       }
 
       setLayout() {
@@ -110,7 +122,7 @@
 
       setTimeout(function(){
         $(".nano").nanoScroller();
-      },1000);
+      },500);
     });
     
   </script>

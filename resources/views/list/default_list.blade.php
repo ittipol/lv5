@@ -19,9 +19,7 @@
 
   <div class="line"></div>
 
-  <div class="filter-panel pull-right">
-
-  </div>
+  @include('layouts.blackbox.components.filter-panel')
 
   <section class="card-list">
 
@@ -31,7 +29,7 @@
 
         <?php foreach ($entities as $entity): ?>
 
-        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-3 col-md-6 col-sm-4 col-xs-12">
           <div class="card medium">
             <div class="image-tile" style="background-image: url('/images/bb1.jpg');">
               <!-- <div class="image" style="background-image:url('<?php echo $entity['image']; ?>');"></div> -->

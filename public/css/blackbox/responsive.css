@@ -72,6 +72,16 @@
     visibility: visible;
     opacity: 1;
   }
+
+  .filter-panel {
+    position: absolute;
+    left: 250px;
+  }
+
+  .filter-panel + .card-list {
+    margin-right: 0;  
+  }
+
 }
 
 /* Small Devices, Tablets */
