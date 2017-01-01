@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
-use App\Models\PersonHasCompany;
 use App\Models\District;
 use App\Models\BusinessEntity;
 use App\Models\Lookup;

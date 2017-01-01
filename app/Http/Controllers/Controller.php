@@ -31,66 +31,52 @@ class Controller extends BaseController
     protected $param;
 
     public function __construct(array $attributes = []) { 
-      // Get Param Form URL
-      $this->param = Route::current()->parameters();
 
       $this->middleware(function ($request, $next) {
 
+        $this->ident = Token::generatePageIdentity(session()->get('Person.id'));
+        $this->formToken = Token::generateformToken(session()->get('Person.id'));
+
+        // Get Param Form URL
+        $this->param = Route::current()->parameters();
+
         if(!empty($this->param['slug'])) {
-          $_model = service::loadModel(service::generateModelByModelAlias($this->param['slug']));
 
-          // Check slug is model
-          if(!$_model) {
-            $slug = Slug::where('name','like',$this->param['slug'])->first();
-            $this->slug = $slug->name;
-            $this->slugModel = service::loadModel($slug->model)->find($slug->model_id);
+          $slug = Slug::where('name','like',$this->param['slug'])->first();
 
-            if($this->slugModel->checkRelatedDataExist('PersonHasEntity',[['person_id','=',session()->get('Person.id')]])) {
-              $pagePermission = $this->slugModel->getRalatedDataByModelName('PersonHasEntity',true,[['person_id','=',session()->get('Person.id')]])->role;
-
-              $this->pagePermission = array(
-                'add' => $pagePermission['adding_permission'],
-                'edit' => $pagePermission['editing_permission'],
-                'delete' => $pagePermission['deleting_permission'],
-              );
-            }
-
-          }else{
-            $this->pagePermission = false;
+          if(empty($slug)) {
+            return response()->view('messages.message');
           }
+
+          $this->slug = $slug->name;
+          $this->slugModel = service::loadModel($slug->model)->find($slug->model_id);
+
+          if($this->slugModel->checkRelatedDataExist('PersonHasEntity',[['person_id','=',session()->get('Person.id')]])) {
+            $pagePermission = $this->slugModel->getRalatedDataByModelName('PersonHasEntity',true,[['person_id','=',session()->get('Person.id')]])->role;
+
+            $this->pagePermission = array(
+              'add' => $pagePermission['adding_permission'],
+              'edit' => $pagePermission['editing_permission'],
+              'delete' => $pagePermission['deleting_permission'],
+            );
+          }
+
         }
 
         if(!empty($this->param['modelAlias'])) {
+
+          $model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
+
+          if(empty($model)) {
+            return response()->view('messages.message');
+          }
+
           $this->modelAlias = $this->param['modelAlias'];
-          $this->model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
+          $this->model = $model;
         }
 
         return $next($request);
       });
-
-      // $this->ident = Token::generatePageIdentity($this->personId);
-      // $this->formToken = Token::generateformToken($this->personId);
-
-      // if(!empty($this->param['slug'])) {
-      //   $_model = service::loadModel(service::generateModelByModelAlias($this->param['slug']));
-
-      //   // Check slug is model
-      //   if(!$_model) {
-      //     $slug = Slug::where('name','like',$this->param['slug'])->first();
-      //     $this->slug = $slug->name;
-      //     $this->slugModel = service::loadModel($slug->model)->find($slug->model_id);
-
-      //     // dd($this->slugModel->checkRelatedDataExist('PersonHasEntity',[['person_id','=',Session::get('Person.id')]]));
-
-      //   }else{
-      //     $this->pagePermission = false;
-      //   }
-      // }
-
-      // if(!empty($this->param['modelAlias'])) {
-      //   $this->modelAlias = $this->param['modelAlias'];
-      //   $this->model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
-      // }
 
     }
 

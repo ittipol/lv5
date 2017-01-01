@@ -83,10 +83,3 @@
     </div>
   </nav>
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    const additionalOption = new AdditionalOption();
-    additionalOption.load();
-  });
-</script>

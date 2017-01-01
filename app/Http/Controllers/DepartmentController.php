@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DepartmentRequest;
 use App\Models\Company;
 use App\Models\Department;
-use App\Models\PersonHasCompany;
-use App\Models\PersonHasDepartment;
 use App\Models\District;
 use App\Models\TempFile;
 use App\library\message;
