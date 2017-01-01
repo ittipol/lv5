@@ -41,6 +41,10 @@ class AdditionalOption {
     $(document).on('click',function(){
       _this.closePrevBox();
     });
+
+    $(window).resize(function() {
+      _this.closePrevBox();
+    });
   }
 
   closePrevBox() {

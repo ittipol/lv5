@@ -1,18 +1,18 @@
 .additional-option {
   width: 35px;
   height: 35px;
+  border-radius: 35px;
   background-color: #ffffff;
-  border: 1px solid transparent;
   display: inline-block;
-  z-index: 9999;
+  cursor: pointer;
 }
 
 .additional-option:hover {
-	border: 1px solid #cfcfcf;
+	background-color: #dfdfdf;
 }
 
 .additional-option.active {
-  border: 1px solid #cfcfcf;
+  background-color: #dfdfdf;
 }
 
 .additional-option .dot {

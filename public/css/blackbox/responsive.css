@@ -67,6 +67,11 @@
   	visibility: visible;
   	opacity: 1;
   }
+
+  .action-bar-overlay.isvisible {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 /* Small Devices, Tablets */

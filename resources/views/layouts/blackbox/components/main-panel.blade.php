@@ -3,6 +3,7 @@
 <div class="main-panel">
   <div class="nano">
   <div class="main-content nano-content">
+    <!-- slug component here -->
     @yield('content')
   </div>
   </div>

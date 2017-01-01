@@ -35,6 +35,15 @@ class ListController extends Controller
       // Get Entity
       $entity = $this->model->find($record->model_id);
 
+      // Get slug
+      $slug = null;
+      if(!empty($entity->checkRelatedDataExist('Slug'))) {
+        $slug = array(
+          'name' => $entity->getRalatedDataByModelName('Slug',true)->name,
+          'url' => url($entity->getRalatedDataByModelName('Slug',true)->name)
+        );
+      }
+
       $logo = '';
       if(!empty($entity->checkRelatedDataExist('Image',[['type','=','logo']]))) {
         $logo = $entity->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
@@ -45,21 +54,62 @@ class ListController extends Controller
         $image = $entity->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
       }
 
-      $entities[] = array(
-        'id' => $entity->id,
-        'name' => $entity->name,
-        'description' => String::subString($entity->description,120),
-        'logo' => $logo,
-        'image' => $image,
-      );
+      // loop data
+      for ($i=0; $i < 6; $i++) { 
+
+        $entities[] = array(
+          'id' => $entity->id,
+          'slug' => $slug,
+          'name' => $entity->name,
+          'description' => String::subString($entity->description,120),
+          'logo' => $logo,
+          'image' => $image,
+          // 'options' => array(
+          //   'delete' => array(
+          //     'name' => 'ลบ'
+          //     'url' => url($slug.'/delete')
+          //   )
+          // )
+        );
+
+      }
 
     }
+
+    // pattern
+    // $listPage = array(
+    //   'topLeftNav' => array(
+    //     'nav1' => array(
+    //       'name' => 'เพิ่มบริษัทหรือร้านค้าของคุณของคุณ',
+    //       'url' => url('company/add');
+    //     ),
+    //     'nav1' => array(
+    //       'name' => 'เพิ่มบริษัทหรือร้านค้าของคุณของคุณ',
+    //       'type' => 'add', // display as plus icon (material design)
+    //       'url' => url('company/add');
+    //     ),
+    //     'group_nav' => array(
+    //       array(
+    //         'name' => 'เพิ่มบริษัทหรือร้านค้าของคุณของคุณ',
+    //         'url' => url('company/add');
+    //       ),
+    //       array(
+    //         'name' => 'เพิ่มบริษัทหรือร้านค้าของคุณของคุณ',
+    //         'url' => url('company/add');
+    //       )
+    //     )
+    //   )
+    // )
 
     $this->data = array(
       'entities' => $entities
     );
 
     return $this->view('list.default_list');
+
+  }
+
+  private function getOption($modelName) {
 
   }
 
