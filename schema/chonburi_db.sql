@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 29, 2016 at 04:32 AM
+-- Generation Time: Jan 01, 2017 at 08:05 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -186,19 +186,6 @@ CREATE TABLE `days` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `days`
---
-
-INSERT INTO `days` (`id`, `name`) VALUES
-(1, 'วันจันทร์'),
-(2, 'วันอังคาร'),
-(3, 'วันพุธ'),
-(4, 'วันพฤหัสบดี'),
-(5, 'วันศุกร์'),
-(6, 'วันเสาร์'),
-(7, 'วันอาทิตย์');
 
 -- --------------------------------------------------------
 
@@ -409,28 +396,15 @@ CREATE TABLE `people` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `person_has_companies`
+-- Table structure for table `person_has_entities`
 --
 
-CREATE TABLE `person_has_companies` (
+CREATE TABLE `person_has_entities` (
   `id` int(11) NOT NULL,
+  `parent_person_has_entity_id` int(11) DEFAULT NULL,
   `person_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `person_has_departments`
---
-
-CREATE TABLE `person_has_departments` (
-  `id` int(11) NOT NULL,
-  `person_has_company_id` int(11) NOT NULL,
-  `person_id` int(11) NOT NULL,
-  `department_id` int(11) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `model_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -475,6 +449,9 @@ CREATE TABLE `roles` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `alias` varchar(255) DEFAULT NULL,
+  `adding_permission` tinyint(1) NOT NULL,
+  `editing_permission` tinyint(1) NOT NULL,
+  `deleting_permission` tinyint(1) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -483,8 +460,8 @@ CREATE TABLE `roles` (
 -- Dumping data for table `roles`
 --
 
-INSERT INTO `roles` (`id`, `name`, `alias`, `created`, `modified`) VALUES
-(1, 'admin', 'admin', '2016-12-06 10:44:05', '2016-12-06 10:44:05');
+INSERT INTO `roles` (`id`, `name`, `alias`, `adding_permission`, `editing_permission`, `deleting_permission`, `created`, `modified`) VALUES
+(1, 'admin', 'admin', 1, 1, 1, '2016-12-06 10:44:05', '2016-12-31 17:36:42');
 
 -- --------------------------------------------------------
 
@@ -1590,15 +1567,9 @@ ALTER TABLE `people`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `person_has_companies`
+-- Indexes for table `person_has_entities`
 --
-ALTER TABLE `person_has_companies`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `person_has_departments`
---
-ALTER TABLE `person_has_departments`
+ALTER TABLE `person_has_entities`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1701,7 +1672,7 @@ ALTER TABLE `words`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `business_entities`
 --
@@ -1721,7 +1692,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `company_has_business_types`
 --
@@ -1731,7 +1702,7 @@ ALTER TABLE `company_has_business_types`
 -- AUTO_INCREMENT for table `company_has_departments`
 --
 ALTER TABLE `company_has_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `company_has_jobs`
 --
@@ -1741,7 +1712,7 @@ ALTER TABLE `company_has_jobs`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 --
 -- AUTO_INCREMENT for table `days`
 --
@@ -1751,7 +1722,7 @@ ALTER TABLE `days`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `department_has_jobs`
 --
@@ -1771,7 +1742,7 @@ ALTER TABLE `employment_types`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `item_sells`
 --
@@ -1786,32 +1757,27 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `lookups`
 --
 ALTER TABLE `lookups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `office_hours`
 --
 ALTER TABLE `office_hours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `online_shops`
 --
 ALTER TABLE `online_shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `people`
 --
 ALTER TABLE `people`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
--- AUTO_INCREMENT for table `person_has_companies`
+-- AUTO_INCREMENT for table `person_has_entities`
 --
-ALTER TABLE `person_has_companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `person_has_departments`
---
-ALTER TABLE `person_has_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `person_has_entities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `person_interests`
 --
@@ -1831,7 +1797,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `slugs`
 --
 ALTER TABLE `slugs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT for table `stories`
 --
@@ -1856,7 +1822,7 @@ ALTER TABLE `taggings`
 -- AUTO_INCREMENT for table `temp_files`
 --
 ALTER TABLE `temp_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -1871,7 +1837,7 @@ ALTER TABLE `villages`
 -- AUTO_INCREMENT for table `wikis`
 --
 ALTER TABLE `wikis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `wording_relations`
 --
