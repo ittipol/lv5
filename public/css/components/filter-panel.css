@@ -91,7 +91,7 @@
 
   .filter-panel {
     position: fixed;
-    top: 60px;
+    top: 60px !important;
     right: -250px;
   }
 
