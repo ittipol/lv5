@@ -133,7 +133,7 @@
   }
 
   .filter-panel ul > li label:hover,
-  .filter-panel ul > li label.active { 
+  .filter-panel ul > li label.checked { 
     background-color: #3D5AFE;
   }
 

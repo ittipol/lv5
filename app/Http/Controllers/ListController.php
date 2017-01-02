@@ -33,54 +33,16 @@ class ListController extends Controller
   }
 
   public function index() {
-// dd(Input::all());
+
     // URL
-    // list?q=company&filter=type:value,type1:value1&sort=name:asc
-    $url = Request::url();
-    // $url .= '?q='.$this->query['q'];
-    // dd($this->query['q']);
+    // list?q=company&filter=franchise:assassins,franchise:tom&sort=name:asc
+
+    // $url = Request::url();
 
     // foreach($qs as $key => $value){
     //   $qs[$key] = sprintf('%s=%s',$key, urlencode($value));
     // }
     // $url = sprintf('%s?%s', $url, implode('&', $qs));
-
-
-    $sortingOptions = array(
-      'sort' => array(
-        'title' => 'เรียง',
-        'type' => 'radio',
-        // 'options' => array(
-        //   array(
-        //     'name' => 'ตัวอักษร A - Z ก - ฮ',
-        //     'value' => 'name:asc',
-        //     'id' => $this->modelAlias.':name:asc',
-        //     'checked' => true
-        //   ),
-        //   array(
-        //     'name' => 'ตัวอักษร Z - A ฮ - ก',
-        //     'value' => 'name:desc',
-        //     'id' => $this->modelAlias.':name:desc'
-        //   ),
-        //   array(
-        //     'name' => 'วันที่เก่าที่สุดไปหาใหม่ที่สุด',
-        //     'value' => 'created:asc',
-        //     'id' => $this->modelAlias.':created:asc'
-        //   ),
-        //   array(
-        //     'name' => 'วันที่ใหม่ที่สุดไปหาเก่าที่สุด',
-        //     'value' => 'created:desc',
-        //     'id' => $this->modelAlias.':created:desc'
-        //   )
-        // )
-        'options' => $this->generateSorting($this->model->sortingFields)
-      ),
-      'filter' => array(
-        'title' => 'กรอง',
-        'type' => 'checkbox',
-        'options' => array()
-      )
-    );
 
     $sort = 'name';
     $order = 'ASC';
@@ -96,8 +58,6 @@ class ListController extends Controller
       }
 
     }
-
-    // if(!empty($this->query['filter'])){}
 
     $personHasEntity = new PersonHasEntity;
 
@@ -198,6 +158,19 @@ class ListController extends Controller
     //   )
     // )
 
+    $sortingOptions = array(
+      'sort' => array(
+        'title' => 'เรียง',
+        'type' => 'radio',
+        'options' => $this->generateSorting($this->model->sortingFields,$sort,$order)
+      ),
+      'filter' => array(
+        'title' => 'กรอง',
+        'type' => 'checkbox',
+        'options' => array()
+      )
+    );
+
     $this->data = array(
       'lists' => $lists,
       'title' => $this->getTitle($this->model->modelName),
@@ -208,26 +181,33 @@ class ListController extends Controller
 
   }
 
-  private function generateSorting($sortingFields,$selected = true) {
+  private function generateSorting($sortingFields,$sort,$order) {
     $options = array();
 
     foreach ($sortingFields as $sortingField) {
 
-      $name = $this->getsortiongOptionName($sortingField,'asc');
-      // $id = 
+      $checked = false;
+      if(($sortingField == $sort) && (strtolower($order) == 'asc')){
+        $checked = true;
+      }                       
 
       $options[] = array(
-        'name' => 'ตัวอักษร A - Z ก - ฮ',
-        'value' => 'name:asc',
-        'id' => $this->modelAlias.':name:asc',
-        'checked' => true
+        'name' => $this->getsortiongOptionName($sortingField,'asc'),
+        'value' => $sortingField.':asc',
+        'id' => $this->modelAlias.':'.$sortingField.':asc',
+        'checked' => $checked
       );
 
+      $checked = false;
+      if(($sortingField == $sort) && (strtolower($order) == 'desc')){
+        $checked = true;
+      }     
+
       $options[] = array(
-        'name' => 'ตัวอักษร A - Z ก - ฮ',
-        'value' => 'name:asc',
-        'id' => $this->modelAlias.':name:asc',
-        'checked' => true
+        'name' => $this->getsortiongOptionName($sortingField,'desc'),
+        'value' => $sortingField.':desc',
+        'id' => $this->modelAlias.':'.$sortingField.':desc',
+        'checked' => $checked
       );
 
     }
@@ -236,6 +216,20 @@ class ListController extends Controller
   }
 
   private function getsortiongOptionName($field, $order) {
+
+    $name = '';
+
+    if(($field == 'name') && ($order == 'asc')) {
+      $name = 'ตัวอักษร A - Z ก - ฮ';
+    }elseif(($field == 'name') && ($order == 'desc')){
+      $name = 'ตัวอักษร Z - A ฮ - ก';
+    }elseif(($field == 'created') && ($order == 'asc')){
+      $name = 'วันที่เก่าที่สุดไปหาใหม่ที่สุด';
+    }elseif(($field == 'created') && ($order == 'desc')){
+      $name = 'วันที่ใหม่ที่สุดไปหาเก่าที่สุด';
+    }
+
+    return $name;
 
   }
 
