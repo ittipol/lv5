@@ -19,6 +19,14 @@ class PersonHasEntity extends Model
     return $this->hasOne('App\Models\Role','id','role_id');
   }
 
+  public function companies() {
+    return $this->hasOne('App\Models\Company','id','model_id');
+  }
+
+  public function onlineShops() {
+    return $this->hasOne('App\Models\OnlineShop','id','model_id');
+  }
+
   public function __saveRelatedData($model,$personId,$roleAlias) {
 
     $role = new Role;

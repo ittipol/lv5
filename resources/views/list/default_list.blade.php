@@ -31,7 +31,7 @@
 
         <div class="col-lg-3 col-md-6 col-sm-4 col-xs-12">
           <div class="card medium">
-            <div class="image-tile" style="background-image: url('/images/a3.jpg');">
+            <div class="image-tile" style="background-image: url('/images/xxx.jpg');">
               <!-- <div class="image" style="background-image:url('<?php echo $entity['image']; ?>');"></div> -->
               <div class="title"><?php echo $entity['name']; ?></div>
             </div>

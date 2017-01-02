@@ -42,11 +42,12 @@ Route::post('register','UserController@registerAdd')->middleware('guest');
 // Page
 Route::group(['middleware' => 'auth'], function () {
   Route::get('{slug}','EntityController@home');
+  Route::get('{slug}/group/{slug_product_group}','EntityController@home');
   // Route::get('{slug}/{action}','EntityController@home');
   Route::get('{slug}/delete','EntityController@home');
 
-  Route::get('{slug}/{modelAlias}/list','ListController@home');
-  Route::get('{slug}/{modelAlias}/add','FormController@home');
+  Route::get('{slug}/list/{modelAlias}','ListController@home');
+  Route::get('{slug}/add/{modelAlias}','FormController@home');
   Route::get('{slug}/{modelAlias}/edit/{param}','FormController@home');
   Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@home');
 });

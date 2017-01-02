@@ -16,25 +16,63 @@ class ListController extends Controller
   }
 
   public function listView() {
-    // dd($this->model->modelName);
+
+    // Get Order by
+    // if empty
+    // get default order by
+    // name ASC
 
     // switch ($this->model->modelName) {
     //   case 'Company':
     //     $this->companyListView();
     //     break;
-      
     // }
 
     // Get Companies filter by person id
-    $records = PersonHasEntity::where([
-      ['person_id','=',Session::get('Person.id')],
-      ['model','=',$this->model->modelName]
-    ])->get();
+    // $records = PersonHasEntity::where([
+    //   ['person_id','=',Session::get('Person.id')],
+    //   ['model','=',$this->model->modelName]
+    // ]);
+
+    $personHasEntity = new PersonHasEntity;
+
+    $records = $this->model
+               ->select($this->model->table.'.*')
+               ->join($personHasEntity->table, $personHasEntity->table.'.model_id', '=', $this->model->table.'.id')
+               ->where([
+                 [$personHasEntity->table.'.person_id','=',Session::get('Person.id')],
+                 [$personHasEntity->table.'.model','=',$this->model->modelName]
+               ])
+               ->orderBy($this->model->table.'.name', 'ASC')
+               ->get();
+
+    // $xxx = PersonHasEntity::where([
+    //   ['person_id','=',Session::get('Person.id')],
+    //   ['model','=',$this->model->modelName]
+    // ])
+    // ->with('onlineShops')
+    // ->orderBy('name', 'ASC')
+    // ->get();
+
+    // $records = PersonHasEntity::where([
+    //   ['person_id','=',Session::get('Person.id')],
+    //   ['model','=',$this->model->modelName]
+    // ])
+    // ->join('online_shops', 'person_has_entities.model_id', '=', 'online_shops.id')
+    // ->orderBy('online_shops.name', 'ASC')
+    // ->select('online_shops.*')
+    // ->get();
+
+    // $a = \DB::table('person_has_entities')
+    // ->join('online_shops', 'person_has_entities.model_id', '=', 'online_shops.id')
+    // ->orderBy('online_shops.name', 'ASC')
+    // ->get();
+
 
     $entities = array();
-    foreach ($records as $record) {
+    foreach ($records as $entity) {
       // Get Entity
-      $entity = $this->model->find($record->model_id);
+      // $entity = $this->model->find($record->model_id);
 
       // Get slug
       $slug = null;
@@ -60,26 +98,21 @@ class ListController extends Controller
         $image = $entity->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
       }
 
-      // loop data
-      for ($i=0; $i < 25; $i++) { 
-
-        $entities[] = array(
-          'id' => $entity->id,
-          'slug' => $slug,
-          'name' => $entity->name,
-          'description' => String::subString($entity->description,120),
-          'logo' => $logo,
-          'cover' => $cover,
-          'image' => $image,
-          // 'options' => array(
-          //   'delete' => array(
-          //     'name' => 'ลบ'
-          //     'url' => url($slug.'/delete')
-          //   )
-          // )
-        );
-
-      }
+      $entities[] = array(
+        'id' => $entity->id,
+        'slug' => $slug,
+        'name' => $entity->name,
+        // 'description' => String::subString($entity->description,120),
+        'logo' => $logo,
+        'cover' => $cover,
+        'image' => $image,
+        // 'options' => array(
+        //   'delete' => array(
+        //     'name' => 'ลบ'
+        //     'url' => url($slug.'/delete')
+        //   )
+        // )
+      );
 
     }
 
