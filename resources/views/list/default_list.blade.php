@@ -11,7 +11,7 @@
       </div>
 
       <!-- <div class="col-lg-6">
-        <a href="{{URL::to('entity/add')}}" class="button pull-right">เพิ่มสถานประกอบการหรือร้านค้า</a>
+        <a href="{{URL::to('list/add')}}" class="button pull-right">เพิ่มสถานประกอบการหรือร้านค้า</a>
       </div> -->
 
     </div>
@@ -25,15 +25,15 @@
 
     <div class="card-container row">
 
-      <?php if(!empty($entities)):?>
+      <?php if(!empty($lists)):?>
 
-        <?php foreach ($entities as $entity): ?>
+        <?php foreach ($lists as $list): ?>
 
         <div class="col-lg-3 col-md-6 col-sm-4 col-xs-12">
           <div class="card medium">
             <div class="image-tile" style="background-image: url('/images/xxx.jpg');">
-              <!-- <div class="image" style="background-image:url('<?php echo $entity['image']; ?>');"></div> -->
-              <div class="title"><?php echo $entity['name']; ?></div>
+              <!-- <div class="image" style="background-image:url('<?php echo $list['image']; ?>');"></div> -->
+              <div class="title"><?php echo $list['name']; ?></div>
             </div>
             <div class="button-group clear-fix">
               <div class="additional-option">
@@ -41,15 +41,15 @@
                 <div class="dot"></div>
                 <div class="dot"></div>
                 <div class="additional-option-content">
-                  <a href="{{URL::to('department/add/')}}/<?php echo $entity['id']; ?>">เพิ่มสาขา</a>
-                  <a href="{{URL::to('department/list')}}/<?php echo $entity['id']; ?>">แสดงแผนก</a>
-                  <a href="{{URL::to('department/add/')}}/<?php echo $entity['id']; ?>">เพิ่มแผนก</a>
-                  <a href="{{URL::to('job/add')}}/<?php echo $entity['id']; ?>">ลงประกาศงาน</a>
-                  <a href="{{URL::to('entity/report/<?php echo $entity['id']; ?>')}}">แสดงรายชื่อผู้สมัครงาน</a>
+                  <a href="{{URL::to('department/add/')}}/<?php echo $list['id']; ?>">เพิ่มสาขา</a>
+                  <a href="{{URL::to('department/list')}}/<?php echo $list['id']; ?>">แสดงแผนก</a>
+                  <a href="{{URL::to('department/add/')}}/<?php echo $list['id']; ?>">เพิ่มแผนก</a>
+                  <a href="{{URL::to('job/add')}}/<?php echo $list['id']; ?>">ลงประกาศงาน</a>
+                  <a href="{{URL::to('list/report/<?php echo $list['id']; ?>')}}">แสดงรายชื่อผู้สมัครงาน</a>
                 </div>
               </div>
-              <?php if(!empty($entity['slug'])): ?>
-                <a href="<?php echo $entity['slug']['url']; ?>">
+              <?php if(!empty($list['slug'])): ?>
+                <a href="<?php echo $list['slug']['url']; ?>">
                   <img src="/images/icons/home.png">
                 </a>
               <?php endif; ?>

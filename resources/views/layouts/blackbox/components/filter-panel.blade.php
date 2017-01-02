@@ -13,13 +13,13 @@
         <div class="line"></div>
         <ul class="nav-stack-item ">
           <li class="item">
-            <a class="active" href="http://lv5.local">ตัวอักษร A - Z ก - ฮ</a>
+            <a class="active" href="{{URL::to('list/')}}">ตัวอักษร A - Z ก - ฮ</a>
           </li>
           <li class="item">
-            <a href="http://lv5.local">ตัวอักษร Z - A ฮ - ก</a>
+            <a href="{{URL::to('list/')}}">ตัวอักษร Z - A ฮ - ก</a>
           </li>
           <li class="item">
-            <a href="http://lv5.local">เพิ่มล่าสุด</a>
+            <a href="{{URL::to('list/')}}">เพิ่มล่าสุด</a>
           </li>
         </ul>
       </div>

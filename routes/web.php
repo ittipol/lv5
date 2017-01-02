@@ -39,6 +39,25 @@ Route::post('login','UserController@auth');
 Route::get('register','UserController@registerForm')->middleware('guest');
 Route::post('register','UserController@registerAdd')->middleware('guest');
 
+// List Controller
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('list','ListController@listView');
+});
+
+// Form Controller
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('add','FormController@formAdd');
+  Route::post('add','OnlineShopController@add');
+  Route::get('edit','FormController@formEdit');
+  Route::post('edit','OnlineShopController@edit');
+  // Route::get('delete/{slug}','FormController@delete');
+});
+
+// Search Controller
+Route::group(['middleware' => 'auth'], function () {
+  Route::get('search/{keyword}','HomeController@search');
+});
+
 // Page
 Route::group(['middleware' => 'auth'], function () {
   Route::get('{slug}','EntityController@home');
@@ -50,21 +69,6 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('{slug}/add/{modelAlias}','FormController@home');
   Route::get('{slug}/{modelAlias}/edit/{param}','FormController@home');
   Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@home');
-});
-
-// Form Controller
-Route::group(['middleware' => 'auth'], function () {
-
-});
-
-// List Controller
-Route::group(['middleware' => 'auth'], function () {
-  Route::get('{modelAlias}/list','ListController@listView');
-});
-
-// Search Controller
-Route::group(['middleware' => 'auth'], function () {
-  Route::get('search/{keyword}','HomeController@search');
 });
 
 // Shop

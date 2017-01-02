@@ -82,4 +82,32 @@ class Service
 
   }
 
+  public static function parseQueryString($data) {
+
+    $result = array();
+
+    foreach ($data as $key => $value) {
+      $_data = explode(',', $value);
+
+      foreach ($_data as $_key => $_value) {
+        $__data = explode(':', $_value);
+
+        if(empty($__data[0])){
+          continue;
+        } 
+
+        if(!empty($__data[1])){
+          $result[$key][$__data[0]] = $__data[1];
+        }else{
+          $result[$key][] = $__data[0];
+        }
+        
+      }
+
+    }
+
+    return $result;
+
+  }
+
 }

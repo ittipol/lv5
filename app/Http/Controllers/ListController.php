@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PersonHasEntity;
 use App\library\string;
+use App\library\service;
+use Request;
 use Session;
+use Schema;
 
 class ListController extends Controller
 {
@@ -13,26 +16,77 @@ class ListController extends Controller
 
   public function __construct(array $attributes = []) { 
     parent::__construct($attributes);
+
+    // $this->query = Service::parseQueryString(Request::query());
+    $this->query = Request::query();
+
+    if($this->query['q']) {
+      $this->model = Service::loadModel(service::generateModelByModelAlias($this->query['q']));
+    }
+
+    if(empty($this->model)) {
+
+    }
+
   }
 
   public function listView() {
 
-    // Get Order by
-    // if empty
-    // get default order by
-    // name ASC
+    // URL
+    // list?q=company&filter=type:value,type1:value1&sort=name:asc
+    $url = Request::url();
+    // $url .= '?q='.$this->query['q'];
+    dd($this->query['q']);
 
-    // switch ($this->model->modelName) {
-    //   case 'Company':
-    //     $this->companyListView();
-    //     break;
-    // }
+    foreach($qs as $key => $value){
+      $qs[$key] = sprintf('%s=%s',$key, urlencode($value));
+    }
+    $url = sprintf('%s?%s', $url, implode('&', $qs));
 
-    // Get Companies filter by person id
-    // $records = PersonHasEntity::where([
-    //   ['person_id','=',Session::get('Person.id')],
-    //   ['model','=',$this->model->modelName]
-    // ]);
+    $sortingOptions = array(
+      'sort' => array(
+        'name' => 'เรียง',
+        'options' => array(
+          array(
+            'name' => 'ตัวอักษร A - Z ก - ฮ',
+            'sort' => 'name:asc',
+          ),
+          array(
+            'name' => 'ตัวอักษร Z - A ฮ - ก',
+            'sort' => 'name:desc',
+          ),
+          array(
+            'name' => 'วันที่เก่าที่สุดไปหาใหม่ที่สุด',
+            'sort' => 'created:asc',
+          ),
+          array(
+            'name' => 'วันที่ใหม่ที่สุดไปหาเก่าที่สุด',
+            'sort' => 'created:desc',
+          )
+        )
+      ),
+      'filter' => array(
+        'name' => 'กรอง',
+        'options' => array()
+      )
+    );
+
+    $sort = 'name';
+    $order = 'ASC';
+    if(!empty($this->query['sort'])){
+      $parts = explode(':', $this->query['sort']);
+
+      if(!empty($parts[1]) && strtolower($parts[1]) == 'desc'){
+        $order = 'DESC';
+      }
+
+      if(Schema::hasColumn($this->model->table, $parts[0])) {
+        $sort = $parts[0];
+      }
+
+    }
+
+    // if(!empty($this->query['filter'])){}
 
     $personHasEntity = new PersonHasEntity;
 
@@ -43,16 +97,8 @@ class ListController extends Controller
                  [$personHasEntity->table.'.person_id','=',Session::get('Person.id')],
                  [$personHasEntity->table.'.model','=',$this->model->modelName]
                ])
-               ->orderBy($this->model->table.'.name', 'ASC')
+               ->orderBy($this->model->table.'.'.$sort, $order)
                ->get();
-
-    // $xxx = PersonHasEntity::where([
-    //   ['person_id','=',Session::get('Person.id')],
-    //   ['model','=',$this->model->modelName]
-    // ])
-    // ->with('onlineShops')
-    // ->orderBy('name', 'ASC')
-    // ->get();
 
     // $records = PersonHasEntity::where([
     //   ['person_id','=',Session::get('Person.id')],
@@ -69,40 +115,40 @@ class ListController extends Controller
     // ->get();
 
 
-    $entities = array();
-    foreach ($records as $entity) {
+    $lists = array();
+    foreach ($records as $record) {
       // Get Entity
-      // $entity = $this->model->find($record->model_id);
+      // $record = $this->model->find($record->model_id);
 
       // Get slug
       $slug = null;
-      if(!empty($entity->checkRelatedDataExist('Slug'))) {
+      if(!empty($record->checkRelatedDataExist('Slug'))) {
         $slug = array(
-          'name' => $entity->getRalatedDataByModelName('Slug',true)->name,
-          'url' => url($entity->getRalatedDataByModelName('Slug',true)->name)
+          'name' => $record->getRalatedDataByModelName('Slug',true)->name,
+          'url' => url($record->getRalatedDataByModelName('Slug',true)->name)
         );
       }
 
       $logo = '';
-      if(!empty($entity->checkRelatedDataExist('Image',[['type','=','logo']]))) {
-        $logo = $entity->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
+      if(!empty($record->checkRelatedDataExist('Image',[['type','=','logo']]))) {
+        $logo = $record->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
       }
 
       $cover = '';
-      if(!empty($entity->checkRelatedDataExist('Image',[['type','=','cover']]))) {
-        $cover = $entity->getRalatedDataByModelName('Image',true,[['type','=','cover']])->getImageUrl();
+      if(!empty($record->checkRelatedDataExist('Image',[['type','=','cover']]))) {
+        $cover = $record->getRalatedDataByModelName('Image',true,[['type','=','cover']])->getImageUrl();
       }
 
       $image = '';
-      if(!empty($entity->checkRelatedDataExist('Image',[['type','=','images']]))) {
-        $image = $entity->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
+      if(!empty($record->checkRelatedDataExist('Image',[['type','=','images']]))) {
+        $image = $record->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
       }
 
-      $entities[] = array(
-        'id' => $entity->id,
+      $lists[] = array(
+        'id' => $record->id,
         'slug' => $slug,
-        'name' => $entity->name,
-        // 'description' => String::subString($entity->description,120),
+        'name' => $record->name,
+        // 'description' => String::subString($record->description,120),
         'logo' => $logo,
         'cover' => $cover,
         'image' => $image,
@@ -142,11 +188,15 @@ class ListController extends Controller
     // )
 
     $this->data = array(
-      'entities' => $entities,
+      'lists' => $lists,
       'title' => $this->getTitle($this->model->modelName)
     );
 
     return $this->view('list.default_list');
+
+  }
+
+  private function getSortingOption($modelName) {
 
   }
 

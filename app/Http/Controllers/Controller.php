@@ -11,13 +11,12 @@ use App\library\token;
 use App\library\service;
 use Session;
 use Route;
+use Request;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    // protected $header = true;
-    // protected $footer = true;
     protected $slug;
     protected $slugModel;
     protected $model;
@@ -25,17 +24,18 @@ class Controller extends BaseController
     protected $pagePermission = false;
     protected $actionBarText;
     protected $data = array();
-    protected $formData = array();
+    // protected $formData = array();
     protected $ident;
     protected $formToken;
     protected $param;
+    protected $query;
 
     public function __construct(array $attributes = []) { 
 
       $this->middleware(function ($request, $next) {
 
-        $this->ident = Token::generatePageIdentity(session()->get('Person.id'));
-        $this->formToken = Token::generateformToken(session()->get('Person.id'));
+        // $this->ident = Token::generatePageIdentity(session()->get('Person.id'));
+        // $this->formToken = Token::generateformToken(session()->get('Person.id'));
 
         // Get Param Form URL
         $this->param = Route::current()->parameters();
@@ -63,17 +63,17 @@ class Controller extends BaseController
 
         }
 
-        if(!empty($this->param['modelAlias'])) {
+        // if(!empty($this->param['modelAlias'])) {
 
-          $model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
+        //   $model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
 
-          if(empty($model)) {
-            return response()->view('messages.message');
-          }
+        //   if(empty($model)) {
+        //     return response()->view('messages.message');
+        //   }
 
-          $this->modelAlias = $this->param['modelAlias'];
-          $this->model = $model;
-        }
+        //   $this->modelAlias = $this->param['modelAlias'];
+        //   $this->model = $model;
+        // }
 
         return $next($request);
       });
@@ -81,14 +81,11 @@ class Controller extends BaseController
     }
 
     protected function view($view) {
-
-    // 	$this->data['header'] = $this->header;
-		  // $this->data['footer'] = $this->footer;   
       $this->data['actionBarText'] = $this->actionBarText;   
       $this->data['pagePermission'] = $this->pagePermission;  
       $this->data['__token'] = $this->formToken;
 
-      $this->data = array_merge($this->data,$this->formData);
+      // $this->data = array_merge($this->data,$this->formData);
 
     	return view($view,$this->data);
     }
