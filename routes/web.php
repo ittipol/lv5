@@ -60,15 +60,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Page
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('{slug}','EntityController@home');
-  Route::get('{slug}/group/{slug_product_group}','EntityController@home');
-  // Route::get('{slug}/{action}','EntityController@home');
-  Route::get('{slug}/delete','EntityController@home');
+  Route::get('{slug}','EntityController@index');
+  Route::get('{slug}/group/{slug_product_group}','EntityController@index');
+  // Route::get('{slug}/{action}','EntityController@index');
+  Route::get('{slug}/delete','EntityController@index');
 
-  Route::get('{slug}/list/{modelAlias}','ListController@home');
-  Route::get('{slug}/add/{modelAlias}','FormController@home');
-  Route::get('{slug}/{modelAlias}/edit/{param}','FormController@home');
-  Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@home');
+  Route::get('{slug}/list/{modelAlias}','ListController@index');
+  Route::get('{slug}/add/{modelAlias}','FormController@index');
+  Route::get('{slug}/{modelAlias}/edit/{param}','FormController@index');
+  Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@index');
 });
 
 // Shop

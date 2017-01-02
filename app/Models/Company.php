@@ -10,7 +10,7 @@ use Session;
 class Company extends Model
 {
   public $table = 'companies';
-  protected $fillable = ['name','description','business_entity_id','business_type','ip_address','created_by'];
+  protected $fillable = ['name','description','brand_story','business_entity_id','business_type','ip_address','created_by'];
   public $timestamps  = false;
 
   // sorting

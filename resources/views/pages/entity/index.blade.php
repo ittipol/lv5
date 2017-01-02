@@ -2,7 +2,7 @@
 @section('content')
   <div class="entity-panel">
 
-    <div class="entity-header" style="background-image: url('/images/xxx.jpg');">
+    <div class="entity-header" style="background-image: url('<?php echo $cover; ?>');">
         <div class="contain-fluid">
           <div class="entity-header-overlay">
             <div class="row">

@@ -48,6 +48,7 @@ Tagging.prototype.removeHiddenField = function(id) {
 Tagging.prototype.crateTagList = function(){
 	let span = document.createElement('span');
 	span.setAttribute('id',this.code+'_tag_list');
+	span.style.display = 'inline-block';
 	
 	document.getElementById(this.panel).appendChild(span);
 }
@@ -189,7 +190,7 @@ Tagging.prototype.calInputFielsWidth = function(){
 	let inputFieldWidth = $('#'+this.panel).width() - (this.tagChipsWidth % $('#'+this.panel).width());
 
 	if(inputFieldWidth > 120){
-		$('#'+this.code+'_tag_input').css('width',inputFieldWidth);
+		// $('#'+this.code+'_tag_input').css('width',inputFieldWidth);
 		document.getElementById(this.code+'_tag_input').style.width = inputFieldWidth+'px';
 	}else{
 		document.getElementById(this.code+'_tag_input').style.width = $('#'+this.panel).width()+'px';

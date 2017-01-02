@@ -35,7 +35,7 @@ class Controller extends BaseController
       $this->middleware(function ($request, $next) {
 
         // $this->ident = Token::generatePageIdentity(session()->get('Person.id'));
-        // $this->formToken = Token::generateformToken(session()->get('Person.id'));
+        $this->formToken = Token::generateformToken(session()->get('Person.id'));
 
         // Get Param Form URL
         $this->param = Route::current()->parameters();

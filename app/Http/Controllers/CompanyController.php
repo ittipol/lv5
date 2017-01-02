@@ -19,7 +19,7 @@ use Session;
 class CompanyController extends Controller
 {
     public function __construct(array $attributes = []) { 
-    // parent::__construct();
+    parent::__construct();
 
     // check don't have permission in this page
   }

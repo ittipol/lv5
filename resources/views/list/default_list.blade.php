@@ -31,8 +31,7 @@
 
         <div class="col-lg-3 col-md-6 col-sm-4 col-xs-12">
           <div class="card medium">
-            <div class="image-tile" style="background-image: url('/images/xxx.jpg');">
-              <!-- <div class="image" style="background-image:url('<?php echo $list['image']; ?>');"></div> -->
+            <div class="image-tile" style="background-image: url('<?php echo $list['cover']; ?>');">
               <div class="title"><?php echo $list['name']; ?></div>
             </div>
             <div class="button-group clear-fix">

@@ -16,7 +16,7 @@ class EntityController extends Controller
     // check don't have permission in this page
   }
 
-  public function home() {
+  public function index() {
 
     $logo = '';
     if(!empty($this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']]))) {
