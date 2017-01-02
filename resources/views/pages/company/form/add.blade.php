@@ -7,7 +7,7 @@
     <div class="container-header">
       <div class="col-lg-6">
         <div class="title">
-          เพิ่มสถานประกอบการหรือร้านค้า
+          เพิ่มบริษัทหรือร้านค้าของคุณ
         </div>
       </div>
     </div>
@@ -39,22 +39,22 @@
   <div class="form-section">
 
     <div class="title">
-      ข้อมูลร้านค้าหรือสถานประกอบการ
+      รายละเอียดบริษัทหรือร้านค้าของคุณ
     </div>
 
     <div class="form-section-inner">
 
       <div class="form-row">
         <?php 
-          echo Form::label('name', 'ชื่อร้านค้าหรือสถานประกอบการ', array(
+          echo Form::label('name', 'ชื่อบริษัทหรือร้านค้าของคุณ', array(
             'class' => 'required'
           ));
           echo Form::text('name', null, array(
-            'placeholder' => 'ชื่อร้านค้าหรือสถานประกอบการ',
+            'placeholder' => 'ชื่อบริษัทหรือร้านค้าของคุณ',
             'autocomplete' => 'off'
           ));
         ?>
-        <p class="notice info">ชื่อร้านค้าหรือสถานประกอบการจะมีผลโดยตรงต่อการค้นหา</p>
+        <p class="notice info">ชื่อบริษัทหรือร้านค้าของคุณจะมีผลโดยตรงต่อการค้นหา</p>
       </div>
 
       <div class="form-row">
@@ -78,8 +78,17 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('description', 'ข้อมูลร้านค้าหรือสถานประกอบการ');
+          echo Form::label('description', 'ข้อมูลบริษัทหรือร้านค้าของคุณ');
           echo Form::textarea('description', null, array(
+            'class' => 'ckeditor'
+          ));
+        ?>
+      </div>
+
+      <div class="form-row">
+        <?php 
+          echo Form::label('brand_story', 'Brand Story');
+          echo Form::textarea('brand_story', null, array(
             'class' => 'ckeditor'
           ));
         ?>
@@ -99,14 +108,21 @@
           <div class="sub-form-inner">
 
             <div class="form-row">
-              <?php echo Form::label('', 'รูปภาพเครื่องหมายร้านค้าหรือสถานประกอบการ'); ?>
+              <?php echo Form::label('', 'รูปภาพเครื่องหมายบริษัทหรือร้านค้าของคุณ'); ?>
               <div id="_image_logo"></div>
             </div>
 
             <div class="line"></div>
 
             <div class="form-row">
-              <?php echo Form::label('', 'รูปภาพร้านค้าหรือสถานประกอบการ (สูงสุด 5 รูป)'); ?>
+              <?php echo Form::label('', 'รูปภาพหน้าปก'); ?>
+              <div id="_image_cover"></div>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="form-row">
+              <?php echo Form::label('', 'รูปภาพบริษัทหรือร้านค้าของคุณ (สูงสุด 5 รูป)'); ?>
               <div id="_image_group"></div>
             </div>
 
@@ -228,7 +244,7 @@
   <div class="form-section">
 
     <div class="title">
-      ที่อยู่ร้านค้าหรือสถานประกอบการ
+      ที่อยู่บริษัทหรือร้านค้าของคุณ
     </div>
 
     <div class="form-section-inner">
@@ -276,7 +292,7 @@
       </div>
 
       <div class="form-row">
-        <?php echo Form::label('', 'ระบุตำแหน่งร้านค้าหรือสถานประกอบการบนแผนที่'); ?>
+        <?php echo Form::label('', 'ระบุตำแหน่งบริษัทหรือร้านค้าของคุณบนแผนที่'); ?>
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map"></div>
       </div>
@@ -295,10 +311,10 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('_tags', 'แท๊กที่เกี่ยวข้องกับร้านค้าหรือสถานประกอบการของคุณ');
+          echo Form::label('_tags', 'แท๊กที่เกี่ยวข้องกับบริษัทหรือร้านค้าของคุณของคุณ');
         ?>
         <div id="_tags" class="tag"></div>
-        <p class="notice info">แท็กจะช่วยให้การค้นหาร้านค้าหรือสถานประกอบการของคุณง่ายขึ้น</p>
+        <p class="notice info">แท็กจะช่วยให้การค้นหาบริษัทหรือร้านค้าของคุณของคุณง่ายขึ้น</p>
       </div>
 
     </div>
@@ -319,7 +335,7 @@
           echo Form::checkbox('wiki', 1, null, array(
             'id' => 'wiki'
           ));
-          echo Form::label('wiki', 'อนุญาตให้นำข้อมูลร้านค้าหรือสถานประกอบการของคุณลงใน Wiki ชลบุรี');
+          echo Form::label('wiki', 'อนุญาตให้นำข้อมูลบริษัทหรือร้านค้าของคุณของคุณลงใน Wiki ชลบุรี');
         ?>
         <p class="notice info">Wiki จะเป็นระบบในการจัดเก็บข้อมูลต่างๆ ใยชลบุรี และจะทำให้ง่ายต่อการค้นหาและเข้าถึง</p>
       </div>
@@ -346,6 +362,9 @@
 
     const logo = new Images('_image_logo','logo',1,'default');
     logo.load();
+
+    const cover = new Images('_image_cover','cover',1,'default');
+    cover.load();
 
     const images = new Images('_image_group','images',5,'default');
     images.load();

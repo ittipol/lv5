@@ -57,7 +57,7 @@
             <ul class="submenu">
               <li class="submenu-item">
                 <a href="{{URL::to('online-shop/add')}}">ร้านค้าออนไลน์</a>
-                <a href="{{URL::to('company/add')}}">บริษัทหรือร้านค้าของคุณของคุณ</a>
+                <a href="{{URL::to('company/add')}}">บริษัทหรือร้านค้าของคุณ</a>
               </li>
             </ul>
           </li>

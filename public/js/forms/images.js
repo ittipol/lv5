@@ -176,9 +176,8 @@ Images.prototype.uploadImage = function(parent,input,data) {
   	}else{
 
   		if(typeof response.message == 'object') {
-			  NotificationBottom.type = response.message.type;
-				NotificationBottom.title = response.message.title;
-				NotificationBottom.load();
+				const notificationBottom = new NotificationBottom(response.message.title,'',response.message.type);
+				notificationBottom.load();
   		}
 
   	}

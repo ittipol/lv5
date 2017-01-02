@@ -31,6 +31,14 @@ select {
 	margin: 20px 0;
 }
 
+.form-row input[type="checkbox"] {
+	vertical-align: top;
+}
+
+.form-row input[type="checkbox"] + label {
+	width: 90%;
+}
+
 .form-section .form-section-inner {
 	/*border-left: 5px solid #1976D2;*/
 }
@@ -249,6 +257,11 @@ select[name^="OfficeHour"] {
 
 select[name^="OfficeHour"].disabled {
 	color: #aaaaaa;
+}
+
+.office-hour span {
+	width: 60px;
+	display: inline-block;
 }
 
 .office-status {

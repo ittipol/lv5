@@ -3,25 +3,18 @@
 <div class="login-form">
 	<div class="login-form-inner">
 		<h2><a class="logo" href="{{URL::to('/')}}">CHONBURI SQUARE</a></h2>
-		<h3>เข้าสู่ระบบ</h3>
+		<!-- <h3>เข้าสู่ระบบ</h3> -->
 
 		<?php if(!empty($errors->all())): ?>
-			<div class="form-error-messages">
-				<div class="form-error-messages-inner">
-					<h3>เกิดข้อผิดพลาด!!!</h3>
-						<ul>
-						<?php foreach ($errors->all() as $message) { ?>
-							<li class="error-messages"><?php echo $message; ?></li>
-						<?php	} ?>
-					</ul>
-				</div>
-			</div>
+			<?php foreach ($errors->all() as $message) { ?>
+				<h4 class="error-message"><?php echo $message; ?></h4>
+			<?php	} ?>
 		<?php endif; ?>
 
 		<div class="login-form-main">
 
 			<?php
-				echo Form::open(['url' => 'login', 'method' => 'post', 'id' => 'login_form']);
+				echo Form::open(['method' => 'post', 'id' => 'login_form']);
 			?>
 
 			<div class="form-row">
@@ -58,6 +51,17 @@
 					));
 				?>
 			</div>
+
+			<div>
+				<a href="">ลืมรหัสผ่าน</a>
+			</div>
+
+			<div class="line space-top-bottom-10"></div>
+
+			<a href="#" class="fb-button">
+				<img src="/images/fb-logo.png">
+				เข้าสู่ระบบด้วย Facebook
+			</a>
 
 			<div class="line space-top-bottom-10"></div>
 

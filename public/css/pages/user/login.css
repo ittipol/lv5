@@ -20,8 +20,12 @@ input[type="password"] {
 	padding: 20px;
 }
 
+h2 {
+	text-align: center;
+}
+
 .login-form .logo {
-	color: #1976D2;
+	color: #0D47A1;
 }
 
 .login-form-header {
@@ -40,4 +44,15 @@ input[type="password"] {
 
 .button {
 	padding: 10px 30px;
+}
+
+.fb-button {
+	color: #ffffff !important;
+	text-align: center;
+	background-color: rgb(58,91,155);
+	display: block;
+}
+
+.fb-button img {
+	width: 50px;
 }

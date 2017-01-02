@@ -31,8 +31,10 @@ class UserController extends Controller
 
   public function login() {
 
-    $this->header = false;
-    $this->footer = false;
+    $this->data = array(
+      'header' => false,
+      'footer' => false,
+    );
 
     if(Auth::check()){
       return redirect('home');
@@ -59,10 +61,10 @@ class UserController extends Controller
       $message->loginSuccess();
       return Redirect::intended('home');
     }else{
-      $message = new Message;
-      $message->loginFail();
-      // return Redirect::back()->withErrors(['อีเมล  หรือ รหัสผ่านไม่ถูก']);
-      return Redirect::back();
+      // $message = new Message;
+      // $message->loginFail();
+      return Redirect::back()->withErrors(['อีเมล  หรือ รหัสผ่านไม่ถูก']);
+      // return Redirect::back();
     }
 
   }
