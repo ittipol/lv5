@@ -208,14 +208,35 @@ class ListController extends Controller
 
   }
 
-  private function generateSorting($sortingFields) {
+  private function generateSorting($sortingFields,$selected = true) {
     $options = array();
 
     foreach ($sortingFields as $sortingField) {
-      dd($sortingField);
+
+      $name = $this->getsortiongOptionName($sortingField,'asc');
+      // $id = 
+
+      $options[] = array(
+        'name' => 'ตัวอักษร A - Z ก - ฮ',
+        'value' => 'name:asc',
+        'id' => $this->modelAlias.':name:asc',
+        'checked' => true
+      );
+
+      $options[] = array(
+        'name' => 'ตัวอักษร A - Z ก - ฮ',
+        'value' => 'name:asc',
+        'id' => $this->modelAlias.':name:asc',
+        'checked' => true
+      );
+
     }
 
     return $options;
+  }
+
+  private function getsortiongOptionName($field, $order) {
+
   }
 
   // private function getOption($modelName) {
