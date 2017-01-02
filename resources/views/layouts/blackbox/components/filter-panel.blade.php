@@ -5,23 +5,69 @@
   </label>
 </div>
 
+<div class="filter-panel nano">
+  <div class="nano-content">
+    <div class="filter-panel-inner">
+      <?php
+        echo Form::open(['method' => 'get','id' => 'sorting_form']);
+      ?>
+      <?php
+        echo Form::hidden('q', 'company');
+      ?>
+      <?php foreach ($sortingOptions as $value): ?>
+        <?php if(!empty($value['options'])): ?>
+          <h5><?php echo $value['title']; ?></h5>
+          <div class="line"></div>
+          <ul class="nav-stack-item ">
+            <?php foreach ($value['options'] as $option): ?>
 
-  <div class="filter-panel nano">
-    <div class="nano-content">
-      <div class="filter-panel-inner">
-        <h5>เรียง</h5>
-        <div class="line"></div>
-        <ul class="nav-stack-item ">
-          <li class="item">
-            <a class="active" href="{{URL::to('list/')}}">ตัวอักษร A - Z ก - ฮ</a>
-          </li>
-          <li class="item">
-            <a href="{{URL::to('list/')}}">ตัวอักษร Z - A ฮ - ก</a>
-          </li>
-          <li class="item">
-            <a href="{{URL::to('list/')}}">เพิ่มล่าสุด</a>
-          </li>
-        </ul>
-      </div>
+              <?php $checked = false; ?>
+              <?php if(!empty($option['checked']) && $option['checked']): ?>
+                <?php $checked = true; ?>
+              <?php endif; ?>
+
+              <li class="item">
+                <label <?php if($checked) echo 'class="checked"'; ?> for="<?php echo $option['id']; ?>">
+                  <span><?php echo $option['name']; ?></span>
+                  <input type="<?php echo $value['type']; ?>" id="<?php echo $option['id']; ?>" <?php if($checked) echo 'checked'; ?> class="sorting-option-radio" value="<?php echo $option['value']; ?>" name="sort" />
+                </label>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        <?php endif; ?>
+      <?php endforeach; ?>
+      <?php
+        echo Form::close();
+      ?>
     </div>
   </div>
+</div>
+
+<script type="text/javascript">
+
+class Filter {
+  constructor() {
+    // this.filterPanelOriginalTop;
+    // this.filterPanelOriginalHeight;
+    // this.filterPanelExtendHeight;
+  }
+
+  load() {
+    this.bind();
+  }
+
+  bind() {
+    $('.filter-panel .sorting-option-radio').on('click',function(){
+      if($(this).is(':checked')) {
+        $('#sorting_form').submit();
+      }
+    });
+  }
+}
+
+$(document).ready(function(){
+  const filter = new Filter;
+  filter.load();
+});
+
+</script>

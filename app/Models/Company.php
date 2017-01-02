@@ -13,6 +13,9 @@ class Company extends Model
   protected $fillable = ['name','description','business_entity_id','business_type','ip_address','created_by'];
   public $timestamps  = false;
 
+  // sorting
+  public $sortingFields = array('name','created');
+
   // Allowed Data
   public $allowedRelatedModel = array('Address','Tagging','OfficeHour','Contact');
   public $allowedDir = array(

@@ -30,7 +30,7 @@
   position: relative;
 }
 
-.filter-panel ul > li a { 
+.filter-panel ul > li label { 
 	position: relative;
   padding: 14px 0 14px 20px;
   line-height: 22px;
@@ -42,12 +42,12 @@
   transition: all .3s ease-in-out;
 }
 
-.filter-panel ul > li a:hover,
-.filter-panel ul > li a.active { 
+.filter-panel ul > li label:hover,
+.filter-panel ul > li label.checked { 
   background-color: #eaeaea;
 }
 
-.filter-panel ul > li a.active::before {
+.filter-panel ul > li label.checked::before {
   content: "";
   position: absolute;
   top: 0;
@@ -57,7 +57,11 @@
   background-color: #304FFE;
 }
 
-.filter-panel ul.submenu > li > a { 
+.filter-panel ul > li label > input { 
+  display: none;
+}
+
+.filter-panel ul.submenu > li > label { 
 	position: relative;
   padding: 8px 0 8px 40px;
   font-size: 13px;
@@ -116,11 +120,11 @@
     color: #ffffff;
   }
 
-  .filter-panel ul > li a { 
+  .filter-panel ul > li label { 
     color: #ffffff;
   }
 
-  .filter-panel ul.submenu > li > a { 
+  .filter-panel ul.submenu > li > label { 
     color: #ffffff;
   }
 
@@ -128,8 +132,8 @@
     background-color: #ffffff;
   }
 
-  .filter-panel ul > li a:hover,
-  .filter-panel ul > li a.active { 
+  .filter-panel ul > li label:hover,
+  .filter-panel ul > li label.active { 
     background-color: #3D5AFE;
   }
 

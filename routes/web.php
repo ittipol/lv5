@@ -41,7 +41,7 @@ Route::post('register','UserController@registerAdd')->middleware('guest');
 
 // List Controller
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('list','ListController@listView');
+  Route::get('list','ListController@index');
 });
 
 // Form Controller
@@ -55,7 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Search Controller
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('search/{keyword}','HomeController@search');
+  Route::get('search/{keyword}','SearchController@search');
 });
 
 // Page

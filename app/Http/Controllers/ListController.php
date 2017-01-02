@@ -8,6 +8,7 @@ use App\library\service;
 use Request;
 use Session;
 use Schema;
+use Input;
 
 class ListController extends Controller
 {
@@ -20,8 +21,9 @@ class ListController extends Controller
     // $this->query = Service::parseQueryString(Request::query());
     $this->query = Request::query();
 
-    if($this->query['q']) {
+    if(!empty($this->query['q'])) {
       $this->model = Service::loadModel(service::generateModelByModelAlias($this->query['q']));
+      $this->modelAlias = $this->query['q'];
     }
 
     if(empty($this->model)) {
@@ -30,43 +32,52 @@ class ListController extends Controller
 
   }
 
-  public function listView() {
-
+  public function index() {
+// dd(Input::all());
     // URL
     // list?q=company&filter=type:value,type1:value1&sort=name:asc
     $url = Request::url();
     // $url .= '?q='.$this->query['q'];
-    dd($this->query['q']);
+    // dd($this->query['q']);
 
-    foreach($qs as $key => $value){
-      $qs[$key] = sprintf('%s=%s',$key, urlencode($value));
-    }
-    $url = sprintf('%s?%s', $url, implode('&', $qs));
+    // foreach($qs as $key => $value){
+    //   $qs[$key] = sprintf('%s=%s',$key, urlencode($value));
+    // }
+    // $url = sprintf('%s?%s', $url, implode('&', $qs));
+
 
     $sortingOptions = array(
       'sort' => array(
-        'name' => 'เรียง',
-        'options' => array(
-          array(
-            'name' => 'ตัวอักษร A - Z ก - ฮ',
-            'sort' => 'name:asc',
-          ),
-          array(
-            'name' => 'ตัวอักษร Z - A ฮ - ก',
-            'sort' => 'name:desc',
-          ),
-          array(
-            'name' => 'วันที่เก่าที่สุดไปหาใหม่ที่สุด',
-            'sort' => 'created:asc',
-          ),
-          array(
-            'name' => 'วันที่ใหม่ที่สุดไปหาเก่าที่สุด',
-            'sort' => 'created:desc',
-          )
-        )
+        'title' => 'เรียง',
+        'type' => 'radio',
+        // 'options' => array(
+        //   array(
+        //     'name' => 'ตัวอักษร A - Z ก - ฮ',
+        //     'value' => 'name:asc',
+        //     'id' => $this->modelAlias.':name:asc',
+        //     'checked' => true
+        //   ),
+        //   array(
+        //     'name' => 'ตัวอักษร Z - A ฮ - ก',
+        //     'value' => 'name:desc',
+        //     'id' => $this->modelAlias.':name:desc'
+        //   ),
+        //   array(
+        //     'name' => 'วันที่เก่าที่สุดไปหาใหม่ที่สุด',
+        //     'value' => 'created:asc',
+        //     'id' => $this->modelAlias.':created:asc'
+        //   ),
+        //   array(
+        //     'name' => 'วันที่ใหม่ที่สุดไปหาเก่าที่สุด',
+        //     'value' => 'created:desc',
+        //     'id' => $this->modelAlias.':created:desc'
+        //   )
+        // )
+        'options' => $this->generateSorting($this->model->sortingFields)
       ),
       'filter' => array(
-        'name' => 'กรอง',
+        'title' => 'กรอง',
+        'type' => 'checkbox',
         'options' => array()
       )
     );
@@ -189,20 +200,27 @@ class ListController extends Controller
 
     $this->data = array(
       'lists' => $lists,
-      'title' => $this->getTitle($this->model->modelName)
+      'title' => $this->getTitle($this->model->modelName),
+      'sortingOptions' => $sortingOptions
     );
 
     return $this->view('list.default_list');
 
   }
 
-  private function getSortingOption($modelName) {
+  private function generateSorting($sortingFields) {
+    $options = array();
 
+    foreach ($sortingFields as $sortingField) {
+      dd($sortingField);
+    }
+
+    return $options;
   }
 
-  private function getOption($modelName) {
+  // private function getOption($modelName) {
 
-  }
+  // }
 
   // private function companyListView() {
 

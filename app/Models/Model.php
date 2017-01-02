@@ -28,6 +28,8 @@ class Model extends _Model
   public $relatedData;
   public $temporaryData;
 
+  public $sortingFields;
+
   public $allowedRelatedModel = false;
   public $allowedDir = false;
   public $allowedImage = false;
