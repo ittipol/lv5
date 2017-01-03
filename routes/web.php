@@ -13,7 +13,7 @@
 
 Route::get('logout',function(){
   Auth::logout();
-  // Session::flush();
+  Session::flush();
   return redirect('/');
 });
 
@@ -59,8 +59,10 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // Page
+
+Route::get('{slug}','EntityController@index');
+
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('{slug}','EntityController@index');
   Route::get('{slug}/group/{slug_product_group}','EntityController@index');
   // Route::get('{slug}/{action}','EntityController@index');
   Route::get('{slug}/delete','EntityController@index');

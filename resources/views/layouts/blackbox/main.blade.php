@@ -21,9 +21,6 @@
 
       constructor() {
         this.mainNavWidth = 280;
-        // this.filterPanelOriginalTop;
-        // this.filterPanelOriginalHeight;
-        // this.filterPanelExtendHeight;
       }
 
       load(){
@@ -50,22 +47,11 @@
             height: h
           });
 
-          // $('.filter-panel').css({
-          //   height: h - 60
-          // });
-
           if(w > 992) {
             if($('#main_nav_trigger').is(':checked')) {
               $('#main_nav_trigger').trigger('click');
             }
 
-            // if($('#filter_panel_trigger').is(':checked')) {
-            //   $('#filter_panel_trigger').trigger('click');
-            // }
-
-            // $('.filter-panel').css({
-            //   height: h - $('.filter-panel').offset().top
-            // });
           }
 
         });
@@ -95,10 +81,6 @@
           if($('#main_nav_trigger').is(':checked')) {
             $('#main_nav_trigger').trigger('click');
           }
-
-          // if($('#filter_panel_trigger').is(':checked')) {
-          //   $('#filter_panel_trigger').trigger('click');
-          // }
         });
 
         $('.action-bar-overlay').on('click',function(){
@@ -106,41 +88,6 @@
             $('#main_nav_trigger').trigger('click');
           }
         });
-
-        // $('#filter_panel_trigger').on('click',function(){
-        //   if($(this).is(':checked')) {
-        //     $('.filter-panel').addClass('is-filter-panel-open');
-        //     $('.main-panel-overlay').addClass('isvisible');
-        //   }else{
-        //     $('.filter-panel').removeClass('is-filter-panel-open');
-        //     $('.main-panel-overlay').removeClass('isvisible');
-        //   }
-        // }); 
-
-        // $(".nano").on("update", function(event, vals){ 
-        //    // console.log("pos=" + vals.position + ", direction=" + vals.direction + "\n" )
-
-        //    if(vals.position > _this.filterPanelOriginalTop) {
-        //     $('.filter-panel').css({
-        //       top: vals.position,
-        //       height: _this.filterPanelExtendHeight
-        //     });
-        //    }else{
-        //     $('.filter-panel').css({
-        //       top: _this.filterPanelOriginalTop,
-        //       height: _this.filterPanelOriginalHeight
-        //     });
-        //    }
-
-        // });
-
-        // $(".nano").bind("scrolltop", function(e){
-        //     console.log('top');
-        // });
-
-        // $(".nano").bind("scrollend", function(e){
-        //     console.log('end');
-        // });
       }
 
       setLayout() {
@@ -156,15 +103,6 @@
           width: w,
           height: h
         });
-
-        // this.filterPanelOriginalTop = $('.filter-panel').position().top;
-        // this.filterPanelOriginalHeight = h - $('.filter-panel').offset().top;
-        // this.filterPanelExtendHeight = this.filterPanelOriginalHeight + this.filterPanelOriginalTop;
-
-        // $('.filter-panel').css({
-        //   height: this.filterPanelOriginalHeight
-        // });
-
       }
 
     }

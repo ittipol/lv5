@@ -5,7 +5,7 @@
   position: relative;
   overflow: hidden;
 	border-bottom: 5px solid #1A237E;
-	background-color: #eaeaea;
+	background-color: #d2d2d2;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 100% auto;
@@ -76,14 +76,12 @@
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
-	.entity-header {
-		background-size: auto 100%;
-	}
 
 	.entity-description {
 		width: 90%;
 		padding: 0 0 20px 45px;
 	}
+
 }
 
 /* Small Devices, Tablets */
@@ -93,7 +91,18 @@
 
 /* Extra Small Devices, Phones */ 
 @media only screen and (max-width : 480px) {
+	.entity-header {
+		background-size: auto 100%;
+	}
 
+	.entity-logo {
+		width: 150px;
+		height: 150px;
+	}
+
+	.entity-description h2 {
+		font-size: 25px;
+	}
 }
 
 /* Custom, iPhone Retina */ 

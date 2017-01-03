@@ -50,8 +50,6 @@ class FormController extends Controller
       $_businessEntities[$businessEntity->id] = $businessEntity->name;
     }
 
-    // return $this->view('form.form');
-
     $this->data = array(
       'districts' => $_districts,
       'businessEntities' => $_businessEntities
@@ -70,16 +68,27 @@ class FormController extends Controller
       $this->model->deleteTempData();
       // reomove form token
       Session::forget($this->model->formToken);
-dd('saved');
+
       $message = new Message;
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
       $message = new Message;
       $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
-      // return Redirect::to('company/add');
+      return Redirect::back();
     }
-dd('reere');
-    return Redirect::to('company/list');
+
+    return Redirect::to($this->to($this->model));
+
+  }
+
+  private function to($model) {
+
+    $to = '/';
+    if(($model->modelName == 'Company') || ($model->modelName == 'OnlineShop')) {
+      $to = $model->getRalatedDataByModelName('Slug',true)->name;
+    }
+
+    return $to;
 
   }
 
@@ -87,7 +96,7 @@ dd('reere');
 
   // }
 
-  private function getAllDistricts($pass = true){
+  private function getDistricts($pass = true){
     $districts = District::all();
     $_districts = array();
     foreach ($districts as $district) {

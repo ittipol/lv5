@@ -100,12 +100,12 @@ class ListController extends Controller
         );
       }
 
-      $logo = '';
+      $logo = ''; // default cover
       if(!empty($record->checkRelatedDataExist('Image',[['type','=','logo']]))) {
         $logo = $record->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
       }
 
-      $cover = '';
+      $cover = ''; // default cover
       if(!empty($record->checkRelatedDataExist('Image',[['type','=','cover']]))) {
         $cover = $record->getRalatedDataByModelName('Image',true,[['type','=','cover']])->getImageUrl();
       }

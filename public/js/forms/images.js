@@ -8,7 +8,7 @@ function Images (panel,type,limit,style) {
 	this.runningNumber = 0;
 	this.imagesPlaced = [];
 	this.filenames = []; 
-	this.defaultImage = '/images/add_images2.svg';
+	this.defaultImage = '/images/common/image.svg';
 	this.allowedClick = true;
 	this.style = style;
 }

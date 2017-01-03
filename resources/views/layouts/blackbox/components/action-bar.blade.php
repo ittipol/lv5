@@ -13,7 +13,7 @@
           </li>
         </ul>
         <div class="action-bar-text pull-left">
-          <a class="link" href="{{URL::to('/')}}">Go-Go shop</a>
+          <a class="link" href="{{URL::to('/')}}">CHONBURI SQUARE</a>
         </div>
       </div>
       <div class="col-lg-9 col-xs-10">

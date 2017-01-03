@@ -36,7 +36,7 @@
   background-color: #ffffff;
 }
 
-.navigation-top .account-info .account-description {
+.navigation-top .account-info .avatar + .account-description {
   margin-left: 10px;
 }
 
@@ -113,7 +113,7 @@
   transition: all .3s ease-in-out;
 }
 
-.navigation-primary-menu .line {
+.main-navigation .line {
   background-color: #ffffff;
   width: 85%;
   margin-right: auto;
