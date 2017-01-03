@@ -14,6 +14,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/components/scroll.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/components/filter.js') }}"></script>
 
 <?php if(file_exists($jsPath)): ?>
 <script type="text/javascript" src="<?php echo $root.$jsPath; ?>"></script>

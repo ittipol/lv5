@@ -70,7 +70,9 @@ class FormController extends Controller
 
     // $this->loadAddress($this->slugModel);
 
-    $this->loadImage($this->slugModel,'logo',[['type','=','logo']]);
+    $this->loadImage($this->slugModel,'logo',array(
+      'conditons' => [['type','=','logo']]
+    ));
 
     // $logo = $company->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
     // $_logo = array();
@@ -83,18 +85,28 @@ class FormController extends Controller
 
   }
 
-  private function loadImage($model,$type,$conditons = []) {
-    $images = $model->getRalatedDataByModelName('Image',false,$conditons);
+  private function loadImage($model,$type,$options = array()) {
+    $images = $model->getRalatedDataByModelName('Image',false,$options['conditons']);
 
-    dd($images);
+    // dd(count($images));
+
+    // if image = 1
+    // if(count($images) == 1) {
+
+    // }
 
     $data = array();
-    if($logo){
-      $_logo[] = array(
-        'name' => $logo->name,
-        'url' => $logo->getImageUrl()
+    foreach ($images as $image) {
+      $data[] = array(
+        'name' => $image->name,
+        'url' => $image->getImageUrl()
       );
     }
+
+    $this->formData['logoJson'] = json_encode($data); 
+
+    return json_encode($data);
+
   }
 
   // private function loadAddress($model,$pass = true) {
@@ -129,13 +141,13 @@ class FormController extends Controller
     switch ($modelName) {
       case 'Company':
 
-        $this->loadData('District','all',array(
+        $this->loadData('District',array(
           'key' => 'id',
           'field' => 'name',
           'indexName' => 'districts'
         ));
 
-        $this->loadData('BusinessEntity','all',array(
+        $this->loadData('BusinessEntity',array(
           'key' => 'id',
           'field' => 'name',
           'indexName' => 'businessEntities'
@@ -151,14 +163,11 @@ class FormController extends Controller
 
   }
 
-  private function loadData($modelName,$conditions = array(),$options = array(),$pass = true){
+  private function loadData($modelName,$options = array(),$pass = true){
     $model = Service::loadModel($modelName);
 
     $records = array();
-    if($conditions == 'all') {
-      $records = $model->all();
-    }elseif(is_array($conditons) && !empty($conditons)){
-
+    if(!empty($options['conditions']) && is_array($options['conditions'])) {
       // $_conditons = [
       //   ['model','=',$this->modelName],
       //   ['model_id','=',$this->id],
@@ -166,7 +175,10 @@ class FormController extends Controller
 
       // $conditons = array_merge($conditons,$_conditons);
 
-      $records = $model->where($conditons);
+      $records = $model->where($options['conditions']);
+    }else{
+      // Get all
+      $records = $model->all();
     }
 
     $data = array();

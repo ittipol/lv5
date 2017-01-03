@@ -54,6 +54,17 @@
 	float: left;
 }
 
+.right-side-panel {
+	position: absolute;
+  right: 15px;
+  width: 250px;
+  background-color: #ffffff;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 9998;
+  transition: right .2s ease-out
+}
+
 /*==========  Mobile First Method  ==========*/
 
 /* Custom, iPhone Retina */ 

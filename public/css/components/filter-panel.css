@@ -1,9 +1,7 @@
 .filter-panel {
 	position: absolute;
   right: 15px;
-	/*float: right;*/
 	width: 250px;
-	/*padding-top: 20px;*/
   background-color: #ffffff;
   overflow-y: auto; 
   overflow-x: hidden;
