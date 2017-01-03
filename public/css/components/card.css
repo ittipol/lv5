@@ -1,5 +1,6 @@
 .card-container {
 	padding: 20px 0;
+	padding-right: 280px;
 }
 
 .card-container .card {
@@ -147,6 +148,11 @@
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
+
+	.card-container {
+		padding-right: 0;
+	}
+
 	.card .image-tile {
 		background-size: 100% auto;
 	}

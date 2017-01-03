@@ -47,9 +47,9 @@ Route::group(['middleware' => 'auth'], function () {
 // Form Controller
 Route::group(['middleware' => 'auth'], function () {
   Route::get('add/{modelAlias}','FormController@formAdd');
-  Route::post('add/{modelAlias}','OnlineShopController@add');
+  Route::post('add/{modelAlias}','FormController@add');
   Route::get('edit/{modelAlias}','FormController@formEdit');
-  Route::post('edit/{modelAlias}','OnlineShopController@edit');
+  Route::post('edit/{modelAlias}','FormController@edit');
   // Route::get('delete/{slug}','FormController@delete');
 });
 

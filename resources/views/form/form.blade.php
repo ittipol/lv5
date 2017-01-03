@@ -1,4 +1,5 @@
 @extends('layouts.blackbox.main')
+@section('content')
 
 <div class="container">
   
@@ -33,15 +34,8 @@
     echo Form::hidden('__token', $__token);
   ?>
 
-  @section('content')
-
-  @stop
-
-  <?php
-    echo Form::submit('เพิ่มสถานประกอบการหรือร้านค้าของคุณ', array(
-      'class' => 'button'
-    ));
-  ?>
+  <!-- content here  -->
+  @yield('form_content')
 
   <?php
     echo Form::close();
@@ -49,3 +43,4 @@
 
 </div>
 
+@stop

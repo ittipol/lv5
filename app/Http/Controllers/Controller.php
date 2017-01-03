@@ -21,6 +21,7 @@ class Controller extends BaseController
     protected $slugModel;
     protected $model;
     protected $modelAlias;
+    protected $hasError = false;
     protected $pagePermission = false;
     protected $actionBarText;
     protected $data = array();
@@ -33,9 +34,6 @@ class Controller extends BaseController
     public function __construct(array $attributes = []) { 
 
       $this->middleware(function ($request, $next) {
-
-        // $this->ident = Token::generatePageIdentity(session()->get('Person.id'));
-        // $this->formToken = Token::generateformToken(session()->get('Person.id'));
 
         // Get Param Form URL
         $this->param = Route::current()->parameters();
@@ -68,6 +66,7 @@ class Controller extends BaseController
           $model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
 
           if(empty($model)) {
+            // Go to display error page
             return response()->view('messages.message');
           }
 
@@ -80,7 +79,14 @@ class Controller extends BaseController
 
     }
 
-    protected function view($view) {
+    protected function view($view = null) {
+
+      // if(empty($view)) {
+      //   $message = new Message;
+      //   $message->error('ไม่พบหน้านี้');
+      //   return \Redirect::back()->withErrors(['ไม่พบหน้านี้']);
+      // }
+
       $this->data['actionBarText'] = $this->actionBarText;   
       $this->data['pagePermission'] = $this->pagePermission;  
       $this->data['__token'] = $this->formToken;

@@ -28,6 +28,12 @@ class Model extends _Model
   public $relatedData;
   public $temporaryData;
 
+  // Validation rules
+  public $validation = array(
+    'rules' => array(),
+    'messages' => array(),
+  );
+
   public $sortingFields;
 
   public $allowedRelatedModel = false;

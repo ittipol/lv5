@@ -13,6 +13,24 @@ class Company extends Model
   protected $fillable = ['name','description','brand_story','business_entity_id','business_type','ip_address','created_by'];
   public $timestamps  = false;
 
+  // Validation rules
+  public $validation = array(
+    'rules' => array(
+      'name' => 'required|max:255',
+      'Contact.phone_number' => 'max:255',
+      'Contact.website' => 'max:255',
+      'Contact.email' => 'email|unique:contacts,email|max:255',
+      'Contact.facebook' => 'max:255',
+      'Contact.instagram' => 'max:255',
+      'Contact.line' => 'max:255'
+    ),
+    'messages' => array(
+      'name.required' => 'กรุณากรอกชื่อสถานประกอบการหรือร้านค้าของคุณ',
+      'Contact.email.email' => 'อีเมลไม่ถูกต้อง',
+      'Contact.email.unique' => 'อีเมลถูกใช้งานแล้ว',
+    )
+  );
+
   // sorting
   public $sortingFields = array('name','created');
 

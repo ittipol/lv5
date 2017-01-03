@@ -1,38 +1,5 @@
-@extends('layouts.blackbox.main')
-@section('content')
-
-<div class="container">
-  
-  <div class="row">
-    <div class="container-header">
-      <div class="col-lg-6">
-        <div class="title">
-          เพิ่มบริษัทหรือร้านค้าของคุณ
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <?php if(!empty($errors->all())): ?>
-    <div class="form-error-messages">
-      <div class="form-error-messages-inner">
-        <h3>เกิดข้อผิดพลาด!!!</h3>
-          <ul>
-          <?php foreach ($errors->all() as $message) { ?>
-            <li class="error-messages"><?php echo $message; ?></li>
-          <?php } ?>
-        </ul>
-      </div>
-    </div>
-  <?php endif; ?>
-
-  <?php
-    echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
-  ?>
-
-  <?php
-    echo Form::hidden('__token', $__token);
-  ?>
+@extends('form.form')
+@section('form_content')
 
   <div class="form-section">
 
@@ -341,47 +308,42 @@
     </div>
 
   </div>
-
+  
   <?php
     echo Form::submit('เพิ่มสถานประกอบการหรือร้านค้าของคุณ', array(
       'class' => 'button'
     ));
   ?>
 
-  <?php
-    echo Form::close();
-  ?>
+  <script type="text/javascript">
 
-</div>
+    $(document).ready(function(){
 
-<script type="text/javascript">
+      const logo = new Images('_image_logo','logo',1,'default');
+      logo.load();
 
-  $(document).ready(function(){
+      const cover = new Images('_image_cover','cover',1,'default');
+      cover.load();
 
-    const logo = new Images('_image_logo','logo',1,'default');
-    logo.load();
+      const images = new Images('_image_group','images',5,'default');
+      images.load();
+      
+      const tagging = new Tagging();
+      tagging.load();
 
-    const cover = new Images('_image_cover','cover',1,'default');
-    cover.load();
+      const district = new District();
+      district.load();
 
-    const images = new Images('_image_group','images',5,'default');
-    images.load();
-    
-    const tagging = new Tagging();
-    tagging.load();
+      const map = new Map();
+      map.load();
+      
+      const officeHour = new OfficeHour();
+      officeHour.load();
 
-    const district = new District();
-    district.load();
+      const form = new Form();
+      form.load();
+    });
 
-    const map = new Map();
-    map.load();
-    
-    const officeHour = new OfficeHour();
-    officeHour.load();
-
-    const form = new Form();
-    form.load();
-  });
-</script>
+  </script>
 
 @stop

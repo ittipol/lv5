@@ -18,42 +18,40 @@ use Session;
 
 class CompanyController extends Controller
 {
-    public function __construct(array $attributes = []) { 
+  public function __construct(array $attributes = []) { 
     parent::__construct();
-
-    // check don't have permission in this page
   }
 
-  public function listView() {
+  // public function listView() {
 
-    // Get company
-    $personHasCompany = PersonHasCompany::where('person_id','=',Session::get('Person.id'))->get();
+  //   // Get company
+  //   $personHasCompany = PersonHasCompany::where('person_id','=',Session::get('Person.id'))->get();
 
-    $companies = array();
-    foreach ($personHasCompany as $value) {
-      $company = $value->company;
+  //   $companies = array();
+  //   foreach ($personHasCompany as $value) {
+  //     $company = $value->company;
 
-      $image = '';
-      if(!empty($company->getRalatedDataByModelName('Image',true,[['type','=','images']]))) {
-        $image = $company->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
-      }
+  //     $image = '';
+  //     if(!empty($company->getRalatedDataByModelName('Image',true,[['type','=','images']]))) {
+  //       $image = $company->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
+  //     }
 
-      $companies[] = array(
-        'id' => $company->id,
-        'name' => $company->name,
-        'description' => String::subString($company->description,120),
-        'business_type' => $company->business_type,
-        'total_department' => $company->companyHasDepartments->count(),
-        'image' => $image,
-      );
-    }
+  //     $companies[] = array(
+  //       'id' => $company->id,
+  //       'name' => $company->name,
+  //       'description' => String::subString($company->description,120),
+  //       'business_type' => $company->business_type,
+  //       'total_department' => $company->companyHasDepartments->count(),
+  //       'image' => $image,
+  //     );
+  //   }
 
-    $this->data = array(
-      'companies' => $companies
-    );
+  //   $this->data = array(
+  //     'companies' => $companies
+  //   );
 
-    return $this->view('pages.company.list');
-  }
+  //   return $this->view('pages.company.list');
+  // }
 
   public function formAdd() {
 
