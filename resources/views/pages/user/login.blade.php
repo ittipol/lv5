@@ -59,7 +59,7 @@
 			<div class="line space-top-bottom-10"></div>
 
 			<a href="#" class="fb-button">
-				<img src="/images/fb-logo.png">
+				<img src="/images/common/fb-logo.png">
 				เข้าสู่ระบบด้วย Facebook
 			</a>
 
