@@ -39,6 +39,26 @@
   <div class="form-section">
 
     <div class="title">
+      แท๊ก
+    </div>
+
+    <div class="form-section-inner">
+
+      <div class="form-row">
+        <?php 
+          echo Form::label('_tags', 'แท๊กที่เกี่ยวข้องกับบริษัทหรือร้านค้าของคุณของคุณ');
+        ?>
+        <div id="_tags" class="tag"></div>
+        <p class="notice info">แท็กจะช่วยให้การค้นหาบริษัทหรือร้านค้าของคุณของคุณง่ายขึ้น</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="form-section">
+
+    <div class="title">
       รายละเอียดบริษัทหรือร้านค้าของคุณ
     </div>
 
@@ -301,7 +321,7 @@
 
   </div>
 
-  <div class="form-section">
+  <!-- <div class="form-section">
 
     <div class="title">
       แท๊ก
@@ -319,7 +339,7 @@
 
     </div>
 
-  </div>
+  </div> -->
 
   <div class="form-section">
 

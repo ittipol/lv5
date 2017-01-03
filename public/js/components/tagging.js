@@ -1,7 +1,7 @@
 function Tagging () {
 	this.tagChipsWidth = 0;
 	this.tagList = [];
-	this.padding = 22;
+	this.padding = 18;
 	this.runningNumber = 0;
 	this.placeholder = 'แท๊ก';
 	this.dataName = 'Tagging';
@@ -48,7 +48,6 @@ Tagging.prototype.removeHiddenField = function(id) {
 Tagging.prototype.crateTagList = function(){
 	let span = document.createElement('span');
 	span.setAttribute('id',this.code+'_tag_list');
-	span.style.display = 'inline-block';
 	
 	document.getElementById(this.panel).appendChild(span);
 }
@@ -160,12 +159,14 @@ Tagging.prototype.createTagChip = function(tagName){
 
 	tagChip.appendChild(tagNameElem);
 	tagChip.appendChild(tagDelete);
+	tagChip.style.display = 'none';
 	document.getElementById(this.code+'_tag_list').appendChild(tagChip);
-
+	
 	this.createHiddenField(this.runningNumber++,id,tagName);
 
 	this.tagChipsWidth += $(tagChip).width()+this.padding; 
 	this.calInputFielsWidth();
+	tagChip.style.display = 'inline-block';
 	
 }
 
@@ -189,10 +190,12 @@ Tagging.prototype.generateCode = function() {
 Tagging.prototype.calInputFielsWidth = function(){
 	let inputFieldWidth = $('#'+this.panel).width() - (this.tagChipsWidth % $('#'+this.panel).width());
 
-	if(inputFieldWidth > 120){
-		// $('#'+this.code+'_tag_input').css('width',inputFieldWidth);
+	// if(this.tagChipsWidth > $('#'+this.panel).width()) {}
+
+	if(inputFieldWidth > 100){
 		document.getElementById(this.code+'_tag_input').style.width = inputFieldWidth+'px';
 	}else{
+		this.tagChipsWidth += inputFieldWidth;
 		document.getElementById(this.code+'_tag_input').style.width = $('#'+this.panel).width()+'px';
 	}
 }
