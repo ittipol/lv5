@@ -3,30 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\library\service;
+use App\library\token;
 use Redirect;
 use Session;
 
 class FormController extends Controller
 {
 
-  protected $allowedModel = array('Company','Department','Job','Product'); 
+  protected $allowedAdd = array('Company','Department','Job','Product'); 
 
   public function __construct(array $attributes = []) { 
 
     parent::__construct();
 
     // Generate Form token
-    $this->formToken = Token::generateformToken(Session::get('Person.id'));
+    $this->middleware(function ($request, $next) {
+      $this->formToken = Token::generateformToken(Session::get('Person.id'));
+      return $next($request);
+    });
+
   }
 
   public function formAdd() {
     
-    dd($this->model->allowedRelatedModel);
+    // dd($this->model->allowedRelatedModel);
 
     // set form token
-    Session::put($this->formToken,1);
+    // Session::put($this->formToken,1);
 
-    return $this->view('pages.'.$this->modelAlias.'.form.add');
+    // return $this->view('form.form');
+
+    return $this->view('form.forms.company');
+
+    // return $this->view('pages.'.$this->modelAlias.'.form.add');
 
   }
 

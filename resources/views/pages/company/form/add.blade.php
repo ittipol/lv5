@@ -30,8 +30,6 @@
     echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
   ?>
 
-  <!-- <input type="hidden" name="__token" value="<?php echo $__token; ?>" > -->
-
   <?php
     echo Form::hidden('__token', $__token);
   ?>

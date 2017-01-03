@@ -18,7 +18,6 @@ class ListController extends Controller
   public function __construct(array $attributes = []) { 
     parent::__construct($attributes);
 
-    // $this->query = Service::parseQueryString(Request::query());
     $this->query = Request::query();
 
     if(!empty($this->query['q'])) {
@@ -27,7 +26,8 @@ class ListController extends Controller
     }
 
     if(empty($this->model)) {
-
+      // error
+      exit('error model not found!!!');
     }
 
   }

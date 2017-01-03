@@ -46,10 +46,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Form Controller
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('add','FormController@formAdd');
-  Route::post('add','OnlineShopController@add');
-  Route::get('edit','FormController@formEdit');
-  Route::post('edit','OnlineShopController@edit');
+  Route::get('add/{modelAlias}','FormController@formAdd');
+  Route::post('add/{modelAlias}','OnlineShopController@add');
+  Route::get('edit/{modelAlias}','FormController@formEdit');
+  Route::post('edit/{modelAlias}','OnlineShopController@edit');
   // Route::get('delete/{slug}','FormController@delete');
 });
 

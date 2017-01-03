@@ -35,7 +35,7 @@ class Controller extends BaseController
       $this->middleware(function ($request, $next) {
 
         // $this->ident = Token::generatePageIdentity(session()->get('Person.id'));
-        $this->formToken = Token::generateformToken(session()->get('Person.id'));
+        // $this->formToken = Token::generateformToken(session()->get('Person.id'));
 
         // Get Param Form URL
         $this->param = Route::current()->parameters();
@@ -63,17 +63,17 @@ class Controller extends BaseController
 
         }
 
-        // if(!empty($this->param['modelAlias'])) {
+        if(!empty($this->param['modelAlias'])) {
 
-        //   $model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
+          $model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
 
-        //   if(empty($model)) {
-        //     return response()->view('messages.message');
-        //   }
+          if(empty($model)) {
+            return response()->view('messages.message');
+          }
 
-        //   $this->modelAlias = $this->param['modelAlias'];
-        //   $this->model = $model;
-        // }
+          $this->modelAlias = $this->param['modelAlias'];
+          $this->model = $model;
+        }
 
         return $next($request);
       });
