@@ -39,6 +39,8 @@
 
         <div>
 
+          <h1>right bar เหมือน filter ไว้แสดงข้อมูลต่างๆ เช่น หมวดหมู่, tags , tel และอื่น ดูจาก wongnai</h1>
+
           <h3>new function</h3>
           ระบบค้นหาสินค้าเฉพาะใน shop นี้
 

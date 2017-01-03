@@ -129,7 +129,7 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        let title = 'เข้าถึงเนื้อหาและร้านค้าทั้งหมดด้วยการเข้าสู่ระบบ';
+        let title = 'เข้าถึงเนื้อหาทั้งหมดและบริษัทหรือร้านค้าด้วยการเข้าสู่ระบบ';
         let desc = '';
         desc += '<div class="button-group">';
         desc += '<a class="button" href="login">เข้าสู่ระบบ</a>';
