@@ -63,7 +63,7 @@ class Controller extends BaseController
 
         if(!empty($this->param['modelAlias'])) {
 
-          $model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
+          $model = service::loadModel(service::generateModelNameByModelAlias($this->param['modelAlias']));
 
           if(empty($model)) {
             // Go to display error page

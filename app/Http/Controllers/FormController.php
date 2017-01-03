@@ -63,47 +63,54 @@ class FormController extends Controller
   }
 
   public function formEdit() {
-    // dd($this->slugModel);
-
     // $this->setFormToken();
-    // $this->loadRequiredFormData($this->slugModel->modelName);
+    $this->loadRequiredFormData($this->slugModel->modelName);
 
     // $this->loadAddress($this->slugModel);
 
     $this->loadImage($this->slugModel,'logo',array(
-      'conditons' => [['type','=','logo']]
+      'conditons' => [['type','=','logo']],
+      'field' => 'name',
+      'indexName' => 'logoJson'
     ));
 
-    // $logo = $company->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
-    // $_logo = array();
-    // if($logo){
-    //   $_logo[] = array(
-    //     'name' => $logo->name,
-    //     'url' => $logo->getImageUrl()
-    //   );
-    // }
+    $this->loadImage($this->slugModel,'cover',array(
+      'conditons' => [['type','=','cover']],
+      'field' => 'name',
+      'indexName' => 'coverJson'
+    ));
+
+    $this->loadImage($this->slugModel,'images',array(
+      'conditons' => [['type','=','images']],
+      'field' => 'name',
+      'indexName' => 'imagesJson'
+    ));
+
+    $taggings = $company->getRalatedDataByModelName('Tagging');
+    $_words = array();
+    if(!empty($taggings)){
+      foreach ($taggings as $tagging) {
+        $_words[] = array(
+          'id' =>  $tagging->word->id,
+          'name' =>  $tagging->word->word
+        );
+      }
+    }
 
   }
 
   private function loadImage($model,$type,$options = array()) {
     $images = $model->getRalatedDataByModelName('Image',false,$options['conditons']);
 
-    // dd(count($images));
-
-    // if image = 1
-    // if(count($images) == 1) {
-
-    // }
-
     $data = array();
     foreach ($images as $image) {
       $data[] = array(
-        'name' => $image->name,
+        'name' => $image->{$options['field']},
         'url' => $image->getImageUrl()
       );
     }
 
-    $this->formData['logoJson'] = json_encode($data); 
+    $this->formData[$options['indexName']] = json_encode($data); 
 
     return json_encode($data);
 

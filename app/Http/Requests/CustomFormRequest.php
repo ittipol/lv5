@@ -13,7 +13,7 @@ class CustomFormRequest extends FormRequest
 
   public function __construct(array $attributes = []) { 
     $this->param = Route::current()->parameters();
-    $this->model = service::loadModel(service::generateModelByModelAlias($this->param['modelAlias']));
+    $this->model = service::loadModel(service::generateModelNameByModelAlias($this->param['modelAlias']));
   }
 
   /**

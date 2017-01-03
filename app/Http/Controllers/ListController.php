@@ -21,7 +21,7 @@ class ListController extends Controller
     $this->query = Request::query();
 
     if(!empty($this->query['q'])) {
-      $this->model = Service::loadModel(service::generateModelByModelAlias($this->query['q']));
+      $this->model = Service::loadModel(service::generateModelNameByModelAlias($this->query['q']));
       $this->modelAlias = $this->query['q'];
     }
 

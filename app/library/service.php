@@ -68,7 +68,7 @@ class Service
 
   }
 
-  public static function generateModelByModelAlias($modelAlias) {
+  public static function generateModelNameByModelAlias($modelAlias) {
 
     $modelAlias = str_replace('-', ' ', $modelAlias);
     $parts = explode(' ', $modelAlias);
