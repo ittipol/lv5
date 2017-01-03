@@ -27,15 +27,6 @@
           </div>
         </div>
         <div class="line space-top-bottom-10"></div>
-        <div class="account-info">
-          <div>หรือคุณยังไม่มีบัญชี</div>
-          <div class="account-description">
-            <a href="{{URL::to('select_registation')}}">
-              <h4>สมัครสมาชิก</h4>
-            </a>
-          </div>
-        </div>
-        <div class="line space-top-bottom-10"></div>
 
       @else
 

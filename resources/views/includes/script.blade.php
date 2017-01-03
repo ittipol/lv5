@@ -44,20 +44,22 @@
 <link rel="stylesheet" href="<?php echo $root.$cssPath; ?>" />
 <?php endif; ?>
 
-@if(Session::has('message.title') && Session::has('message.type'))
-<script type="text/javascript">
-  $(document).ready(function(){
+@if (Auth::check())
+  @if(Session::has('message.title') && Session::has('message.type'))
+  <script type="text/javascript">
+    $(document).ready(function(){
 
-    let title = '{{ Session::get("message.title") }}';
-    let type = '{{ Session::get("message.type") }}';
-    let desc = '';
-    @if(Session::has('message.desc'))
-      desc = '{{ Session::get("message.desc") }}';
-    @endif
+      let title = '{{ Session::get("message.title") }}';
+      let type = '{{ Session::get("message.type") }}';
+      let desc = '';
+      @if(Session::has('message.desc'))
+        desc = '{{ Session::get("message.desc") }}';
+      @endif
 
-    const notificationBottom = new NotificationBottom(title,desc,type);
-    notificationBottom.load();
+      const notificationBottom = new NotificationBottom(title,desc,type);
+      notificationBottom.load();
 
-  });
-</script>
+    });
+  </script>
+  @endif
 @endif

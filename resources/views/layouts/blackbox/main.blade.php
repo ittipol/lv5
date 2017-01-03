@@ -105,6 +105,10 @@
         });
       }
 
+      loadMainNav() {
+
+      }
+
     }
 
     $(document).ready(function(){
@@ -120,6 +124,23 @@
     });
     
   </script>
+
+  @if (!Auth::check())
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        let title = 'เข้าถึงเนื้อหาและร้านค้าทั้งหมดด้วยการเข้าสู่ระบบ';
+        let desc = '';
+        desc += '<div class="button-group">';
+        desc += '<a class="button" href="login">เข้าสู่ระบบ</a>';
+        desc += '<a class="button" href="select_registation">สมัครสมาชิก</a>';
+        desc += '</div>';
+
+        const notificationBottom = new NotificationBottom(title,desc,'','medium',true);
+        notificationBottom.load();
+      });
+    </script>
+  @endif
 
 </body>
 </html>

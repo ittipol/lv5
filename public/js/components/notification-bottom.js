@@ -1,9 +1,12 @@
 class NotificationBottom {
-  constructor(title = '',desc = '',type = '') {
+  constructor(title = '',desc = '',type = 'info',size = 'small',alwaysVisible = false,allowedClose = true) {
       this.title = title;
       this.desc = desc;
       this.type = type;
+      this.size = size;
       this.delay = 9000;
+      this.alwaysVisible = alwaysVisible;
+      this.allowedClose = allowedClose;
   }
 
   load() {
@@ -24,19 +27,22 @@ class NotificationBottom {
   createNotification() {
 
     let html = '';
-    html += '<div id="notification_bottom" class="notification-bottom {{type}}">';
+    html += '<div id="notification_bottom" class="notification-bottom {{type}} {{size}}">';
     html += '<div class="notification-bottom-inner">';
     html += '<div class="message">';
     html += '<div class="title">{{title}}</div>';
     html += '<p class="description">{{desc}}</p>';
     html += '</div>';
     html += '</div>';
-    html += '<div id="notification_bottom_close" class="close-btn">×</div>';
+    if(this.allowedClose){
+      html += '<div id="notification_bottom_close" class="close-btn">×</div>';
+    }
     html += '</div>';
 
     html = html.replace('{{title}}',this.title);
     html = html.replace('{{desc}}',this.desc);
     html = html.replace('{{type}}',this.type);
+    html = html.replace('{{size}}',this.size);
 
     return html;
 
@@ -56,7 +62,16 @@ class NotificationBottom {
     // document.getElementById('notification_bottom').style.right = -document.getElementById('notification_bottom').offsetWidth+'px';
     document.getElementById('notification_bottom').style.right = '50px';
 
-    $('#notification_bottom').animate({bottom:80,right:50,opacity:1},500,'swing').delay(this.delay).fadeOut(220);
+    if(this.alwaysVisible){
+      $('#notification_bottom').animate({bottom:80,right:50,opacity:1},500,'swing');
+    }else{
+      $('#notification_bottom').animate({bottom:80,right:50,opacity:1},500,'swing').delay(this.delay).fadeOut(220);
 
+    }
+    
+  }
+
+  setVisible(visible) {
+    this.alwaysVisible = visible;
   }
 }

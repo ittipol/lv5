@@ -4,8 +4,12 @@
 	width: 380px;
 	height: 110px;
 	color: #ffffff;
-	background-color: rgba(26,35,126);
+	background-color: rgb(26,35,126);
 	border-top: 4px solid #303F9F;
+}
+
+.notification-bottom.medium {
+	height: 130px;
 }
 
 .notification-bottom.success {
@@ -79,11 +83,20 @@
 	line-height: 30px;
 }
 
+.notification-bottom .button-group .button {
+	padding: 5px 30px;
+	margin-right: 10px;
+}
+
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
 
   .notification-bottom {
   	width: 280px;
+  }
+
+  .notification-bottom .button-group .button {
+  	padding: 5px 20px;
   }
 
 }

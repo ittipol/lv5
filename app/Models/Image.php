@@ -17,7 +17,7 @@ class Image extends Model
   public $timestamps  = false;
   public $maxFileSize = 3145728; 
   public $allowedFileTypes = ['image/jpg','image/jpeg','image/png', 'image/pjpeg'];
-  public $noImagePath = '/images/no-img.png';
+  public $noImagePath = '/images/common/no-img.png';
 
   public function __construct() {  
     parent::__construct();
