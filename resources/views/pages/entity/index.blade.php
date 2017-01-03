@@ -9,7 +9,9 @@
         <div class="row">
           <div class="col-md-12 col-lg-9">
             <div class="entity-header-info clearfix">
-              <div class="entity-logo" style="background-image: url('<?php echo $logo ?>');"></div>
+              <div class="entity-logo">
+                <img src="<?php echo $logo ?>">
+              </div>
               <section class="entity-description">
                 <h2><?php echo strip_tags($name); ?></h2>
                 <p><?php echo strip_tags($short_description); ?></p>
