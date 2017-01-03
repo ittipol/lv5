@@ -18,7 +18,7 @@ class EntityController extends Controller
 
   public function index() {
 
-    $logo = '';
+    $logo = '/images/common/image.svg';
     if(!empty($this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']]))) {
       $logo = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
     }

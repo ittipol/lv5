@@ -46,10 +46,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Form Controller
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('add/{modelAlias}','FormController@formAdd');
-  Route::post('add/{modelAlias}','FormController@add');
-  Route::get('edit/{modelAlias}','FormController@formEdit');
-  Route::post('edit/{modelAlias}','FormController@edit');
+
+  // action = add, edit
+  // form/company?action=add
+  Route::get('form/{modelAlias}','FormController@formAdd');
+
+  Route::get('{modelAlias}/add','FormController@formAdd');
+  Route::post('{modelAlias}/add','FormController@add');
+  // Route::get('edit/{modelAlias}','FormController@formEdit');
+  // Route::post('edit/{modelAlias}','FormController@edit');
   // Route::get('delete/{slug}','FormController@delete');
 });
 
@@ -59,7 +64,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // Page
-
 Route::get('{slug}','EntityController@index');
 
 Route::group(['middleware' => 'auth'], function () {
@@ -67,10 +71,13 @@ Route::group(['middleware' => 'auth'], function () {
   // Route::get('{slug}/{action}','EntityController@index');
   Route::get('{slug}/delete','EntityController@index');
 
-  Route::get('{slug}/list/{modelAlias}','ListController@index');
-  Route::get('{slug}/add/{modelAlias}','FormController@index');
-  Route::get('{slug}/{modelAlias}/edit/{param}','FormController@index');
-  Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@index');
+  // Route::get('{slug}/list/{modelAlias}','ListController@index');
+  // Route::get('{slug}/add/{modelAlias}','FormController@index');
+
+  Route::get('{slug}/edit','FormController@formEdit');
+  Route::post('{slug}/edit','FormController@edit');
+
+  // Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@index');
 });
 
 // Shop
@@ -101,8 +108,8 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['middleware' => 'auth'], function () {
   // Route::get('company/list','CompanyController@listView');
 
-  Route::get('company/add','CompanyController@formAdd');;
-  Route::post('company/add','CompanyController@add');
+  // Route::get('company/add','CompanyController@formAdd');;
+  // Route::post('company/add','CompanyController@add');
 
   // Route::get('{slug}/edit','CompanyController@formEdit');
   // Route::patch('{slug}/edit',[

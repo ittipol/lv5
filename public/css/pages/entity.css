@@ -5,16 +5,33 @@
   position: relative;
   overflow: hidden;
 	border-bottom: 5px solid #1A237E;
-	background-color: #d2d2d2;
-	background-position: center;
+	background-color: #90949c;
+/*	background-position: center;
 	background-repeat: no-repeat;
-	background-size: 100% auto;
+	background-size: 100% auto;*/
+}
+
+.entity-default-cover {
+	background-image: url('/images/common/image.svg');
+	background-position: center;
+	background-repeat: repeat;
+	background-size: 200px;
+}
+
+.entity-cover {
+	position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
 }
 
 .entity-header-overlay {
 	width: 100%;
 	background-color: rgba(50,50,50,.8);
 	margin-top: 265px;
+	position: relative;
 	transition: all .5s ease;
 }
 
@@ -26,7 +43,7 @@
   background-position: center;
   background-size: auto 100%;
   float: left;
-  margin: 45px 0 20px 45px;
+  margin: 45px 0 45px 45px;
 }
 
 .entity-description {
@@ -77,6 +94,14 @@
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
 
+	.entity-logo {
+		margin-bottom: 0;
+	}
+
+	.entity-cover {
+		background-size: auto 100%;
+	}
+
 	.entity-description {
 		width: 90%;
 		padding: 0 0 20px 45px;
@@ -91,9 +116,6 @@
 
 /* Extra Small Devices, Phones */ 
 @media only screen and (max-width : 480px) {
-	.entity-header {
-		background-size: auto 100%;
-	}
 
 	.entity-logo {
 		width: 150px;

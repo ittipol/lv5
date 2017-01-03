@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomFormRequest;
-use App\Models\BusinessEntity;
-use App\Models\District;
 use App\library\service;
 use App\library\token;
 use App\library\message;
 use Redirect;
 use Session;
-use Request;
+// use Request;
 
 class FormController extends Controller
 {
@@ -37,24 +35,7 @@ class FormController extends Controller
 
   public function formAdd() {
     $this->setFormToken();
-
-    $districts = District::all();
-    $_districts = array();
-    foreach ($districts as $district) {
-      $_districts[$district->id] = $district->name;
-    }
-
-    $businessEntities = BusinessEntity::all();
-    $_businessEntities = array();
-    foreach ($businessEntities as $businessEntity) {
-      $_businessEntities[$businessEntity->id] = $businessEntity->name;
-    }
-
-    $this->data = array(
-      'districts' => $_districts,
-      'businessEntities' => $_businessEntities
-    );
-
+    $this->loadRequiredFormData($this->model->modelName);
     return $this->view('form.forms.add.'.$this->modelAlias);
 
   }
@@ -81,6 +62,57 @@ class FormController extends Controller
 
   }
 
+  public function formEdit() {
+    // dd($this->slugModel);
+
+    // $this->setFormToken();
+    // $this->loadRequiredFormData($this->slugModel->modelName);
+
+    // $this->loadAddress($this->slugModel);
+
+    $this->loadImage($this->slugModel,'logo',[['type','=','logo']]);
+
+    // $logo = $company->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
+    // $_logo = array();
+    // if($logo){
+    //   $_logo[] = array(
+    //     'name' => $logo->name,
+    //     'url' => $logo->getImageUrl()
+    //   );
+    // }
+
+  }
+
+  private function loadImage($model,$type,$conditons = []) {
+    $images = $model->getRalatedDataByModelName('Image',false,$conditons);
+
+    dd($images);
+
+    $data = array();
+    if($logo){
+      $_logo[] = array(
+        'name' => $logo->name,
+        'url' => $logo->getImageUrl()
+      );
+    }
+  }
+
+  // private function loadAddress($model,$pass = true) {
+  //   $address = $model->getRalatedDataByModelName('Address',true);
+  //   $geographic = array();
+  //   if(!empty($address->lat) && !empty($address->lng)) {
+  //     $geographic['lat'] = $address->lat;
+  //     $geographic['lng'] = $address->lng;
+  //   }
+
+  //   'geographic' => json_encode($geographic)
+
+  // }
+
+  public function edit(CustomFormRequest $request) {
+
+  }
+
   private function to($model) {
 
     $to = '/';
@@ -92,24 +124,61 @@ class FormController extends Controller
 
   }
 
-  // public function formAddCompany() {
+  private function loadRequiredFormData($modelName){
 
-  // }
+    switch ($modelName) {
+      case 'Company':
 
-  private function getDistricts($pass = true){
-    $districts = District::all();
-    $_districts = array();
-    foreach ($districts as $district) {
-      $_districts[$district->id] = $district->name;
+        $this->loadData('District','all',array(
+          'key' => 'id',
+          'field' => 'name',
+          'indexName' => 'districts'
+        ));
+
+        $this->loadData('BusinessEntity','all',array(
+          'key' => 'id',
+          'field' => 'name',
+          'indexName' => 'businessEntities'
+        ));
+
+        break;
+
+      case 'Company':
+
+       break;
+
     }
 
-    // pass value
+  }
+
+  private function loadData($modelName,$conditions = array(),$options = array(),$pass = true){
+    $model = Service::loadModel($modelName);
+
+    $records = array();
+    if($conditions == 'all') {
+      $records = $model->all();
+    }elseif(is_array($conditons) && !empty($conditons)){
+
+      // $_conditons = [
+      //   ['model','=',$this->modelName],
+      //   ['model_id','=',$this->id],
+      // ];
+
+      // $conditons = array_merge($conditons,$_conditons);
+
+      $records = $model->where($conditons);
+    }
+
+    $data = array();
+    foreach ($records as $record) {
+      $data[$record->{$options['key']}] = $record->{$options['field']};
+    }
+
     if($pass){
-      $this->formData['districts'] = $_districts;
+      $this->formData[$options['indexName']] = $data;
     }
-    
-    return $_districts;
 
+    return $data;
   }
 
 }

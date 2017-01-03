@@ -46,7 +46,7 @@ class Slug extends Model
       return false;
     }
 
-    $slug = str_replace(' ', '-', $model->{$field});
+    $slug = str_replace(' ', '-', trim($model->{$field}));
 
     if(strlen($slug) <= 15) {
       $includeToken = true;

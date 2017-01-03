@@ -25,7 +25,7 @@ class Controller extends BaseController
     protected $pagePermission = false;
     protected $actionBarText;
     protected $data = array();
-    // protected $formData = array();
+    protected $formData = array();
     protected $ident;
     protected $formToken;
     protected $param;
@@ -91,7 +91,9 @@ class Controller extends BaseController
       $this->data['pagePermission'] = $this->pagePermission;  
       $this->data['__token'] = $this->formToken;
 
-      // $this->data = array_merge($this->data,$this->formData);
+      if(!empty($this->formData)){
+        $this->data = array_merge($this->data,$this->formData);
+      }
 
     	return view($view,$this->data);
     }
