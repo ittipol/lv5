@@ -54,6 +54,7 @@ class FormController extends Controller
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
       $message = new Message;
+      // $message->cannotAdd();
       $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
       return Redirect::back();
     }
@@ -67,55 +68,120 @@ class FormController extends Controller
     $this->loadRequiredFormData($this->slugModel->modelName);
 
     // $this->loadAddress($this->slugModel);
+    // load images
+    $this->loadImages($this->slugModel,'logo','logoJson');
+    $this->loadImages($this->slugModel,'cover','coverJson');
+    $this->loadImages($this->slugModel,'images','imagesJson');
+    // load Taggings
+    $this->loadTaggings($this->slugModel,'tagJson');
 
-    $this->loadImage($this->slugModel,'logo',array(
-      'conditons' => [['type','=','logo']],
-      'field' => 'name',
-      'indexName' => 'logoJson'
-    ));
+    dd($this->formData);
+  }
 
-    $this->loadImage($this->slugModel,'cover',array(
-      'conditons' => [['type','=','cover']],
-      'field' => 'name',
-      'indexName' => 'coverJson'
-    ));
+  private function loadData($model,$modelName,$options = array()) {
 
-    $this->loadImage($this->slugModel,'images',array(
-      'conditons' => [['type','=','images']],
-      'field' => 'name',
-      'indexName' => 'imagesJson'
-    ));
+    $conditons = array();
+    if(!empty($options['conditons'])){
+      $conditons = array_merge($options['conditons'],$conditons);
+    }
 
-    // load tag
+    $records = $model->getRalatedDataByModelName($modelName,false,$conditons);
 
-    $taggings = $company->getRalatedDataByModelName('Tagging');
-    $_words = array();
-    if(!empty($taggings)){
-      foreach ($taggings as $tagging) {
-        $_words[] = array(
-          'id' =>  $tagging->word->id,
-          'name' =>  $tagging->word->word
-        );
+    $_data = array();
+    if(!empty($records)){
+      foreach ($records as $key => $record) {
+        foreach ($options['dataFormat'] as $format) {
+
+          if(is_array($format['field'])){
+
+            $arr = current($format['field']);
+
+            switch (key($format['field'])) {
+              case 'relation':
+                $_data[$key][$format['key']] = $record->{$arr['with']}->{$arr['field']};
+                break;
+              
+              case 'fx':
+                $_data[$key][$format['key']] = $record->{$arr}();
+                break;
+            }
+
+          }else{
+            $_data[$key][$format['key']] = $record->{$format['field']};
+          }
+
+        }
       }
     }
 
-  }
-
-  private function loadImage($model,$type,$options = array()) {
-    $images = $model->getRalatedDataByModelName('Image',false,$options['conditons']);
-
-    $data = array();
-    foreach ($images as $image) {
-      $data[] = array(
-        'name' => $image->{$options['field']},
-        'url' => $image->getImageUrl()
-      );
+    if(!empty($options['json'])){
+      $_data = json_encode($_data);
     }
 
-    $this->formData[$options['indexName']] = json_encode($data); 
+    if(!empty($options['dataIndexName'])) {
+      $data[$options['dataIndexName']] = $_data;
+    }else{
+      $data = $_data;
+    }
 
-    return json_encode($data);
+    if(!empty($options['passToview'])){
+      if(is_array($data)){
+        $this->formData[$options['dataIndexName']] = $data[$options['dataIndexName']];
+      }else{
+        $this->formData = $data;
+      }
+    }
 
+    return $data;
+  }
+
+  private function loadImages($model,$type,$dataIndexName) {
+    return $this->loadData($model,'Image',array(
+      'dataIndexName' => $dataIndexName,
+      'json' => true,
+      'passToview' => true,
+      'conditons' => [['type','=',$type]],
+      'dataFormat' => array(
+        array(
+          'key' => 'name',
+          'field' => 'name'
+        ),
+        array(
+          'key' => 'url',
+          'field' => array(
+            'fx' => 'getImageUrl'
+          )
+        )
+      )
+    ));
+  }
+
+  private function loadTaggings($model,$dataIndexName) {
+    return $this->loadData($model,'Tagging',array(
+      'dataIndexName' => $dataIndexName,
+      'json' => true,
+      'passToview' => true,
+      'dataFormat' => array(
+        array(
+          'key' => 'id',
+          'field' => array(
+            'relation' => array(
+              'with' => 'word',
+              'field' => 'id'
+            )
+          )
+        ),
+        array(
+          'key' => 'name',
+          'field' => array(
+            'relation' => array(
+              'with' => 'word',
+              'field' => 'word'
+            )
+          )
+        )
+      )
+    ));
   }
 
   // private function loadAddress($model,$pass = true) {
@@ -150,13 +216,13 @@ class FormController extends Controller
     switch ($modelName) {
       case 'Company':
 
-        $this->loadData('District',array(
+        $this->loadFormData('District',array(
           'key' => 'id',
           'field' => 'name',
           'indexName' => 'districts'
         ));
 
-        $this->loadData('BusinessEntity',array(
+        $this->loadFormData('BusinessEntity',array(
           'key' => 'id',
           'field' => 'name',
           'indexName' => 'businessEntities'
@@ -172,7 +238,7 @@ class FormController extends Controller
 
   }
 
-  private function loadData($modelName,$options = array(),$pass = true){
+  private function loadFormData($modelName,$options = array(),$pass = true){
     $model = Service::loadModel($modelName);
 
     $records = array();

@@ -58,6 +58,16 @@ class Company extends Model
   public $allowedSlug = array(
     'field' => 'name'
   );
+  public $allowedForm = array(
+    'form' => array(
+      'header' => array(
+        'text' => 'บริษัทหรือร้านค้าของคุณ'
+      ),
+      'footer' => array(
+        'textButton' => 'เพิ่ม'
+      )
+    )
+  );
   
 
   public function __construct() {  
