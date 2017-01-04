@@ -22,6 +22,20 @@ class NotificationBottom {
     $('#notification_bottom_close').on('click', function(){
       $('#notification_bottom').stop().fadeOut(220)
     });
+
+    $('#main_nav_trigger').on('click',function(){
+      if($(this).is(':checked')) {
+        $('#notification_bottom').stop().css({
+          bottom: 0,
+          opacity: 0
+        });
+      }else{
+        $('#notification_bottom').stop().css({
+          bottom: 50,
+          opacity: 1
+        });
+      }
+    });
   }
 
   createNotification() {
@@ -54,12 +68,7 @@ class NotificationBottom {
     $('body').append(this.createNotification());
 
     document.getElementById('notification_bottom').style.opacity = 0;
-    // document.getElementById('notification_bottom').style.bottom = -document.getElementById('notification_bottom').offsetHeight+'px';
-
-    // $('#notification_bottom').animate({bottom:0,opacity:1},500,'swing').delay(this.delay).fadeOut(220);
-
-    document.getElementById('notification_bottom').style.bottom = '0';
-    // document.getElementById('notification_bottom').style.right = -document.getElementById('notification_bottom').offsetWidth+'px';
+    document.getElementById('notification_bottom').style.bottom = 0;
     document.getElementById('notification_bottom').style.right = '50px';
 
     if(this.alwaysVisible){

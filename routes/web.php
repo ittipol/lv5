@@ -17,8 +17,8 @@ Route::get('logout',function(){
   return redirect('/');
 });
 
+Route::get('safe_image/{file}', 'StaticFileController@serveImages');
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('safe_image/{file}', 'StaticFileController@serveImages');
   Route::get('avatar', 'StaticFileController@avatar');
 });
 

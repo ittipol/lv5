@@ -33,14 +33,16 @@
 }
 
 .entity-logo {
+	width: 200px;
+	height: 200px;
   margin: 45px 0 45px 45px;
   background-color: #9e9e9e;
   float: left;
 }
 
 .entity-logo img {
-	width: 200px;
-	height: 200px;
+	width: 100%;
+	height: 100%;
 }
 
 .entity-description {
@@ -131,7 +133,7 @@
 	}
 
 	.entity-description h2 {
-		font-size: 25px;
+		font-size: 22px;
 	}
 }
 
