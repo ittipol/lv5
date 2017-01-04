@@ -18,7 +18,15 @@
       </div>
       <div class="col-lg-9 col-xs-10">
         <nav class="pull-right">
-        <!-- <a class="avatar" href="{{URL::to('user/account')}}"><img src="/avatar" /></a> -->
+  
+        <!-- <form id="search-form" action="../search.html" method="GET">
+          <div class="search-widget qp-ui qp-ui-search-input" data-qp-ui="{ 'SearchInput': {} }" data-qp-ui-data-id="qp:5">
+            <button class="search-button"><i class="material-icons">search</i></button>
+            <button class="search-close-button"><i class="material-icons">close</i></button>
+            <input name="q" type="text" id="search-input" autocomplete="off">
+            <label for="search-input">Search</label>
+          </div>
+        </form> -->
         <label for="search_input">
           <input id="search_input" type="text" class="search-input"  placeholder="ค้นหา" autocomplete="off" autocorrect="off" value="" />
         </label>

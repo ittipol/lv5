@@ -41,7 +41,7 @@
   $cssFiles = array(
     'css/bootstrap.min.css',
     'css/core.css',
-    'css/map.css',
+    'css/map/map.css',
     'css/messages/message.css',
     'css/components/notification-bottom.css',
     'css/components/form.css',

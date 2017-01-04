@@ -24,10 +24,6 @@
   background-size: 100% auto;
 }
 
-/*.entity-default-logo {
-	background-image: url('/images/common/image.svg');
-}*/
-
 .entity-header-overlay {
 	width: 100%;
 	background-color: rgba(50,50,50,.8);

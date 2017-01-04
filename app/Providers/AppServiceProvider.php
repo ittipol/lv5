@@ -13,7 +13,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
       // app('view')->composer('layouts.master', function ($view) {
       //   $action = app('request')->route()->getAction();
 

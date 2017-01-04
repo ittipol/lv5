@@ -1,14 +1,12 @@
 <!doctype html>
 <html>
 <head>
-	<!-- <meta charset="utf-8"> -->
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- Meta data -->
+  @include('includes.meta') 
+  <!-- CSS & JS -->
+  @include('includes.script')
+  <!-- Title  -->
   <title>Chonburi Square</title>
-	<!-- my head section goes here -->
-	@include('includes.script') 
 
   <link rel="stylesheet" href="{{ URL::asset('css/layouts/header.css') }}" />
   <link rel="stylesheet" href="{{ URL::asset('css/layouts/footer.css') }}" />
