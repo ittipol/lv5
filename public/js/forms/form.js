@@ -2,7 +2,7 @@ class Form {
 	constructor() {}
 
 	load() {
-		this.init()
+		this.init();
 	}
 
 	init() {
@@ -11,6 +11,6 @@ class Form {
   	    event.preventDefault()
   	    return false;
   	  }
-  	})
+  	});
 	}
 }

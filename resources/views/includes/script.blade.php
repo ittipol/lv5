@@ -1,49 +1,80 @@
-<!-- css and js goes here -->
+<?php
+  require 'minify/minify-js.php';
+  require 'minify/minify-css.php';
+?>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"></script>
+<?php
 
-<script type="text/javascript" src="{{ URL::asset('js/jquery-3.1.1.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
+  $jsFiles = array(
+    'js/jquery-3.1.1.min.js',
+    'js/jquery.validate.min.js',
+    // 'js/ckeditor/ckeditor.js',
+    'js/map/google-map.js',
+    'js/map/map.js',
+    'js/forms/form.js',
+    'js/forms/images.js',
+    'js/forms/office_hour.js',
+    'js/forms/district.js',
+    'js/components/tagging.js',
+    'js/components/notification-bottom.js',
+    'js/components/additional-option.js',
+    'js/components/custom-scroll.js',
+    'js/components/filter.js'
+  );
+
+  $code = '';
+  foreach ($jsFiles as $js) {
+    $code .= file_get_contents($js);
+  }
+
+  $_js = JSMin::minify($code);
+
+  if(!file_exists(public_path().'/js/script.min.js') || (strlen($_js) != filesize(public_path().'/js/script.min.js'))){
+    file_put_contents('js/script.min.js', $_js);
+  }
+  
+?>
+
+<script type="text/javascript" src="{{ URL::asset('js/script.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/map/map.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/forms/form.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/forms/images.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/forms/office_hour.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/forms/district.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/components/tagging.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/components/notification-bottom.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/components/additional-option.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/components/scroll.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/components/filter.js') }}"></script>
 
-<?php if(file_exists($jsPath)): ?>
-<script type="text/javascript" src="<?php echo $root.$jsPath; ?>"></script>
-<?php endif; ?>
+<?php
+  $cssFiles = array(
+    'css/bootstrap.min.css',
+    'css/core.css',
+    'css/map.css',
+    'css/messages/message.css',
+    'css/components/notification-bottom.css',
+    'css/components/form.css',
+    'css/components/tag.css',
+    'css/components/card.css',
+    'css/components/button.css',
+    'css/components/switch.css',
+    'css/components/additional-option.css',
+    'css/components/custom-scroll.css',
+    'css/components/filter-panel.css',
+    'css/pages/entity.css',
+    'css/blackbox/wrapper.css',
+    'css/blackbox/components/action-bar.css',
+    'css/blackbox/components/main-nav.css',
+    'css/blackbox/components/main-panel.css',
+    'css/blackbox/responsive.css',
+  );
 
-<link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/core.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/map.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/messages/message.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/notification-bottom.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/form.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/tag.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/card.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/button.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/switch.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/additional-option.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/scroll.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/components/filter-panel.css') }}" />
+  $code = '';
+  foreach ($cssFiles as $css) {
+    $code .= file_get_contents($css);
+  }
 
-<link rel="stylesheet" href="{{ URL::asset('css/pages/entity.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/blackbox/wrapper.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/action-bar.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/main-nav.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/blackbox/components/main-panel.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/blackbox/responsive.css') }}" />
+  $_css = CSSMin::minify($code);
 
-<?php if(file_exists($cssPath)): ?>
-<link rel="stylesheet" href="<?php echo $root.$cssPath; ?>" />
-<?php endif; ?>
+  if(!file_exists(public_path().'/css/script.min.css') || (strlen($_css) != filesize(public_path().'/css/script.min.css'))){
+    file_put_contents('css/script.min.css', $_css);
+  }
+
+?>
+
+<link rel="stylesheet" href="{{ URL::asset('css/script.min.css') }}" />
 
 @if (Auth::check())
   @if(Session::has('message.title') && Session::has('message.type'))

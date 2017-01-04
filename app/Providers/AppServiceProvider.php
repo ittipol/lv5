@@ -24,20 +24,20 @@ class AppServiceProvider extends ServiceProvider
       //   $view->with(compact('controller', 'action'));
       // });
 
-      $root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http');
+      // $root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http');
 
-      if(!empty($_SERVER['HTTP_HOST'])){
-          $root .= '://' . $_SERVER['HTTP_HOST'] . '/';
-      }
+      // if(!empty($_SERVER['HTTP_HOST'])){
+      //     $root .= '://' . $_SERVER['HTTP_HOST'] . '/';
+      // }
 
-      view()->share('root',$root);
+      // view()->share('root',$root);
 
-      // Update your AppServiceProvider by adding a view composer to the boot method and using '*' to share it with all views
-      view()->composer('*', function($view){
-          $viewName = str_replace('.', '/', $view->getName());
-          view()->share('cssPath', 'css/'.$viewName.'.css'); 
-          view()->share('jsPath', 'js/'.$viewName.'.js'); 
-      });
+      // // Update your AppServiceProvider by adding a view composer to the boot method and using '*' to share it with all views
+      // view()->composer('*', function($view){
+      //     $viewName = str_replace('.', '/', $view->getName());
+      //     view()->share('cssPath', 'css/'.$viewName.'.css'); 
+      //     view()->share('jsPath', 'js/'.$viewName.'.js'); 
+      // });
     }
 
     /**
