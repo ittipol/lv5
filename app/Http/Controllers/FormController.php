@@ -67,7 +67,15 @@ class FormController extends Controller
     // $this->setFormToken();
     $this->loadRequiredFormData($this->slugModel->modelName);
 
-    // $this->loadAddress($this->slugModel);
+    $address = $this->loadAddress($this->slugModel);
+    dd($address['address']);
+    $this->loadGeography($address);
+    // $geography = array();
+    // if(!empty($address->lat) && !empty($address->lng)) {
+    //   $geography['lat'] = $address->lat;
+    //   $geography['lng'] = $address->lng;
+    // }
+
     // load images
     $this->loadImages($this->slugModel,'logo','logoJson');
     $this->loadImages($this->slugModel,'cover','coverJson');
@@ -88,7 +96,7 @@ class FormController extends Controller
     $records = $model->getRalatedDataByModelName($modelName,false,$conditons);
 
     $_data = array();
-    if(!empty($records)){
+    if(!empty($records) && !empty($options['dataFormat'])){
       foreach ($records as $key => $record) {
         foreach ($options['dataFormat'] as $format) {
 
@@ -184,17 +192,32 @@ class FormController extends Controller
     ));
   }
 
-  // private function loadAddress($model,$pass = true) {
-  //   $address = $model->getRalatedDataByModelName('Address',true);
-  //   $geographic = array();
-  //   if(!empty($address->lat) && !empty($address->lng)) {
-  //     $geographic['lat'] = $address->lat;
-  //     $geographic['lng'] = $address->lng;
-  //   }
+  private function loadAddress($model) {
+    $address = $model->getRalatedDataByModelName('Address',true);
 
-  //   'geographic' => json_encode($geographic)
+    $_address = null;
+    if($address){
+      $_address = $address->getAttributes();
+    }
 
-  // }
+    $this->formData['address'] = $_address;
+
+    return $_address;
+  }
+
+  private function loadGeography($address) {
+
+    $geography = array();
+
+    if(!empty($address['lat']) && !empty($address['lng'])) {
+      $geography['lat'] = $address['lat'];
+      $geography['lng'] = $address['lng'];
+    }
+
+    $this->formData['geography'] = json_encode($geography);
+
+    return $geography;
+  }
 
   public function edit(CustomFormRequest $request) {
 
