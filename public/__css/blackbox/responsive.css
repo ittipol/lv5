@@ -83,6 +83,13 @@
 /* Extra Small Devices, Phones */ 
 @media only screen and (max-width : 480px) {
   .form-error-messages {
+    background-position: 136% 60%;
+  }
+}
+
+/* Custom */ 
+@media only screen and (max-width : 360px) {
+  .form-error-messages {
     background-position: 151% 60%;
   }
 }
