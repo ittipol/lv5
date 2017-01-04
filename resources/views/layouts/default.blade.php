@@ -12,6 +12,8 @@
 
   <link rel="stylesheet" href="{{ URL::asset('css/layouts/header.css') }}" />
   <link rel="stylesheet" href="{{ URL::asset('css/layouts/footer.css') }}" />
+  <link rel="stylesheet" href="{{ URL::asset('css/pages/user/login.css') }}" />
+  <link rel="stylesheet" href="{{ URL::asset('css/pages/user/register.css') }}" />
   
 </head>
 <body>
