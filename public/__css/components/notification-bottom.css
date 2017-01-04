@@ -1,7 +1,7 @@
 .notification-bottom {
 	position: fixed;
 	bottom: 0;
-	right: 0;
+	right: 50px;
 	z-index: 9999;
 	width: 380px;
 	height: 110px;

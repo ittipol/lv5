@@ -4,7 +4,7 @@ class NotificationBottom {
       this.desc = desc;
       this.type = type;
       this.size = size;
-      this.delay = 9000;
+      this.delay = 10000;
       this.alwaysVisible = alwaysVisible;
       this.allowedClose = allowedClose;
   }
@@ -69,7 +69,7 @@ class NotificationBottom {
 
     document.getElementById('notification_bottom').style.opacity = 0;
     document.getElementById('notification_bottom').style.bottom = 0;
-    document.getElementById('notification_bottom').style.right = '50px';
+    // document.getElementById('notification_bottom').style.right = '50px';
 
     if(this.alwaysVisible){
       $('#notification_bottom').animate({bottom:80,right:50,opacity:1},500,'swing');
