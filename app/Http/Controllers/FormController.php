@@ -86,6 +86,8 @@ class FormController extends Controller
       'indexName' => 'imagesJson'
     ));
 
+    // load tag
+
     $taggings = $company->getRalatedDataByModelName('Tagging');
     $_words = array();
     if(!empty($taggings)){

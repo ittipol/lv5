@@ -8,6 +8,7 @@
   $jsFiles = array(
     'js/jquery-3.1.1.min.js',
     'js/jquery.validate.min.js',
+    'js/blackbox/blackbox.js',
     'js/map/google-map.js',
     'js/map/map.js',
     'js/forms/form.js',
@@ -57,7 +58,7 @@
     'css/blackbox/components/action-bar.css',
     'css/blackbox/components/main-nav.css',
     'css/blackbox/components/main-panel.css',
-    'css/blackbox/responsive.css',
+    'css/blackbox/responsive.css'
   );
 
   $code = '';
