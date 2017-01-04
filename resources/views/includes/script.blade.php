@@ -6,20 +6,20 @@
 <?php
 
   $jsFiles = array(
-    'js/jquery-3.1.1.min.js',
-    'js/jquery.validate.min.js',
-    'js/blackbox/blackbox.js',
-    'js/map/google-map.js',
-    'js/map/map.js',
-    'js/forms/form.js',
-    'js/forms/images.js',
-    'js/forms/office_hour.js',
-    'js/forms/district.js',
-    'js/components/tagging.js',
-    'js/components/notification-bottom.js',
-    'js/components/additional-option.js',
-    'js/components/custom-scroll.js',
-    'js/components/filter.js'
+    '__js/jquery-3.1.1.min.js',
+    '__js/jquery.validate.min.js',
+    '__js/blackbox/blackbox.js',
+    '__js/map/google-map.js',
+    '__js/map/map.js',
+    '__js/forms/form.js',
+    '__js/forms/images.js',
+    '__js/forms/office_hour.js',
+    '__js/forms/district.js',
+    '__js/components/tagging.js',
+    '__js/components/notification-bottom.js',
+    '__js/components/additional-option.js',
+    '__js/components/custom-scroll.js',
+    '__js/components/filter.js'
   );
 
   $code = '';
@@ -29,36 +29,36 @@
 
   $_js = JSMin::minify($code);
 
-  if(!file_exists(public_path().'/js/script.min.js') || (strlen($_js) != filesize(public_path().'/js/script.min.js'))){
-    file_put_contents('js/script.min.js', $_js);
+  if(!file_exists(public_path().'/js/8fcf1793a14f7d35.js') || (strlen($_js) != filesize(public_path().'/js/8fcf1793a14f7d35.js'))){
+    file_put_contents('js/8fcf1793a14f7d35.js', $_js);
   }
   
 ?>
 
-<script type="text/javascript" src="{{ URL::asset('js/script.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/8fcf1793a14f7d35.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
 
 <?php
   $cssFiles = array(
-    'css/bootstrap.min.css',
-    'css/core.css',
-    'css/map/map.css',
-    'css/messages/message.css',
-    'css/components/notification-bottom.css',
-    'css/components/form.css',
-    'css/components/tag.css',
-    'css/components/card.css',
-    'css/components/button.css',
-    'css/components/switch.css',
-    'css/components/additional-option.css',
-    'css/components/custom-scroll.css',
-    'css/components/filter-panel.css',
-    'css/pages/entity.css',
-    'css/blackbox/wrapper.css',
-    'css/blackbox/components/action-bar.css',
-    'css/blackbox/components/main-nav.css',
-    'css/blackbox/components/main-panel.css',
-    'css/blackbox/responsive.css'
+    '__css/bootstrap.min.css',
+    '__css/core.css',
+    '__css/map/map.css',
+    '__css/messages/message.css',
+    '__css/components/notification-bottom.css',
+    '__css/components/form.css',
+    '__css/components/tag.css',
+    '__css/components/card.css',
+    '__css/components/button.css',
+    '__css/components/switch.css',
+    '__css/components/additional-option.css',
+    '__css/components/custom-scroll.css',
+    '__css/components/filter-panel.css',
+    '__css/pages/entity.css',
+    '__css/blackbox/wrapper.css',
+    '__css/blackbox/components/action-bar.css',
+    '__css/blackbox/components/main-nav.css',
+    '__css/blackbox/components/main-panel.css',
+    '__css/blackbox/responsive.css'
   );
 
   $code = '';
@@ -68,13 +68,13 @@
 
   $_css = CSSMin::minify($code);
 
-  if(!file_exists(public_path().'/css/script.min.css') || (strlen($_css) != filesize(public_path().'/css/script.min.css'))){
-    file_put_contents('css/script.min.css', $_css);
+  if(!file_exists(public_path().'/css/a590bf3e950e330b.css') || (strlen($_css) != filesize(public_path().'/css/a590bf3e950e330b.css'))){
+    file_put_contents('css/a590bf3e950e330b.css', $_css);
   }
 
 ?>
 
-<link rel="stylesheet" href="{{ URL::asset('css/script.min.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/a590bf3e950e330b.css') }}" />
 
 @if (Auth::check())
   @if(Session::has('message.title') && Session::has('message.type'))

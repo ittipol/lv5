@@ -67,9 +67,15 @@ class FormController extends Controller
     // $this->setFormToken();
     $this->loadRequiredFormData($this->slugModel->modelName);
 
-    $address = $this->loadAddress($this->slugModel);
-    dd($address['address']);
-    $this->loadGeography($address);
+    dd($this->slugModel->allowedRelatedModel);
+
+    foreach ($this->slugModel->allowedRelatedModel as $modelName) {
+      // $modelName
+      // ->loadFormData();
+    }
+
+    $this->loadGeography($this->loadAddress($this->slugModel));
+    $this->loadOfficehour($this->slugModel);
     // $geography = array();
     // if(!empty($address->lat) && !empty($address->lng)) {
     //   $geography['lat'] = $address->lat;
@@ -77,6 +83,8 @@ class FormController extends Controller
     // }
 
     // load images
+    // model Image->loadAndBuildDataForForm('logo','logoJson');
+    // __buildFormData();
     $this->loadImages($this->slugModel,'logo','logoJson');
     $this->loadImages($this->slugModel,'cover','coverJson');
     $this->loadImages($this->slugModel,'images','imagesJson');
@@ -219,6 +227,10 @@ class FormController extends Controller
     return $geography;
   }
 
+  private function loadOfficehour($model) {
+
+  }
+
   public function edit(CustomFormRequest $request) {
 
   }
@@ -253,7 +265,7 @@ class FormController extends Controller
 
         break;
 
-      case 'Company':
+      case 'OnlineShop':
 
        break;
 
