@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 01, 2017 at 08:05 AM
+-- Generation Time: Jan 04, 2017 at 04:20 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -109,6 +109,7 @@ CREATE TABLE `companies` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `brand_story` text,
   `business_entity_id` int(11) NOT NULL,
   `business_type` varchar(255) DEFAULT NULL,
   `created_by` int(11) NOT NULL,
@@ -186,6 +187,19 @@ CREATE TABLE `days` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `days`
+--
+
+INSERT INTO `days` (`id`, `name`) VALUES
+(1, 'วันจันทร์'),
+(2, 'วันอังคาร'),
+(3, 'วันพุธ'),
+(4, 'วันพฤหัสบดี'),
+(5, 'วันศุกร์'),
+(6, 'วันเสาร์'),
+(7, 'วันอาทิตย์');
 
 -- --------------------------------------------------------
 
@@ -665,10 +679,11 @@ CREATE TABLE `users` (
   `email` varchar(25) NOT NULL,
   `password` varchar(255) NOT NULL,
   `receive_email` tinyint(1) DEFAULT NULL,
-  `remember_token` varchar(255) DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `api_token` varchar(255) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1672,7 +1687,7 @@ ALTER TABLE `words`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `business_entities`
 --
@@ -1692,7 +1707,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 --
 -- AUTO_INCREMENT for table `company_has_business_types`
 --
@@ -1712,7 +1727,7 @@ ALTER TABLE `company_has_jobs`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT for table `days`
 --
@@ -1742,7 +1757,7 @@ ALTER TABLE `employment_types`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `item_sells`
 --
@@ -1757,17 +1772,17 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `lookups`
 --
 ALTER TABLE `lookups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT for table `office_hours`
 --
 ALTER TABLE `office_hours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `online_shops`
 --
 ALTER TABLE `online_shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `people`
 --
@@ -1777,7 +1792,7 @@ ALTER TABLE `people`
 -- AUTO_INCREMENT for table `person_has_entities`
 --
 ALTER TABLE `person_has_entities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `person_interests`
 --
@@ -1797,7 +1812,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `slugs`
 --
 ALTER TABLE `slugs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 --
 -- AUTO_INCREMENT for table `stories`
 --
@@ -1817,7 +1832,7 @@ ALTER TABLE `synonyms`
 -- AUTO_INCREMENT for table `taggings`
 --
 ALTER TABLE `taggings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `temp_files`
 --
@@ -1827,7 +1842,7 @@ ALTER TABLE `temp_files`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `villages`
 --
@@ -1837,7 +1852,7 @@ ALTER TABLE `villages`
 -- AUTO_INCREMENT for table `wikis`
 --
 ALTER TABLE `wikis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `wording_relations`
 --
@@ -1852,7 +1867,7 @@ ALTER TABLE `wording_relation_relates`
 -- AUTO_INCREMENT for table `words`
 --
 ALTER TABLE `words`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

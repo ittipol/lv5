@@ -4,7 +4,7 @@ class Blackbox {
     this.mainNavWidth = 280;
   }
 
-  load(){console.log('rrr');
+  load(){
     this.bind();
     this.setLayout();
   }
@@ -28,7 +28,7 @@ class Blackbox {
         height: h
       });
 
-      if(w > 992) {
+      if(w > 1200) {
         if($('#main_nav_trigger').is(':checked')) {
           $('#main_nav_trigger').trigger('click');
         }
@@ -74,7 +74,7 @@ class Blackbox {
   setLayout() {
     let w = window.innerWidth;
     let h = window.innerHeight;
-console.log(w);
+
     $('.main-navigation').css({
       width: this.mainNavWidth,
       height: h
