@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-
 class Address extends Model
 {
   protected $table = 'addresses';
@@ -35,9 +33,8 @@ class Address extends Model
     
   }
 
-  // public function clearAndSave($model,$value) {
-  //   $this->deleteByModelNameAndModelId($model->modelName,$model->id);
-  //   return $this->_save($model,$value);
-  // }
+  public function loadAndBuildToForm() {
+    dd('load');
+  }
 
 }

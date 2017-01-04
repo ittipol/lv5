@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-
 class OnlineShop extends Model
 {
   public $table = 'online_shops';
@@ -38,7 +36,6 @@ class OnlineShop extends Model
     OnlineShop::saved(function($onlineShop){
 
       // if($onlineShop->state == 'create') {
-
       // }
 
       $lookup = new Lookup;

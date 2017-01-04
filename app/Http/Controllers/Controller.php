@@ -6,7 +6,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\Models\Slug;
 use App\library\token;
 use App\library\service;
 use Session;
@@ -40,7 +39,7 @@ class Controller extends BaseController
 
         if(!empty($this->param['slug'])) {
 
-          $slug = Slug::where('name','like',$this->param['slug'])->first();
+          $slug = service::loadModel('Slug')->where('name','like',$this->param['slug'])->first();
 
           if(empty($slug)) {
             return response()->view('messages.message');

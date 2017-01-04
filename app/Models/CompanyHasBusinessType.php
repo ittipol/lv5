@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\BusinessType;
-
 class CompanyHasBusinessType extends Model
 {
   public $table = 'company_has_business_types';

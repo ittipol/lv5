@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\TempFile;
 use App\library\token;
 use App\library\service;
 use Auth;

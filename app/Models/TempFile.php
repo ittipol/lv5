@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
 use App\library\Token;
 use Storage;
 use File;

@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-
 class PersonInterest extends Model
 {
   protected $table = 'person_interests';

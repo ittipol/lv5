@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PersonHasEntity;
 use App\library\string;
 use App\library\service;
 use Request;
@@ -59,7 +58,7 @@ class ListController extends Controller
 
     }
 
-    $personHasEntity = new PersonHasEntity;
+    $personHasEntity = Service::loadModel('PersonHasEntity');
 
     $records = $this->model
                ->select($this->model->table.'.*')

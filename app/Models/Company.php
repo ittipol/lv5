@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\BusinessType;
-use App\Models\WordingRelation;
 use Session;
 
 class Company extends Model

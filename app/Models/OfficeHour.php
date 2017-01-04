@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\Day;
-
 class OfficeHour extends Model
 {
   public $table = 'office_hours';

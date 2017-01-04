@@ -2,10 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\Tagging;
-use App\library\service;
-
 class Lookup extends Model
 {
   protected $table = 'lookups';
@@ -24,6 +20,10 @@ class Lookup extends Model
   // 
   // Call Method
   // 'address' => '{{__getAddress}}'
+
+  // public function __construct() {  
+  //   parent::__construct();
+  // }
 
   public function __saveRelatedData($model,$options = array()) {
 

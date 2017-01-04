@@ -31,12 +31,6 @@
 
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1200px) {
-
-}
-
-/* Medium Devices, Desktops */
-@media only screen and (max-width : 992px) {
-
   .main-navigation {
     left: -280px
   }
@@ -47,8 +41,8 @@
   }
 
   .action-bar {
-  	left: 0;
-  	padding-left: 0;
+    left: 0;
+    padding-left: 0;
   }
 
   .main-navigation.is-main-nav-open {
@@ -56,7 +50,7 @@
   }
 
   .main-panel.is-main-nav-open {
-  	left: 280px;
+    left: 280px;
   }
   
   .action-bar.is-main-nav-open {
@@ -64,14 +58,18 @@
   }
 
   .main-panel-overlay.isvisible {
-  	visibility: visible;
-  	opacity: 1;
+    visibility: visible;
+    opacity: 1;
   }
 
   .action-bar-overlay.isvisible {
     visibility: visible;
     opacity: 1;
   }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
 
 }
 

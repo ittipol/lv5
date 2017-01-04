@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-
 class WordingRelationRelate extends Model
 {
   public $table = 'wording_relation_relates';

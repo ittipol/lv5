@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\Word;
-
 class Tagging extends Model
 {
   public $table = 'taggings';

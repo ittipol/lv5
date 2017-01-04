@@ -3,13 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as _Model;
-use App\Models\Slug;
-use App\Models\Image;
-use App\Models\Address;
-use App\Models\Tagging;
-use App\Models\Wiki;
-use App\Models\Lookup;
-use App\Models\PersonHasEntity;
 use App\library\token;
 use App\library\service;
 use Auth;
@@ -34,6 +27,7 @@ class Model extends _Model
     'messages' => array(),
   );
 
+  // sorting field
   public $sortingFields;
 
   public $allowedRelatedModel = false;
@@ -72,7 +66,7 @@ class Model extends _Model
         }
       }
 
-      if(!$model->exists){ // create new record
+      if(!$model->exists){ // Create new record
 
         $model->state = 'create';
 
@@ -158,6 +152,7 @@ class Model extends _Model
     if(($this->state == 'create') && $this->allowedSlug) {
       $slug = new Slug;
       $slug->setFormToken($this->formToken)->__saveRelatedData($this);
+
       $personHasEntity = new PersonHasEntity;
       $personHasEntity->setFormToken($this->formToken)->__saveRelatedData($this,Session::get('Person.id'),'admin');
     }
@@ -185,15 +180,15 @@ class Model extends _Model
     
   }
 
-  private function _saveRelatedData($model,$value) {
+  private function _saveRelatedData($modelName,$value) {
 
-    $class = Service::loadModel($model);
+    $model = Service::loadModel($modelName);
 
-    if(!method_exists($class,'__saveRelatedData') || !$class->checkHasFieldModelAndModelId()) {
+    if(!method_exists($model,'__saveRelatedData') || !$model->checkHasFieldModelAndModelId()) {
       return false;
     }
 
-    return $class->setFormToken($this->formToken)->__saveRelatedData($this,$value);
+    return $model->setFormToken($this->formToken)->__saveRelatedData($this,$value);
     
   }
 

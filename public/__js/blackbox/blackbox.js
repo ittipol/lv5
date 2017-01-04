@@ -4,7 +4,7 @@ class Blackbox {
     this.mainNavWidth = 280;
   }
 
-  load(){
+  load(){console.log('rrr');
     this.bind();
     this.setLayout();
   }
@@ -74,7 +74,7 @@ class Blackbox {
   setLayout() {
     let w = window.innerWidth;
     let h = window.innerHeight;
-
+console.log(w);
     $('.main-navigation').css({
       width: this.mainNavWidth,
       height: h
@@ -86,8 +86,6 @@ class Blackbox {
     });
   }
 
-  loadMainNav() {
-
-  }
+  loadMainNav() {}
 
 }

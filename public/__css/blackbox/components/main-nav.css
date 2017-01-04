@@ -105,12 +105,12 @@
   padding: 8px 0 8px 40px;
   font-size: 13px;
   line-height: 18px;
-  display: block;
+/*  display: block;
   color: #ffffff;
   cursor: pointer;
   text-decoration: none;
   font-weight: 400;
-  transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;*/
 }
 
 .main-navigation .line {

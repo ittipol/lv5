@@ -67,11 +67,11 @@ class FormController extends Controller
     // $this->setFormToken();
     $this->loadRequiredFormData($this->slugModel->modelName);
 
-    dd($this->slugModel->allowedRelatedModel);
+    // dd($this->slugModel->allowedRelatedModel);
 
+    $data = array();
     foreach ($this->slugModel->allowedRelatedModel as $modelName) {
-      // $modelName
-      // ->loadFormData();
+      $data[] = Service::loadModel($modelName)->loadAndBuildToForm();
     }
 
     $this->loadGeography($this->loadAddress($this->slugModel));

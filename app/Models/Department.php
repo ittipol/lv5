@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\CompanyHasDepartment;
-use App\Models\Lookup;
 use Session;
 
 class Department extends Model

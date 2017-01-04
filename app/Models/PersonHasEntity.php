@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\Models\Role;
-
 class PersonHasEntity extends Model
 {
   public $table = 'person_has_entities';

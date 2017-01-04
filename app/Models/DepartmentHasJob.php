@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-
 class DepartmentHasJob extends Model
 {
   public $table = 'department_has_jobs';

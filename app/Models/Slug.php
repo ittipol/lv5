@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Model;
-use App\library\token;
-
 class Slug extends Model
 {
   public $table = 'slugs';
