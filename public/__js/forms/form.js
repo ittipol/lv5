@@ -3,6 +3,7 @@ class Form {
 
 	load() {
 		this.init();
+		this.bind();
 	}
 
 	init() {
@@ -12,5 +13,11 @@ class Form {
   	    return false;
   	  }
   	});
+	}
+
+	bind() {
+		$('#main_form').on('submit',function(){
+			$('input[type="submit"]').prop('disabled','disabled').addClass('disabled');
+		});
 	}
 }

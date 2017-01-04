@@ -16,6 +16,11 @@
 	background-color: rgb(0,168,112);
 }
 
+.button.disabled {
+	background-color: #aaaaaa;
+	cursor: default;
+}
+
 .wide-btn {
 	width: 100%;
 	text-align: center;

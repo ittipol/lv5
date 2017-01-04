@@ -3,9 +3,9 @@
 
 <div class="container">
   
-  <div class="row">
-    <div class="container-header">
-      <div class="col-lg-6">
+  <div class="container-header">
+    <div class="row">
+      <div class="col-lg-6 col-sm-12">
         <div class="title">
           เพิ่มบริษัทหรือร้านค้าของคุณ
         </div>
@@ -27,7 +27,7 @@
   <?php endif; ?>
 
   <?php
-    echo Form::open(['method' => 'post', 'enctype' => 'multipart/form-data']);
+    echo Form::open(['id' => 'main_form','method' => 'post', 'enctype' => 'multipart/form-data']);
   ?>
 
   <?php

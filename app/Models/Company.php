@@ -22,7 +22,7 @@ class Company extends Model
       'Contact.line' => 'max:255'
     ),
     'messages' => array(
-      'name.required' => 'กรุณากรอกชื่อสถานประกอบการหรือร้านค้าของคุณ',
+      'name.required' => 'กรุณากรอกชื่อบริษัทหรือร้านค้าของคุณ',
       'Contact.email.email' => 'อีเมลไม่ถูกต้อง',
       'Contact.email.unique' => 'อีเมลถูกใช้งานแล้ว',
     )
