@@ -39,11 +39,11 @@
   <div class="entity-content">
     <div class="contain-fluid">
 
-      <div class='right-side-panel'>
+      <div class='entity-right-side-panel'>
         right panel
       </div>
 
-      <div>
+      <div class="entity-left-panel">
 
         <h1>right bar เหมือน filter ไว้แสดงข้อมูลต่างๆ เช่น หมวดหมู่, tags , tel และอื่น ดูจาก wongnai</h1>
 

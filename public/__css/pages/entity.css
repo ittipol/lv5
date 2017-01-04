@@ -52,7 +52,11 @@
 	float: left;
 }
 
-.right-side-panel {
+.entity-left-panel {
+	margin-right: 280px;
+}
+
+.entity-right-side-panel {
 	position: absolute;
   right: 15px;
   width: 250px;
@@ -109,7 +113,7 @@
 	}
 
 	.entity-cover {
-		background-size: auto 100%;
+		background-size: 100%;
 	}
 
 	.entity-description {
@@ -121,6 +125,10 @@
 
 /* Small Devices, Tablets */
 @media only screen and (max-width : 768px) {
+
+	.entity-cover {
+		background-size: auto 100%;
+	}
 
 }
 

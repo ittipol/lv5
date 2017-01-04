@@ -29,7 +29,7 @@
 
         <?php foreach ($lists as $list): ?>
 
-        <div class="col-lg-3 col-md-6 col-sm-4 col-xs-12">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
           <div class="card medium">
             <div class="image-tile" style="background-image: url('<?php echo $list['cover']; ?>');">
               <div class="title"><?php echo $list['name']; ?></div>
