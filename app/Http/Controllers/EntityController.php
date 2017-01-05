@@ -18,22 +18,26 @@ class EntityController extends Controller
 
   public function index() {
 
-    $logo = '/images/common/image.svg';
-    if(!empty($this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']]))) {
-      $logo = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
+    $logo = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
+    if(!empty($logo)) {
+      $logo = $logo->getImageUrl();
     }
 
-    $cover = '';
-    if(!empty($this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','cover']]))) {
-      $cover = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','cover']])->getImageUrl();
+    $cover = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','cover']]);
+    if(!empty($cover)) {
+      $cover = $cover->getImageUrl();
     }
 
-    $contact = $this->slugModel->getRalatedDataByModelName('Contact',true)->getAttributes();
+    $contact = $this->slugModel->getRalatedDataByModelName('Contact',true);
+    if(!empty($contact)) {
+      $contact = $contact->getAttributes();
+    }
 
     $officeHour = $this->slugModel->getRalatedDataByModelName('OfficeHour',true);
-
-    $officeHour = json_decode($officeHour->time,true);
-
+    if(!empty($officeHour)) {
+      $officeHour = json_decode($officeHour->time,true);
+    }
+    
     $this->data = array(
       'name' => $this->slugModel->name,
       'description' => $this->slugModel->description,

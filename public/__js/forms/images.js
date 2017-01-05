@@ -241,7 +241,6 @@ class Images {
 					_this.index = _this.createUploader(_this.index);
 				}
 
-				// let parent = $(input).parent();
 				_this.imagesPlaced.splice(_this.imagesPlaced.indexOf($(parent).find('input').attr('id')),1); 
 
 				parent.parent().remove();

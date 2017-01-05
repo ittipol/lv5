@@ -37,12 +37,20 @@
 	height: 200px;
   margin: 45px 0 45px 45px;
   background-color: #9e9e9e;
+  background-image: url('/images/common/image.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  overflow: hidden;
   float: left;
 }
 
-.entity-logo img {
+.entity-logo > .logo {
 	width: 100%;
 	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: auto 100%;
 }
 
 .entity-description {
@@ -125,21 +133,13 @@
 
 /* Small Devices, Tablets */
 @media only screen and (max-width : 768px) {
-
 	.entity-cover {
 		background-size: auto 100%;
 	}
-
 }
 
 /* Extra Small Devices, Phones */ 
 @media only screen and (max-width : 480px) {
-
-	.entity-logo {
-		width: 150px;
-		height: 150px;
-	}
-
 	.entity-description h2 {
 		font-size: 22px;
 	}
