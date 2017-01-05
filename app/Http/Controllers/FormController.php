@@ -37,7 +37,6 @@ class FormController extends Controller
     $this->setFormToken();
     $this->loadRequiredFormData($this->model->modelName);
     return $this->view('form.forms.add.'.$this->modelAlias);
-
   }
 
   public function add(CustomFormRequest $request) {
@@ -71,16 +70,17 @@ class FormController extends Controller
     foreach ($this->slugModel->allowedRelatedModel as $modelName) {
       $this->loadData($modelName);
     }
-    dd($this->formData);
 
-    // load images
-    $this->loadImages($this->slugModel,'logo','logoJson');
-    $this->loadImages($this->slugModel,'cover','coverJson');
-    $this->loadImages($this->slugModel,'images','imagesJson');
-    // load Taggings
-    // $this->loadTaggings($this->slugModel,'tagJson');
+    foreach ($this->slugModel->allowedDir['dirNames'] as $dirName) {
+     $this->loadImages($this->slugModel,$dirName,$dirName.'Json');
+    }
 
-    dd($this->formData);
+    $this->data = array(
+      'formType' => 'add'
+    );
+
+    return $this->view('form.forms.add.'.$this->modelAlias);
+
   }
 
   private function loadData($modelName) {
@@ -97,6 +97,10 @@ class FormController extends Controller
       case 'OfficeHour':
         $this->loadOfficehour($this->slugModel,'officeHoursJson');
         break;
+
+      case 'Contact':
+        $this->loadContact($this->slugModel,'contactJson');
+        break;
     }
 
   }
@@ -107,8 +111,6 @@ class FormController extends Controller
     //   $conditons = array();
     //   $options['relatedData']['conditons'] = array_merge($options['relatedData']['conditons'],$conditons);
     // }
-
-    
 
     $records = $model->getRalatedDataByModelName($modelName,$options['relatedData']);
 
@@ -161,7 +163,54 @@ class FormController extends Controller
   }
 
   private function loadOfficehour($model) {
-    dd('off');
+
+    $officeHour = $model->getRalatedDataByModelName('OfficeHour',array(
+      'onlyFirst' => true,
+      'fields' => array('time')
+    ));
+
+    if(!empty($officeHour)){
+      $time = json_decode($officeHour->time,true);
+
+      $officeHour = array();
+      foreach ($time as $day => $value) {
+
+        $_startTime = explode(':', $value['start_time']);
+        $_endTime = explode(':', $value['end_time']);
+
+        $officeHour[$day] = array(
+          'open' => $value['open'],
+          'start_time' => array(
+            'hour' => (int)$_startTime[0],
+            'min' => (int)$_startTime[1]
+          ),
+          'end_time' => array(
+            'hour' => (int)$_endTime[0],
+            'min' => (int)$_endTime[1]
+          )
+        );
+      }
+    }
+
+    $this->formData['officeHoursJson'] = json_encode($officeHour);
+
+    return $officeHour;
+
+  }
+
+  private function loadContact($model) {
+    $contact = $model->getRalatedDataByModelName('Contact',array(
+      'onlyFirst' => true,
+      'fields' => array('phone_number','email','website','facebook','instagram','line')
+    ));
+
+    if(!empty($contact)) {
+      $contact = $contact->getAttributes();
+    }
+
+    $this->formData['contact'] = $contact;
+
+    return $contact;
   }
 
   private function loadImages($model,$type,$dataIndexName) {
@@ -169,7 +218,10 @@ class FormController extends Controller
       'dataIndexName' => $dataIndexName,
       'json' => true,
       'passToview' => true,
-      'conditons' => [['type','=',$type]],
+      'relatedData' => array(
+        'conditons' => [['type','=',$type]],
+        'fields' => array('name')
+      ),
       'dataFormat' => array(
         array(
           'key' => 'name',
@@ -191,7 +243,6 @@ class FormController extends Controller
       'json' => true,
       'passToview' => true,
       'relatedData' => array(
-        // 'conditions' => [],
         'fields' => array('word_id'),
       ),
       'dataFormat' => array(
@@ -226,7 +277,7 @@ class FormController extends Controller
       )
     );
   
-    if($address){
+    if(!empty($address)) {
       $address = $address->getAttributes();
     }
 

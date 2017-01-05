@@ -43,7 +43,7 @@
         right panel
       </div>
 
-      <div class="entity-left-panel">
+      <div id="entity_left_panel" class="left-panel">
 
         <h1>right bar เหมือน filter ไว้แสดงข้อมูลต่างๆ เช่น หมวดหมู่, tags , tel และอื่น ดูจาก wongnai</h1>
 

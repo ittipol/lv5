@@ -5,10 +5,12 @@ class OfficeHour {
 		this.code = null;
 		this.index = 1;
 		this.days = ['วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัสบดี','วันศุกร์','วันเสาร์','วันอาทิตย์'],
-		this.latestStartHour = 0;
-		this.latestStartMin = 0;
-		this.latestEndHour = 0;
-		this.latestEndMin = 0;
+		this.latestTime = {
+			start_hour: 0,
+			start_min: 0,
+			end_hour: 0,
+			end_min: 0
+		}
 	}
 
 	load(officeHours,sameTime) {
@@ -60,7 +62,8 @@ class OfficeHour {
 
 		let _this = this;
 
-		this.code = this.generateCode();
+		let token = new Token();
+		this.code = token.generateToken();
 
 		for (let i = 0; i < this.days.length; i++) {
 			this.index = this.createSelect(this.days[i],this.index,this.code);
@@ -95,7 +98,7 @@ class OfficeHour {
 			let id =$(this).prop('id');
 			let parts = id.split('_');
 
-			_this.setLatestValue(parts[2],parts[3],$(this).val());
+			_this.setLatestTime(parts[2],parts[3],$(this).val());
 
 			if(_this.sameTime){
 				_this.setTimes($(this).prop('id'),$(this).val(),_this.code);
@@ -120,7 +123,7 @@ class OfficeHour {
 				parent.find('select').each(function(key, value) {
 					let id = $(this).prop('id');
 					let parts = id.split('_');
-					$(this).val(_this.getLatestValue(parts[2],parts[3]));
+					$(this).val(_this.getLatestTime(parts[2],parts[3]));
 				});
 			}
 		}
@@ -134,7 +137,7 @@ class OfficeHour {
 
 			let id = $('#'+selects[i]).prop('id');
 			let parts = id.split('_');
-			let value = this.getLatestValue(parts[2],parts[3]);
+			let value = this.getLatestTime(parts[2],parts[3]);
 
 			this.setTimes(selects[i],value,code);			
 		};
@@ -175,89 +178,33 @@ class OfficeHour {
 
 		$('#'+this.panel).append(html);
 
-		$('#'+code+'_'+index+'_start_hour').append(this.optionHours());
-		$('#'+code+'_'+index+'_start_min').append(this.optionMins());
-		$('#'+code+'_'+index+'_end_hour').append(this.optionHours());
-		$('#'+code+'_'+index+'_end_min').append(this.optionMins());
+		$('#'+code+'_'+index+'_start_hour').append(this.optionData(24));
+		$('#'+code+'_'+index+'_start_min').append(this.optionData(60));
+		$('#'+code+'_'+index+'_end_hour').append(this.optionData(24));
+		$('#'+code+'_'+index+'_end_min').append(this.optionData(60));
 
 		return ++index;
 	}
 
-	optionHours() {
+	optionData(number) {
 
-		let hour = [];
-		for (let i = 0; i < 24; i++) {
+		let data = [];
+		for (let i = 0; i < number; i++) {
 			let option = document.createElement('option'); 
 			option.value = i;
 			option.innerHTML = i;
-			hour.push(option);
+			data.push(option);
 		};
 
-		return hour;
+		return data;
 	}
 
-	optionMins() {
+	setLatestTime (type,unit,value) {
+	  this.latestTime[type+'_'+unit] = value;
+	};
 
-		let min = [];
-		for (let i = 0; i < 60; i++) {
-			let option = document.createElement('option'); 
-			option.value = i;
-			option.innerHTML = i;
-			min.push(option);
-		};
-
-		return min;
-	}
-
-	generateCode() {
-		let codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	  codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
-	  codeAlphabet += "0123456789";
-
-	  let code = '';
-	  let len = codeAlphabet.length;
-
-	  for (let i = 0; i <= 7; i++) {
-	  	code += codeAlphabet[Math.floor(Math.random() * (len - 0) + 0)];
-	  };
-
-		return code;
-	}
-
-	setLatestValue(type,unit,value) {
-		if(type == 'start'){
-			if(unit == 'hour'){
-				this.latestStartHour = value;
-			}else if(unit == 'min'){
-				this.latestStartMin = value;
-			}
-		}else if(type == 'end'){
-			if(unit == 'hour'){
-				this.latestEndHour = value;
-			}else if(unit == 'min'){
-				this.latestEndMin = value;
-			}
-		}
-	}
-
-	getLatestValue(type,unit) {
-
-		let value;
-
-		if(type == 'start'){
-			if(unit == 'hour'){
-				value = this.latestStartHour;
-			}else if(unit == 'min'){
-				value = this.latestStartMin;
-			}
-		}else if(type == 'end'){
-			if(unit == 'hour'){
-				value = this.latestEndHour;
-			}else if(unit == 'min'){
-				value = this.latestEndMin;
-			}
-		}
-		return value;
-	}
+	getLatestTime (type,unit) {
+	  return this.latestTime[type+'_'+unit];
+	};
 
 }

@@ -34,7 +34,7 @@ class Company extends Model
   // Allowed Data
   public $allowedRelatedModel = array('Address','Tagging','OfficeHour','Contact');
   public $allowedDir = array(
-    'dir_names' => array('logo','cover','images')
+    'dirNames' => array('logo','cover','images')
   );
   public $allowedImage = array(
     'type' => array('logo','cover','images')

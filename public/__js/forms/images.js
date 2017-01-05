@@ -33,7 +33,8 @@ class Images {
 	}
 
 	init(){
-		this.code = this.generateCode();
+		let token = new Token();
+		this.code = token.generateToken();
 	}
 
 	bind(){
@@ -302,21 +303,6 @@ class Images {
 
 		return ++index;
 
-	}
-
-	generateCode() {
-		let codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	  codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
-	  codeAlphabet += "0123456789";
-
-	  let code = '';
-	  let len = codeAlphabet.length;
-
-	  for (let i = 0; i <= 7; i++) {
-	  	code += codeAlphabet[Math.floor(Math.random() * (len - 0) + 0)];
-	  };
-
-		return code;
 	}
 
 	checkImageType(type){

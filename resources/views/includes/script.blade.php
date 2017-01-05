@@ -9,6 +9,7 @@
     '__js/jquery-3.1.1.min.js',
     '__js/jquery.validate.min.js',
     '__js/blackbox/blackbox.js',
+    '__js/library/token.js',
     '__js/map/google-map.js',
     '__js/map/map.js',
     '__js/forms/form.js',

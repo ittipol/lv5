@@ -12,7 +12,7 @@ class User extends Model
     public $timestamps  = false;
 
     public $allowedDir = array(
-      'dir_names' => array('avatar','images')
+      'dirNames' => array('avatar','images')
     );
     public $allowedImage = array(
       'type' => array('avatar','images')

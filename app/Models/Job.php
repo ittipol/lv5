@@ -12,7 +12,7 @@ class Job extends Model
   // allowed Data
   public $allowedRelatedModel = array('Tagging');
   public $allowedDir = array(
-    'dir_names' => array('images')
+    'dirNames' => array('images')
   );
   public $allowedImage = true;
   public $allowedLookup = array(

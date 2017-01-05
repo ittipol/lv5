@@ -208,8 +208,8 @@ class Model extends _Model
       mkdir($path,0777,true);
     }
 
-    if(!empty($this->allowedDir['dir_names'])){
-      foreach ($this->allowedDir['dir_names'] as $dir) {
+    if(!empty($this->allowedDir['dirNames'])){
+      foreach ($this->allowedDir['dirNames'] as $dir) {
         $dirName = $path.'/'.$dir;
         if(!is_dir($dirName)){
           mkdir($dirName,0777,true);

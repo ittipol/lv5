@@ -11,7 +11,7 @@ class OnlineShop extends Model
   // Allowed Data
   public $allowedRelatedModel = array('Tagging','Contact');
   public $allowedDir = array(
-    'dir_names' => array('logo','cover','images')
+    'dirNames' => array('logo','cover','images')
   );
   public $allowedImage = true;
   public $allowedLookup = array(

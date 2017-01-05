@@ -7,16 +7,16 @@
   @include('includes.script')
   <!-- Title  -->
   <title>Chonburi Square</title>
-
-  <link rel="stylesheet" href="{{ URL::asset('css/layouts/header.css') }}" />
-  <link rel="stylesheet" href="{{ URL::asset('css/layouts/footer.css') }}" />
-  <link rel="stylesheet" href="{{ URL::asset('css/pages/user/login.css') }}" />
-  <link rel="stylesheet" href="{{ URL::asset('css/pages/user/register.css') }}" />
+  <!-- use only in default layout -->
+  <link rel="stylesheet" href="{{ URL::asset('__css/layouts/header.css') }}" />
+  <link rel="stylesheet" href="{{ URL::asset('__css/layouts/footer.css') }}" />
+  <link rel="stylesheet" href="{{ URL::asset('__css/pages/user/register.css') }}" />
+  <link rel="stylesheet" href="{{ URL::asset('__css/pages/user/login.css') }}" />
   
 </head>
 <body>
 
-	<?php if(!isset($header) || ($header)): ?>
+	<?php if(!empty($header)): ?>
     <header> 
 		 @include('layouts.default_header')
     </header> 
@@ -26,7 +26,7 @@
 		@yield('content')
   </main>
   
-	<?php if(isset($footer) && ($footer)): ?>
+	<?php if(!empty($footer)): ?>
     <footer> 
 		@include('layouts.default_footer')
     </footer> 

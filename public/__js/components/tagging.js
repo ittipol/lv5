@@ -28,7 +28,8 @@ class Tagging {
 
 	init(){
 		this.tagChipsWidth = 0;
-		this.code = this.generateCode();
+		let token = new Token();
+		this.code = token.generateToken();
 	}
 
 	bind(){}
@@ -167,27 +168,8 @@ class Tagging {
 		
 	}
 
-
-	generateCode() {
-
-		let codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	  codeAlphabet += "abcdefghijklmnopqrstuvwxyz";
-	  codeAlphabet += "0123456789";
-
-	  let code = '';
-	  let len = codeAlphabet.length;
-
-	  for (let i = 0; i <= 7; i++) {
-	  	code += codeAlphabet[Math.floor(Math.random() * (len - 0) + 0)];
-	  };
-
-		return code;
-	}
-
 	calInputFielsWidth(){
 		let inputFieldWidth = $('#'+this.panel).width() - (this.tagChipsWidth % $('#'+this.panel).width());
-
-		// if(this.tagChipsWidth > $('#'+this.panel).width()) {}
 
 		if(inputFieldWidth > 100){
 			document.getElementById(this.code+'_tag_input').style.width = inputFieldWidth+'px';

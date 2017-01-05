@@ -31,6 +31,15 @@
   ?>
 
   <?php
+    // echo  Form::model($model->getAttributes(), [
+    //   'id' => 'main_form',
+    //   'method' => 'PATCH',
+    //   'route' => ['form.edit', $model->id],
+    //   'enctype' => 'multipart/form-data'
+    // ]);
+  ?>
+
+  <?php
     echo Form::hidden('__token', $__token);
   ?>
 

@@ -14,7 +14,7 @@ class Department extends Model
   // allowed Data
   public $allowedRelatedModel = array('Address');
   public $allowedDir = array(
-    'dir_names' => array('logo','cover','images')
+    'dirNames' => array('logo','cover','images')
   );
   public $allowedImage = true;
   public $allowedLookup = array(

@@ -76,6 +76,10 @@ Route::group(['middleware' => 'auth'], function () {
 
   Route::get('{slug}/edit','FormController@formEdit');
   Route::post('{slug}/edit','FormController@edit');
+  Route::patch('{slug}/edit',[
+    'as' => 'form.edit',
+    'uses' => 'FormController@edit'
+  ]);
 
   // Route::get('{slug}/{modelAlias}/delete/{param}','EntityController@index');
 });

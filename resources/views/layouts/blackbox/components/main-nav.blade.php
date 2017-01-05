@@ -8,7 +8,7 @@
 <li><a href="{{URL::to('user/account')}}">{{Session::get('Person.Profile.name')}}</a><li>
 <li><a href="{{URL::to('logout')}}">ออกจากระบบ</a><li>
 @endif -->
-<div class="main-navigation">
+<div id="main_navigation" class="main-navigation">
   <nav>
     <div class="navigation-top">
 

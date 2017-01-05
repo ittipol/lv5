@@ -5,8 +5,13 @@ class Blackbox {
   }
 
   load(){
+    this.init();
     this.bind();
     this.setLayout();
+  }
+
+  init() {
+    this.mainNavWidth = document.getElementById('main_navigation').offsetWidth;
   }
 
   bind() {
