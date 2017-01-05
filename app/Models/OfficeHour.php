@@ -50,11 +50,17 @@ class OfficeHour extends Model
       'display' => $display
     );
 
-    if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      return $model->getRalatedDataByModelName($this->modelName,true)
-            ->setFormToken($this->formToken)
-            ->fill($value)
-            ->save();
+    $officeHour = $model->getRalatedDataByModelName($this->modelName,
+      array(
+        'onlyFirst' => true
+      )
+    );
+
+    if(($model->state == 'update') && !empty($officeHour)){
+      return $officeHour
+      ->setFormToken($this->formToken)
+      ->fill($value)
+      ->save();
     }else{
       return $this->_save($model->includeModelAndModelId($value));
     }

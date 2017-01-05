@@ -18,22 +18,40 @@ class EntityController extends Controller
 
   public function index() {
 
-    $logo = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','logo']]);
+    $logo = $this->slugModel->getRalatedDataByModelName('Image',
+      array(
+        'onlyFirst' => true,
+        'conditions' => [['type','=','logo']]
+      )
+    );
     if(!empty($logo)) {
       $logo = $logo->getImageUrl();
     }
 
-    $cover = $this->slugModel->getRalatedDataByModelName('Image',true,[['type','=','cover']]);
+    $cover = $this->slugModel->getRalatedDataByModelName('Image',
+      array(
+        'onlyFirst' => true,
+        'conditions' => [['type','=','cover']]
+      )
+    );
     if(!empty($cover)) {
       $cover = $cover->getImageUrl();
     }
 
-    $contact = $this->slugModel->getRalatedDataByModelName('Contact',true);
+    $contact = $this->slugModel->getRalatedDataByModelName('Contact',
+      array(
+        'onlyFirst' => true,
+      )
+    );
     if(!empty($contact)) {
       $contact = $contact->getAttributes();
     }
 
-    $officeHour = $this->slugModel->getRalatedDataByModelName('OfficeHour',true);
+    $officeHour = $this->slugModel->getRalatedDataByModelName('OfficeHour',
+      array(
+        'onlyFirst' => true,
+      )
+    );
     if(!empty($officeHour)) {
       $officeHour = json_decode($officeHour->time,true);
     }

@@ -236,24 +236,34 @@ class Model extends _Model
     return $this->find($id)->exists();
   }
 
-  public function getRalatedDataByModelName($modelName,$onlyFirst = false,$conditons = []) {
+  public function getRalatedDataByModelName($modelName,$options = []) {
 
-    $class = Service::loadModel($modelName);
+    $model = Service::loadModel($modelName);
 
-    if(!$class->checkHasFieldModelAndModelId()) {
+    if(!$model->checkHasFieldModelAndModelId()) {
       return false;
     }
 
-    $_conditons = [
+    $conditions = [
       ['model','=',$this->modelName],
       ['model_id','=',$this->id],
     ];
 
-    $conditons = array_merge($conditons,$_conditons);
+    if(!empty($options['conditions'])){
+      $conditions = array_merge($conditions,$options['conditions']);
+    }
 
-    $model = $class->where($conditons);
+    $model = $model->where($conditions);
 
-    if($onlyFirst){
+    if(empty($model->where($conditions)->count())) {
+      return null;
+    }
+
+    if(!empty($options['fields'])){
+      $model = $model->select($options['fields']);
+    }
+
+    if(!empty($options['onlyFirst']) && $options['onlyFirst']) {
       return $model->first();
     }
 
@@ -274,23 +284,23 @@ class Model extends _Model
 
   }
 
-  public function checkRelatedDataExist($modelName,$conditons = []) {
+  // public function checkRelatedDataExist($modelName,$conditons = []) {
 
-    $class = Service::loadModel($modelName);
+  //   $class = Service::loadModel($modelName);
 
-    if(!$class->checkHasFieldModelAndModelId()) {
-      return false;
-    }
+  //   if(!$class->checkHasFieldModelAndModelId()) {
+  //     return false;
+  //   }
 
-    $_conditons = [
-      ['model','=',$this->modelName],
-      ['model_id','=',$this->id],
-    ];
+  //   $_conditons = [
+  //     ['model','=',$this->modelName],
+  //     ['model_id','=',$this->id],
+  //   ];
 
-    $conditons = array_merge($conditons,$_conditons);
+  //   $conditons = array_merge($conditons,$_conditons);
 
-    return $class->where($conditons)->count()  ? true : false;
-  }
+  //   return $class->where($conditons)->count()  ? true : false;
+  // }
 
   public function checkHasFieldModelAndModelId() {
     if(Schema::hasColumn($this->getTable(), 'model') && Schema::hasColumn($this->getTable(), 'model_id')) {

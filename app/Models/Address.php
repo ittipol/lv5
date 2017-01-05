@@ -22,8 +22,14 @@ class Address extends Model
 
   public function __saveRelatedData($model,$value) {
 
-    if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      return $model->getRalatedDataByModelName($this->modelName,true)
+    $address = $model->getRalatedDataByModelName($this->modelName,
+      array(
+        'onlyFirst' => true
+      )
+    );
+
+    if(($model->state == 'update') && !empty($address)){
+      return $address
       ->setFormToken($this->formToken)
       ->fill($value)
       ->save();
@@ -32,9 +38,4 @@ class Address extends Model
     }
     
   }
-
-  public function loadAndBuildToForm() {
-    dd('load');
-  }
-
 }

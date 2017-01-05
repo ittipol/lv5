@@ -66,42 +66,51 @@ class FormController extends Controller
   public function formEdit() {
     // $this->setFormToken();
     $this->loadRequiredFormData($this->slugModel->modelName);
-
-    // dd($this->slugModel->allowedRelatedModel);
-
+// dd($this->slugModel->allowedRelatedModel);
     $data = array();
     foreach ($this->slugModel->allowedRelatedModel as $modelName) {
-      $data[] = Service::loadModel($modelName)->loadAndBuildToForm();
+      $this->loadData($modelName);
     }
-
-    $this->loadGeography($this->loadAddress($this->slugModel));
-    $this->loadOfficehour($this->slugModel);
-    // $geography = array();
-    // if(!empty($address->lat) && !empty($address->lng)) {
-    //   $geography['lat'] = $address->lat;
-    //   $geography['lng'] = $address->lng;
-    // }
+    dd($this->formData);
 
     // load images
-    // model Image->loadAndBuildDataForForm('logo','logoJson');
-    // __buildFormData();
     $this->loadImages($this->slugModel,'logo','logoJson');
     $this->loadImages($this->slugModel,'cover','coverJson');
     $this->loadImages($this->slugModel,'images','imagesJson');
     // load Taggings
-    $this->loadTaggings($this->slugModel,'tagJson');
+    // $this->loadTaggings($this->slugModel,'tagJson');
 
     dd($this->formData);
   }
 
-  private function loadData($model,$modelName,$options = array()) {
+  private function loadData($modelName) {
 
-    $conditons = array();
-    if(!empty($options['conditons'])){
-      $conditons = array_merge($options['conditons'],$conditons);
+    switch ($modelName) {
+      case 'Address':
+        $this->loadAddress($this->slugModel);
+        break;
+
+      case 'Tagging':
+        $this->loadTaggings($this->slugModel,'tagJson');
+        break;
+      
+      case 'OfficeHour':
+        $this->loadOfficehour($this->slugModel,'officeHoursJson');
+        break;
     }
 
-    $records = $model->getRalatedDataByModelName($modelName,false,$conditons);
+  }
+
+  private function loadSpecifiedData($model,$modelName,$options = array()) {
+
+    // if(!empty($options['relatedData']['conditons'])){
+    //   $conditons = array();
+    //   $options['relatedData']['conditons'] = array_merge($options['relatedData']['conditons'],$conditons);
+    // }
+
+    
+
+    $records = $model->getRalatedDataByModelName($modelName,$options['relatedData']);
 
     $_data = array();
     if(!empty($records) && !empty($options['dataFormat'])){
@@ -151,8 +160,12 @@ class FormController extends Controller
     return $data;
   }
 
+  private function loadOfficehour($model) {
+    dd('off');
+  }
+
   private function loadImages($model,$type,$dataIndexName) {
-    return $this->loadData($model,'Image',array(
+    return $this->loadSpecifiedData($model,'Image',array(
       'dataIndexName' => $dataIndexName,
       'json' => true,
       'passToview' => true,
@@ -173,10 +186,14 @@ class FormController extends Controller
   }
 
   private function loadTaggings($model,$dataIndexName) {
-    return $this->loadData($model,'Tagging',array(
+    return $this->loadSpecifiedData($model,'Tagging',array(
       'dataIndexName' => $dataIndexName,
       'json' => true,
       'passToview' => true,
+      'relatedData' => array(
+        // 'conditions' => [],
+        'fields' => array('word_id'),
+      ),
       'dataFormat' => array(
         array(
           'key' => 'id',
@@ -201,22 +218,21 @@ class FormController extends Controller
   }
 
   private function loadAddress($model) {
-    $address = $model->getRalatedDataByModelName('Address',true);
 
-    $_address = null;
+    $address = $model->getRalatedDataByModelName('Address',
+      array(
+        'onlyFirst' => true,
+        'fields' => array('address','district_id','sub_district_id','description','lat','lng')
+      )
+    );
+  
     if($address){
-      $_address = $address->getAttributes();
+      $address = $address->getAttributes();
     }
 
-    $this->formData['address'] = $_address;
-
-    return $_address;
-  }
-
-  private function loadGeography($address) {
+    $this->formData['address'] = $address;
 
     $geography = array();
-
     if(!empty($address['lat']) && !empty($address['lng'])) {
       $geography['lat'] = $address['lat'];
       $geography['lng'] = $address['lng'];
@@ -224,11 +240,7 @@ class FormController extends Controller
 
     $this->formData['geography'] = json_encode($geography);
 
-    return $geography;
-  }
-
-  private function loadOfficehour($model) {
-
+    return $address;
   }
 
   public function edit(CustomFormRequest $request) {
@@ -239,7 +251,11 @@ class FormController extends Controller
 
     $to = '/';
     if(($model->modelName == 'Company') || ($model->modelName == 'OnlineShop')) {
-      $to = $model->getRalatedDataByModelName('Slug',true)->name;
+      $to = $model->getRalatedDataByModelName('Slug',
+        array(
+          'onlyFirst' => true
+        )
+      )->name;
     }
 
     return $to;

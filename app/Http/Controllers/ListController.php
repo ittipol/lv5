@@ -87,41 +87,62 @@ class ListController extends Controller
 
     $lists = array();
     foreach ($records as $record) {
-      // Get Entity
-      // $record = $this->model->find($record->model_id);
 
       // Get slug
-      $slug = null;
-      if(!empty($record->checkRelatedDataExist('Slug'))) {
+      $slug = $record->getRalatedDataByModelName('Slug',
+        array(
+          'onlyFirst' => true,
+          'fields' => array('name')
+        )
+      );
+      if(!empty($slug)) {
         $slug = array(
-          'name' => $record->getRalatedDataByModelName('Slug',true)->name,
-          'url' => url($record->getRalatedDataByModelName('Slug',true)->name)
+          'name' => $slug->name,
+          'url' => url($slug->name)
         );
       }
 
-      $logo = ''; // default cover
-      if(!empty($record->checkRelatedDataExist('Image',[['type','=','logo']]))) {
-        $logo = $record->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
+      // $logo = $record->getRalatedDataByModelName('Image',
+      //   array(
+      //     'onlyFirst' => true,
+      //     'conditions' => [['type','=','logo']],
+      //     'fields' => array('model','model_id','name','type') 
+      //   )
+      // );
+      // if(!empty($logo)) {
+      //   $logo = $logo->getImageUrl();
+      // }
+
+      $cover = $record->getRalatedDataByModelName('Image',
+        array(
+          'onlyFirst' => true,
+          'conditions' => [['type','=','cover']],
+          'fields' => array('model','model_id','name','type')
+        )
+      );
+      if(!empty($cover)) {
+        $cover = $cover->getImageUrl();
       }
 
-      $cover = ''; // default cover
-      if(!empty($record->checkRelatedDataExist('Image',[['type','=','cover']]))) {
-        $cover = $record->getRalatedDataByModelName('Image',true,[['type','=','cover']])->getImageUrl();
-      }
-
-      $image = '';
-      if(!empty($record->checkRelatedDataExist('Image',[['type','=','images']]))) {
-        $image = $record->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
-      }
+      // $images = $record->getRalatedDataByModelName('Image',
+      //   array(
+      //     'onlyFirst' => true,
+      //     'conditions' => [['type','=','images']]
+      //     'fields' => array('model','model_id','name','type') 
+      //   )
+      // );
+      // if(!empty($images)) {
+      //   $images = $images->getImageUrl();
+      // }
 
       $lists[] = array(
         'id' => $record->id,
         'slug' => $slug,
         'name' => $record->name,
         // 'description' => String::subString($record->description,120),
-        'logo' => $logo,
+        // 'logo' => $logo,
         'cover' => $cover,
-        'image' => $image,
+        // 'images' => $images,
         // 'options' => array(
         //   'delete' => array(
         //     'name' => 'ลบ'
@@ -235,40 +256,6 @@ class ListController extends Controller
   // private function getOption($modelName) {
 
   // }
-
-  // private function companyListView() {
-
-  //   // Get Companies filter by person id
-  //   $records = PersonHasEntity::where([
-  //     ['person_id','=',Session::get('Person.id')],
-  //     ['model','=',$this->model->modelName]
-  //   ])->get();
-
-  //   foreach ($records as $record) {
-  //     // Get Entity
-  //     $entity = $this->model->find($record->model_id);
-
-  //     $logo = '';
-  //     if(!empty($entity->checkRelatedDataExist('Image',[['type','=','logo']]))) {
-  //       $logo = $entity->getRalatedDataByModelName('Image',true,[['type','=','logo']])->getImageUrl();
-  //     }
-
-  //     $image = '';
-  //     if(!empty($entity->checkRelatedDataExist('Image',[['type','=','images']]))) {
-  //       $image = $entity->getRalatedDataByModelName('Image',true,[['type','=','images']])->getImageUrl();
-  //     }
-
-  //     $companies[] = array(
-  //       'id' => $entity->id,
-  //       'name' => $entity->name,
-  //       'description' => String::subString($entity->description,120),
-  //       'logo' => $logo,
-  //       'image' => $image,
-  //     );
-
-  //   }
-
-  // }
   
   private function getTitle($modelName) {
 
@@ -284,25 +271,6 @@ class ListController extends Controller
     }
 
     return $title;
-
-  }
-
-  private function getImages($type = 'images',$pass = true) {
-    $images = '';
-    if(!empty($company->checkRelatedDataExist('Image',[['type','=',$type]]))) {
-      $images = $company->getRalatedDataByModelName('Image',false,[['type','=',$type]]);
-
-      // foreach ($images as $image) {
-      //   # code...
-      // }
-    }
-
-    // pass value
-    if($pass){
-      $this->formData[$type] = $images;
-    }
-
-    return $images;
 
   }
 

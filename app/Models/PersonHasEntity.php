@@ -28,7 +28,13 @@ class PersonHasEntity extends Model
 
     $role = new Role;
 
-    if(!$model->checkRelatedDataExist($this->modelName,[['person_id','=',$personId]])){
+    $personHasEntity = $model->getRalatedDataByModelName($this->modelName,
+      array(
+        'conditions' => [['person_id','=',$personId]]
+      )
+    );
+
+    if(empty($personHasEntity)){
 
       $value = array(
         'person_id' => $personId,

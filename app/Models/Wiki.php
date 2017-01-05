@@ -24,8 +24,14 @@ class Wiki extends Model
       }
     }
 
-    if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName)){
-      return $model->getRalatedDataByModelName($this->modelName,true)
+    $wiki = $model->getRalatedDataByModelName($this->modelName,
+      array(
+        'onlyFirst' => true
+      )
+    );
+
+    if(($model->state == 'update') && !empty($wiki)){
+      return $wiki
       ->setFormToken($this->formToken)
       ->fill($value)
       ->save();

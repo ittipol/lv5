@@ -48,8 +48,16 @@ class Controller extends BaseController
           $this->slug = $slug->name;
           $this->slugModel = service::loadModel($slug->model)->find($slug->model_id);
 
-          if($this->slugModel->checkRelatedDataExist('PersonHasEntity',[['person_id','=',session()->get('Person.id')]])) {
-            $pagePermission = $this->slugModel->getRalatedDataByModelName('PersonHasEntity',true,[['person_id','=',session()->get('Person.id')]])->role;
+          // Get parson has entity
+          $personhasEntity = $this->slugModel->getRalatedDataByModelName('PersonHasEntity',
+            array(
+              'onlyFirst' => true,
+              'conditions' => [['person_id','=',session()->get('Person.id')]]
+            )
+          );
+
+          if(!empty($personhasEntity)) {
+            $pagePermission = $personhasEntity->role;
 
             $this->pagePermission = array(
               'add' => $pagePermission['adding_permission'],

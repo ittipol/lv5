@@ -24,8 +24,15 @@ class Tagging extends Model
 
     foreach ($wordIds as $wordId) {
 
-      if(($model->state == 'update') && $model->checkRelatedDataExist($this->modelName,[['word_id','=',$wordId]])){
-        $model->getRalatedDataByModelName($this->modelName,true,[['word_id','=',$wordId]])
+      $taggigs = $model->getRalatedDataByModelName($this->modelName,
+        array(
+          'onlyFirst' => true,
+          'conditions' => [['word_id','=',$wordId]]
+        )
+      );
+
+      if(($model->state == 'update') && !empty($taggigs)){
+        $taggigs
         ->setFormToken($this->formToken)
         ->fill($value)
         ->save();
