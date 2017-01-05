@@ -223,7 +223,7 @@ class Model extends _Model
 
   public function deleteTempData($formToken = null) {
 
-    if(!empty($formToken)) {
+    if(empty($formToken)) {
       $formToken = $this->formToken;
     }
 
