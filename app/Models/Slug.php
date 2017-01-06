@@ -21,39 +21,54 @@ class Slug extends Model
     parent::__construct();
   }
 
-  public function __saveRelatedData($model) {
-    
-    $includeToken = false;
+  public function __saveRelatedData($model,$options = array()) {
+
+    if(empty($model->allowed['Slug']['fields'])) {
+      return false;
+    }
+
+    $options = array(
+      'fields' => $model->allowed['Slug']['fields']
+    );
+
+    $save = true;
 
     do {
-        $slug = $this->generateSlug($model,$includeToken); 
-        $includeToken = true;
+      $slug = $this->generateSlug($model,$options); 
+
+      if(empty($slug)){
+        $save = false;
+      }
+
     } while ($this->checkDataExistBySlug($slug));
 
-    $this->_save($model->includeModelAndModelId(array('name' => $slug)));
+    if($save) {
+      return $this->_save($model->includeModelAndModelId(array('name' => $slug)));
+    }
+
+    // return $save;
+
   }
 
-  private function generateSlug($model,$includeToken = false) {
+  private function generateSlug($model,$options = array()) {
 
-    if(empty($model->allowedSlug['field'])){
+    // $includeToken = false;
+
+    if(empty($options['fields']) || empty($model->{$options['fields']})){
       return false;
     }
 
-    $field = $model->allowedSlug['field'];
+    $slug = str_replace(' ', '-', trim($model->{$options['fields']}));
 
-    if(empty($model->{$field})) {
-      return false;
-    }
+    // if(strlen($slug) <= 16) {
+    //   $includeToken = true;
+    // }
 
-    $slug = str_replace(' ', '-', trim($model->{$field}));
+    // if($includeToken) {
+    //   $slug .= '-'.Token::generateNumber(10);
+    // }
 
-    if(strlen($slug) <= 15) {
-      $includeToken = true;
-    }
-
-    if($includeToken) {
-      $slug .= '-'.Token::generateNumber(10);
-    }
+    $slug .= '-'.Token::generateNumber(10);
 
     return $slug;
 

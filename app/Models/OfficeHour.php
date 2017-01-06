@@ -8,7 +8,9 @@ class OfficeHour extends Model
   protected $fillable = ['model','model_id','same_time','time','display'];
   public $timestamps  = false;
 
-  public function __saveRelatedData($model,$value) {
+  public function __saveRelatedData($model,$options = array()) {
+
+    $value = $options['value'];
 
     $officeHours = array();
 
@@ -25,15 +27,6 @@ class OfficeHour extends Model
       if(!empty($value['time'][$day->id])){
 
         $display = true;
-
-        // $startSeconds = ($value['time'][$day->id]['start_time']['hour']*60*60) + ($value['time'][$day->id]['start_time']['min']*60);
-        // $endSeconds = ($value['time'][$day->id]['end_time']['hour']*60*60) + ($value['time'][$day->id]['end_time']['min']*60);
-
-        // if($startSeconds < $endSeconds) {
-        //   $_data['open'] = $value['time'][$day->id]['open'];
-        //   $_data['start_time'] = $value['time'][$day->id]['start_time']['hour'].':'.$value['time'][$day->id]['start_time']['min'].':00';
-        //   $_data['end_time'] = $value['time'][$day->id]['end_time']['hour'].':'.$value['time'][$day->id]['end_time']['min'].':00';
-        // }
 
         $_data['open'] = $value['time'][$day->id]['open'];
         $_data['start_time'] = $value['time'][$day->id]['start_time']['hour'].':'.$value['time'][$day->id]['start_time']['min'].':00';

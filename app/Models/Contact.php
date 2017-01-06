@@ -8,7 +8,7 @@ class Contact extends Model
   protected $fillable = ['model','model_id','phone_number','email','website','facebook','instagram','line'];
   public $timestamps  = false;
 
-  public function __saveRelatedData($model,$value) {
+  public function __saveRelatedData($model,$options = array()) {
 
     $contact = $model->getRalatedDataByModelName($this->modelName,
       array(
@@ -19,10 +19,10 @@ class Contact extends Model
     if(($model->state == 'update') && !empty($contact)){
       return $contact
       ->setFormToken($this->formToken)
-      ->fill($value)
+      ->fill($options['value'])
       ->save();
     }else{
-      return $this->fill($model->includeModelAndModelId($value))->save();
+      return $this->fill($model->includeModelAndModelId($options['value']))->save();
     }
     
   }

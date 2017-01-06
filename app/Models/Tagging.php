@@ -16,11 +16,11 @@ class Tagging extends Model
     return $this->hasOne('App\Models\Word','id','word_id');
   }
 
-  public function __saveRelatedData($model,$value) {
-    
+  public function __saveRelatedData($model,$options = array()) {
+
     $word = new Word;
     $word->setFormToken($this->formToken);
-    $wordIds = $word->saveSpecial($value);
+    $wordIds = $word->saveSpecial($$options['value']);
 
     foreach ($wordIds as $wordId) {
 
@@ -34,7 +34,7 @@ class Tagging extends Model
       if(($model->state == 'update') && !empty($taggigs)){
         $taggigs
         ->setFormToken($this->formToken)
-        ->fill($value)
+        ->fill($$options['value'])
         ->save();
       }else{
         $this->_save($model->includeModelAndModelId(array('word_id' => $wordId)));

@@ -18,7 +18,7 @@ class Model extends BaseModel
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
-  public $relatedData;
+  public $formRelatedData;
   public $temporaryData;
 
   // Form
@@ -33,12 +33,7 @@ class Model extends BaseModel
   // sorting field
   public $sortingFields;
 
-  public $allowedRelatedModel = false;
-  public $allowedDir = false;
-  public $allowedImage = false;
-  public $allowedLookup = false;
-  public $allowedWiki = false;
-  public $allowedSlug = false;
+  public $allowed;
   
   public function __construct(array $attributes = []) { 
 
@@ -113,15 +108,19 @@ class Model extends BaseModel
       }
     }
 
-    if(!empty($this->allowedRelatedModel)) {
-      foreach ($this->allowedRelatedModel as $allowed) {
+    if(!empty($this->allowed['relatedModel'])){
+      foreach ($this->allowed['relatedModel'] as $key => $modelName) {
 
-        if(empty($attributes[$allowed])) {
+        if(is_array($modelName)){
+          $modelName = $key;
+        }
+
+        if(empty($attributes[$modelName])) {
           continue;
         }
 
-        $this->relatedData[$allowed] = $attributes[$allowed];
-        unset($attributes[$allowed]);
+        $this->formRelatedData[$modelName] = $attributes[$modelName];
+        unset($attributes[$modelName]);
       }
     }
 
@@ -143,7 +142,7 @@ class Model extends BaseModel
     $model = Service::loadModel($this->modelName);
     $model->fill($value);
     $model->setFormToken($this->formToken);
-    return $model->save();
+    $model->save();
   }
 
   public function saveRelatedData() {
@@ -152,38 +151,58 @@ class Model extends BaseModel
       return false;
     }
 
-    if(($this->state == 'create') && $this->allowedSlug) {
+    if(($this->state == 'create') && $this->allowed['Slug']) {
       $slug = new Slug;
       $slug->setFormToken($this->formToken)->__saveRelatedData($this);
 
       $personHasEntity = new PersonHasEntity;
-      $personHasEntity->setFormToken($this->formToken)->__saveRelatedData($this,Session::get('Person.id'),'admin');
+      $personHasEntity->setFormToken($this->formToken)->__saveRelatedData($this,array(
+        'person_id' => Session::get('Person.id'),
+        'role_alias' => 'admin'
+      ));
     }
 
-    if($this->allowedImage) {
-      $imageModel = new Image;
-      $imageModel->setFormToken($this->formToken)->__saveRelatedData($this,Session::get('Person.id'));
-    }
+    // if($this->allowedImage) {
+    //   $imageModel = new Image;
+    //   $imageModel->setFormToken($this->formToken)->__saveRelatedData($this,array(
+    //     'person_id' => Session::get('Person.id')
+    //   ));
+    // }
 
-    if($this->allowedWiki){
+    if($this->allowed['Wiki']){
       $wiki = new Wiki;
       $wiki->setFormToken($this->formToken)->__saveRelatedData($this);
     }
 
-    if(!empty($this->allowedRelatedModel)){
-      foreach ($this->allowedRelatedModel as $allowed) {
+    if(!empty($this->allowed['relatedModel'])){
+      foreach ($this->allowed['relatedModel'] as $key => $modelName) {
 
-        if(empty($this->relatedData[$allowed])) {
+        if(is_array($modelName)){
+          $data = $modelName;
+          $modelName = $key;
+        }
+
+        if(empty($this->formRelatedData[$modelName])) {
           continue;
         }
 
-        $this->_saveRelatedData($allowed,$this->relatedData[$allowed]);
+        $options = array();
+        if(!empty($data['options'])) {
+          $options = Service::parseRelatedModelOptions($data['options']);
+        }
+
+        $options = array_merge($options,array(
+          'value' => $this->formRelatedData[$modelName]
+        ));
+
+        $this->_saveRelatedData($modelName,$options);
+
       }
     }
     
   }
 
-  private function _saveRelatedData($modelName,$value) {
+  private function _saveRelatedData($modelName,$options = array()) {
 
     $model = Service::loadModel($modelName);
 
@@ -191,7 +210,7 @@ class Model extends BaseModel
       return false;
     }
 
-    return $model->setFormToken($this->formToken)->__saveRelatedData($this,$value);
+    return $model->setFormToken($this->formToken)->__saveRelatedData($this,$options);
     
   }
 
@@ -202,25 +221,25 @@ class Model extends BaseModel
 
   public function createDir() {
 
-    if(empty($this->allowedDir)) {
-      return false;
-    }
+    // if(empty($this->allowedDir)) {
+    //   return false;
+    // }
 
     $path = storage_path($this->dirPath).'/'.$this->id;
     if(!is_dir($path)){
       mkdir($path,0777,true);
     }
 
-    if(!empty($this->allowedDir['dirNames'])){
-      foreach ($this->allowedDir['dirNames'] as $dir) {
-        $dirName = $path.'/'.$dir;
-        if(!is_dir($dirName)){
-          mkdir($dirName,0777,true);
-        }
-      }
-    }
+    // if(!empty($this->allowedDir['dirNames'])){
+    //   foreach ($this->allowedDir['dirNames'] as $dir) {
+    //     $dirName = $path.'/'.$dir;
+    //     if(!is_dir($dirName)){
+    //       mkdir($dirName,0777,true);
+    //     }
+    //   }
+    // }
 
-    return true;
+    // return true;
 
   }
 
@@ -241,7 +260,11 @@ class Model extends BaseModel
 
   public function getData($options = array()) {
 
-    $model = $this->where($options['conditions']);
+    $model = $this;
+
+    if(!empty($options['conditions'])){
+      $model = $model->where($options['conditions']);
+    }
 
     if(empty($model->count())) {
       return null;
@@ -258,7 +281,7 @@ class Model extends BaseModel
     return $model->get();
   }
 
-  public function getRalatedDataByModelName($modelName,$options = []) {
+  public function getRalatedDataByModelName($modelName,$options = array()) {
 
     $model = Service::loadModel($modelName);
 

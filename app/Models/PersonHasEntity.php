@@ -24,21 +24,21 @@ class PersonHasEntity extends Model
     return $this->hasOne('App\Models\OnlineShop','id','model_id');
   }
 
-  public function __saveRelatedData($model,$personId,$roleAlias) {
+  public function __saveRelatedData($model,$options = array()) {
 
     $role = new Role;
 
     $personHasEntity = $model->getRalatedDataByModelName($this->modelName,
       array(
-        'conditions' => [['person_id','=',$personId]]
+        'conditions' => [['person_id','=',$options['person_id']]]
       )
     );
 
     if(empty($personHasEntity)){
 
       $value = array(
-        'person_id' => $personId,
-        'role_id' => $role->getIdByalias($roleAlias)
+        'person_id' => $options['person_id'],
+        'role_id' => $role->getIdByalias($options['role_alias'])
       );
 
       return $this->_save($model->includeModelAndModelId($value));

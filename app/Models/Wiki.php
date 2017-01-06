@@ -14,8 +14,15 @@ class Wiki extends Model
 
   public function __saveRelatedData($model,$options = array()) {
 
-    $data = $model->getAttributes();
-    $result = $this->parser($model,$data);
+    if(empty($model->allowed['Wiki']['format'])) {
+      return false;
+    }
+
+    $options = array(
+      'format' => $model->allowed['Wiki']['format']
+    );
+
+    $result = $this->parser($model,$options);
 
     $value = array();
     if(!empty($result)){
@@ -41,20 +48,20 @@ class Wiki extends Model
 
   }
 
-  private function parser($model,$data = array()) {
+  private function parser($model,$options = array()) {
 
-    if(empty($model->allowedWiki['format'])){
+    if(empty($options['format'])){
       return false;
     }
 
-    $formats = $model->allowedWiki['format'];
+    $data = $model->getAttributes();
 
     $parseFormat = '/{{[\w\d|._,=>]+}}/';
     $parseValue = '/[\w\d|._,=>]+/';
 
     $result = array();
 
-    foreach ($formats as $key => $format){
+    foreach ($options['format'] as $key => $format){
 
       preg_match_all($parseFormat, $format, $matches);
 

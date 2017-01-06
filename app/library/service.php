@@ -3,6 +3,7 @@
 namespace App\library;
 
 use App\library\token;
+use Session;
 
 class Service
 {
@@ -82,32 +83,25 @@ class Service
 
   }
 
-  // public static function parseQueryString($data) {
+  public static function parseRelatedModelOptions($options = array()) {
 
-  //   $result = array();
+    if(empty($options)) {
+      return false;
+    }
 
-  //   foreach ($data as $key => $value) {
-  //     $_data = explode(',', $value);
+    $_options = array();
+    foreach ($options as $key => $option) {
+      $parts = explode('|', $option);
 
-  //     foreach ($_data as $_key => $_value) {
-  //       $__data = explode(':', $_value);
+      switch ($parts[0]) {
+        case 'Session':
+          $_options[$key] = Session::get($parts[1]);
+          break;
+      }
+    }
 
-  //       if(empty($__data[0])){
-  //         continue;
-  //       } 
+    return $_options;
 
-  //       if(!empty($__data[1])){
-  //         $result[$key][$__data[0]] = $__data[1];
-  //       }else{
-  //         $result[$key][] = $__data[0];
-  //       }
-        
-  //     }
-
-  //   }
-
-  //   return $result;
-
-  // }
+  }
 
 }

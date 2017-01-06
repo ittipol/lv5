@@ -22,11 +22,6 @@ class Image extends Model
     parent::__construct();
   }
 
-  public function __saveRelatedData($model,$personId) {
-    $this->saveUploadImages($model,$personId);
-    $this->deleteImages($model,$personId);
-  }
-
   // public function saveImage($model,$image,$filename) {
   //   if($this->checkMaxSize($image->getSize()) && $this->checkType($image->getMimeType())) {
   //     $image->move(storage_path($model->dirPath).$this->attributes['model_id'].'/images', $filename);
@@ -36,6 +31,11 @@ class Image extends Model
   //   }
   //   return false;
   // }
+
+  public function __saveRelatedData($model,$options = array()) {
+    $this->saveUploadImages($model,$options['person_id']);
+    $this->deleteImages($model,$options['person_id']);
+  }
 
   public function saveUploadImages($model,$personId) {
 
@@ -56,9 +56,9 @@ class Image extends Model
 
     foreach ($images as $image) {
 
-      if(!in_array($image->type,$model->allowedImage['type'])) {
-        continue;
-      }
+      // if(!in_array($image->type,$model->allowedImage['type'])) {
+      //   continue;
+      // }
 
       $filename = $image->name;
 

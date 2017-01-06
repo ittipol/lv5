@@ -27,10 +27,13 @@ class Lookup extends Model
 
   public function __saveRelatedData($model,$options = array()) {
 
+    if(empty($model->allowed['Lookup']['format'])) {
+      return false;
+    }
+
     $value = array();
 
     $data = $model->getAttributes();
-
     if(!empty($options['data'])){
       $data = array_merge($data,$options['data']);
     }
@@ -53,8 +56,13 @@ class Lookup extends Model
       $value['address'] = $_addresses;
     }
 
+    $options = array(
+      'data' => $data,
+      'format' => $model->allowed['Lookup']['format']
+    );
+
     // Parser
-    $result = $this->parser($model,$data);
+    $result = $this->parser($model,$options);
 
     if(!empty($result)){
       foreach ($result as $key => $_value){
@@ -80,20 +88,18 @@ class Lookup extends Model
 
   }
 
-  private function parser($model,$data = array()) {
+  private function parser($model,$options = array()) {
 
-    if(empty($model->allowedLookup['format'])){
+    if(empty($options['format']) || empty($options['data'])){
       return false;
     }
-
-    $formats = $model->allowedLookup['format'];
 
     $parseFormat = '/{{[\w\d|._,=>@]+}}/';
     $parseValue = '/[\w\d|._,=>@]+/';
 
     $result = array();
 
-    foreach ($formats as $key => $format){
+    foreach ($options['format'] as $key => $format){
 
       if(is_array($format)){
         $records = $this->_parser($format['get'],$model,array(
@@ -130,8 +136,8 @@ class Lookup extends Model
 
               if(substr($_matches[0][0],0,2) == '__'){
                 $_value = $this->{$_matches[0][0]}($model);
-              }elseif(array_key_exists($_matches[0][0],$data)) {
-                $_value = $data[$_matches[0][0]];
+              }elseif(array_key_exists($_matches[0][0],$options['data'])) {
+                $_value = $options['data'][$_matches[0][0]];
               }else{
                 $parts = explode('|', $_matches[0][0]);
 

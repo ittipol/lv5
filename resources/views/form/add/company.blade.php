@@ -1,4 +1,4 @@
-@extends('form.form')
+@extends('form.layout')
 @section('form_content')
 
   <div class="form-section">

@@ -27,16 +27,17 @@
   <?php endif; ?>
 
   <?php
-    echo Form::open(['id' => 'main_form','method' => 'post', 'enctype' => 'multipart/form-data']);
-  ?>
-
-  <?php
-    // echo  Form::model($model->getAttributes(), [
-    //   'id' => 'main_form',
-    //   'method' => 'PATCH',
-    //   'route' => ['form.edit', $model->id],
-    //   'enctype' => 'multipart/form-data'
-    // ]);
+    if($type == 'add') {
+      echo Form::open(['id' => 'main_form','method' => 'post', 'enctype' => 'multipart/form-data']);
+    }elseif($type == 'edit') {
+      echo  Form::model($model->getAttributes(), [
+        'id' => 'main_form',
+        'method' => 'PATCH',
+        'route' => ['form.edit', $model->id],
+        'enctype' => 'multipart/form-data'
+      ]);
+    }
+    
   ?>
 
   <?php

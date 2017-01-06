@@ -10,29 +10,48 @@ class Company extends Model
   protected $fillable = ['name','description','brand_story','business_entity_id','business_type','ip_address','created_by'];
   public $timestamps  = false;
 
-  public $formTemplate = array(
-    'form' => array(
-      'add' => array(
-        'header' => array(
-          'text' => 'เพิ่มบริษัทหรือร้านค้าของคุณ'
-        ),
-        'footer' => array(
-          'textButton' => 'เพิ่ม'
-        ),
-        'components' => array(
-
-        )
+  public $form = array(
+    'requiredModelData' => array(
+      'District' => array(
+        'key' => 'id',
+        'field' => 'name',
+        'name' => 'districts'
       ),
-      'edit' => array(
-        'header' => array(
-          'text' => 'แก้ไขบริษัทหรือร้านค้าของคุณ'
-        ),
-        'footer' => array(
-          'textButton' => 'แก้ไข'
-        ),
-        'components' => array(
+      'BusinessEntity' => array(
+        'key' => 'id',
+        'field' => 'name',
+        'name' => 'businessEntities'
+      )
+    ),
+    'relatedModel' => array(
+      'Address' => array(
+        'conditions' => array(),
+        'fields' => array()
+      ),
+      'Tagging',
+      'OfficeHour',
+      'Contact',
+    ),
+    'add' => array(
+      'header' => array(
+        'text' => 'เพิ่มบริษัทหรือร้านค้าของคุณ'
+      ),
+      'footer' => array(
+        'textButton' => 'เพิ่ม'
+      ),
+      'components' => array(
 
-        )
+      )
+    ),
+    'edit' => array(
+      'header' => array(
+        'text' => 'แก้ไขบริษัทหรือร้านค้าของคุณ'
+      ),
+      'footer' => array(
+        'textButton' => 'แก้ไข'
+      ),
+      'components' => array(
+
       )
     )
   );
@@ -58,29 +77,34 @@ class Company extends Model
   // sorting
   public $sortingFields = array('name','created');
 
-  // Allowed Data
-  public $allowedRelatedModel = array('Address','Tagging','OfficeHour','Contact');
-  public $allowedDir = array(
-    'dirNames' => array('logo','cover','images')
-  );
-  // public $allowedImage = array(
-  //   'type' => array('logo','cover','images')
-  // );
-  public $allowedLookup = array(
-    'format' =>  array(
-      'keyword' => '{{name}}',
-      'keyword_1' => '{{business_type}}',
-      'description' => '{{description}}',
+  public $allowed = array(
+    'relatedModel' => array(
+      // 'Address' => array(
+      //   'options' => array(
+      //     'person_id' => 'Session|Person.id'
+      //   )
+      // ),
+      'Address',
+      'Tagging',
+      'OfficeHour',
+      'Contact',
+    ),
+    'Slug' => array(
+      'fields' => 'name'
+    ),
+    'Wiki' => array(
+      'format' =>  array(
+        'subject' => '{{name}}',
+        'description' => '{{description}}',
+      )
+    ),
+    'Lookup' => array(
+      'format' =>  array(
+        'keyword' => '{{name}}',
+        'keyword_1' => '{{business_type}}',
+        'description' => '{{description}}',
+      )
     )
-  );
-  public $allowedWiki = array(
-    'format' =>  array(
-      'subject' => '{{name}}',
-      'description' => '{{description}}',
-    )
-  );
-  public $allowedSlug = array(
-    'field' => 'name'
   );
 
   public function __construct() {  

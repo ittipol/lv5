@@ -20,7 +20,7 @@ class Address extends Model
     return $this->hasOne('App\Models\SubDistrict','id','sub_district_id');
   }
 
-  public function __saveRelatedData($model,$value) {
+  public function __saveRelatedData($model,$options = array()) {
 
     $address = $model->getRalatedDataByModelName($this->modelName,
       array(
@@ -31,16 +31,25 @@ class Address extends Model
     if(($model->state == 'update') && !empty($address)){
       return $address
       ->setFormToken($this->formToken)
-      ->fill($value)
+      ->fill($options['value'])
       ->save();
     }else{
-      return $this->fill($model->includeModelAndModelId($value))->save();
+      return $this->fill($model->includeModelAndModelId($options['value']))->save();
     }
     
   }
 
-  public function buildFormData($model,$options = array()) {
+  public function buildFormData($options = array()) {
+    $this->formData['address'] = $address;
 
+    $geography = array();
+    if(!empty($address['lat']) && !empty($address['lng'])) {
+      $geography['lat'] = $address['lat'];
+      $geography['lng'] = $address['lng'];
+    }
 
+    $this->formData['geography'] = json_encode($geography);
+
+    return $address;
   }
 }
