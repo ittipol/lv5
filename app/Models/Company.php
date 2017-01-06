@@ -10,6 +10,33 @@ class Company extends Model
   protected $fillable = ['name','description','brand_story','business_entity_id','business_type','ip_address','created_by'];
   public $timestamps  = false;
 
+  public $formTemplate = array(
+    'form' => array(
+      'add' => array(
+        'header' => array(
+          'text' => 'เพิ่มบริษัทหรือร้านค้าของคุณ'
+        ),
+        'footer' => array(
+          'textButton' => 'เพิ่ม'
+        ),
+        'components' => array(
+
+        )
+      ),
+      'edit' => array(
+        'header' => array(
+          'text' => 'แก้ไขบริษัทหรือร้านค้าของคุณ'
+        ),
+        'footer' => array(
+          'textButton' => 'แก้ไข'
+        ),
+        'components' => array(
+
+        )
+      )
+    )
+  );
+
   // Validation rules
   public $validation = array(
     'rules' => array(
@@ -36,9 +63,9 @@ class Company extends Model
   public $allowedDir = array(
     'dirNames' => array('logo','cover','images')
   );
-  public $allowedImage = array(
-    'type' => array('logo','cover','images')
-  );
+  // public $allowedImage = array(
+  //   'type' => array('logo','cover','images')
+  // );
   public $allowedLookup = array(
     'format' =>  array(
       'keyword' => '{{name}}',
@@ -55,17 +82,6 @@ class Company extends Model
   public $allowedSlug = array(
     'field' => 'name'
   );
-  public $allowedForm = array(
-    'form' => array(
-      'header' => array(
-        'text' => 'บริษัทหรือร้านค้าของคุณ'
-      ),
-      'footer' => array(
-        'textButton' => 'เพิ่ม'
-      )
-    )
-  );
-  
 
   public function __construct() {  
     parent::__construct();

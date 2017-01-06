@@ -6,5 +6,7 @@ use Auth;
 
 class Permission
 {
- 
+  public function hasPermission($alias) {
+
+  }
 }

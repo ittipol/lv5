@@ -71,6 +71,9 @@ Route::group(['middleware' => 'auth'], function () {
   // Route::get('{slug}/{action}','EntityController@index');
   Route::get('{slug}/delete','EntityController@index');
 
+  Route::get('{slug}/photo','EntityController@photo');
+  // {slug}/photo/add?album=logo
+
   // Route::get('{slug}/list/{modelAlias}','ListController@index');
   // Route::get('{slug}/add/{modelAlias}','FormController@index');
 

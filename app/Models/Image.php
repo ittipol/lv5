@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\library\token;
 use App\library\service;
+use App\library\image AS ImageLib;
 use Auth;
 use Storage;
 use File;
@@ -27,18 +28,13 @@ class Image extends Model
   }
 
   // public function saveImage($model,$image,$filename) {
-
   //   if($this->checkMaxSize($image->getSize()) && $this->checkType($image->getMimeType())) {
-
   //     $image->move(storage_path($model->dirPath).$this->attributes['model_id'].'/images', $filename);
-
   //     // use disk in filesystems.php
   //     // Storage::disk($model->disk)->put($this->attributes['model_id'].'/images'.'/'.$filename, file_get_contents($image->getRealPath()));
   //     return true;
   //   }
-
   //   return false;
-
   // }
 
   public function saveUploadImages($model,$personId) {
@@ -71,6 +67,11 @@ class Image extends Model
       if(!file_exists($path)){
         continue;
       }
+
+      // Crop image
+      // $imageLib = new ImageLib($path);
+      // $imageLib->crop(200,600,400,800);
+      // $imageLib->save(storage_path($tempFileModel->tempFileDir).$token.'/'.$filename);
 
       $value = array(
         'model' => $model->modelName,
@@ -150,12 +151,10 @@ class Image extends Model
   public function getImageUrl() {
 
     $dirPath = $this->storagePath.Service::generateModelDirName($this->model).'/';
-    $path = storage_path($dirPath.$this->model_id.'/'.$this->type.'/'.$this->name);
+    $path = $this->noImagePath;
 
-    if(File::exists($path)){
+    if(File::exists(storage_path($dirPath.$this->model_id.'/'.$this->type.'/'.$this->name))){
       $path = '/safe_image/'.$this->name;
-    }else{
-      $path = $this->noImagePath;
     }
 
     return $path;
@@ -164,10 +163,10 @@ class Image extends Model
   public function base64Encode() {
 
     $dirPath = 'image/'.strtolower($this->model).'/';
-    $path = storage_path($dirPath.$this->model_id.'/images/'.$this->name);
+    $path = $this->noImagePath;
 
-    if(!File::exists($path)){
-      $path = public_path('/images/no-img.png');
+    if(File::exists(storage_path($dirPath.$this->model_id.'/'.$this->type.'/'.$this->name))){
+      $path = '/safe_image/'.$this->name;
     }
 
     return base64_encode(File::get($path));

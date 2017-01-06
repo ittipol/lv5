@@ -45,6 +45,8 @@
 
       <div id="entity_left_panel" class="left-panel">
 
+        <h1>หัวข้อ ปรับแต่งร้านค้าของคุณ</h1>
+
         <h1>right bar เหมือน filter ไว้แสดงข้อมูลต่างๆ เช่น หมวดหมู่, tags , tel และอื่น ดูจาก wongnai</h1>
 
         <h3>new function</h3>

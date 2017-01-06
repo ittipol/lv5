@@ -67,13 +67,13 @@ class FormController extends Controller
     $this->loadRequiredFormData($this->slugModel->modelName);
 // dd($this->slugModel->allowedRelatedModel);
     $data = array();
-    foreach ($this->slugModel->allowedRelatedModel as $modelName) {
-      $this->loadData($modelName);
-    }
+    // foreach ($this->slugModel->allowedRelatedModel as $modelName) {
+    //   $this->loadData($modelName);
+    // }
 
-    foreach ($this->slugModel->allowedDir['dirNames'] as $dirName) {
-     $this->loadImages($this->slugModel,$dirName,$dirName.'Json');
-    }
+    // foreach ($this->slugModel->allowedDir['dirNames'] as $dirName) {
+    //  $this->loadImages($this->slugModel,$dirName,$dirName.'Json');
+    // }
 
     $this->data = array(
       'formType' => 'add'
@@ -106,11 +106,6 @@ class FormController extends Controller
   }
 
   private function loadSpecifiedData($model,$modelName,$options = array()) {
-
-    // if(!empty($options['relatedData']['conditons'])){
-    //   $conditons = array();
-    //   $options['relatedData']['conditons'] = array_merge($options['relatedData']['conditons'],$conditons);
-    // }
 
     $records = $model->getRalatedDataByModelName($modelName,$options['relatedData']);
 
@@ -219,7 +214,7 @@ class FormController extends Controller
       'json' => true,
       'passToview' => true,
       'relatedData' => array(
-        'conditons' => [['type','=',$type]],
+        'conditions' => [['type','=',$type]],
         'fields' => array('name')
       ),
       'dataFormat' => array(
@@ -276,7 +271,7 @@ class FormController extends Controller
         'fields' => array('address','district_id','sub_district_id','description','lat','lng')
       )
     );
-  
+  dd($address);
     if(!empty($address)) {
       $address = $address->getAttributes();
     }
@@ -294,9 +289,8 @@ class FormController extends Controller
     return $address;
   }
 
-  public function edit(CustomFormRequest $request) {
-
-  }
+  // public function edit(CustomFormRequest $request) {
+  // }
 
   private function to($model) {
 
@@ -345,12 +339,12 @@ class FormController extends Controller
 
     $records = array();
     if(!empty($options['conditions']) && is_array($options['conditions'])) {
-      // $_conditons = [
+      // $_conditions = [
       //   ['model','=',$this->modelName],
       //   ['model_id','=',$this->id],
       // ];
 
-      // $conditons = array_merge($conditons,$_conditons);
+      // $conditions = array_merge($conditions,$_conditions);
 
       $records = $model->where($options['conditions']);
     }else{

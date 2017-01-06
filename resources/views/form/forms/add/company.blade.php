@@ -43,7 +43,7 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('description', 'ข้อมูลบริษัทหรือร้านค้าของคุณ');
+          echo Form::label('description', 'คำอธิบาย เพื่อให้ผู้คนทราบว่าบริษัทหรือร้านค้าของคุณเกี่ยวกับอะไร หรือ มีสินค้าอะไรบ้างที่ขาย');
           echo Form::textarea('description', null, array(
             'class' => 'ckeditor'
           ));
@@ -57,44 +57,6 @@
             'class' => 'ckeditor'
           ));
         ?>
-      </div>
-
-      <div class="form-row">
-
-        <div class="sub-title">รูปภาพ</div>
-
-        <div>
-          <p class="error-message">* รองรับไฟล์ jpg jpeg png</p>
-          <p class="error-message">* รองรับรูปภาพขนาดไม่เกิน 3MB</p>
-        </div>
-
-        <div class="sub-form">
-
-          <div class="sub-form-inner">
-
-            <div class="form-row">
-              <?php echo Form::label('', 'รูปภาพเครื่องหมายบริษัทหรือร้านค้าของคุณ'); ?>
-              <div id="_image_logo"></div>
-            </div>
-
-            <div class="line"></div>
-
-            <div class="form-row">
-              <?php echo Form::label('', 'รูปภาพหน้าปก'); ?>
-              <div id="_image_cover"></div>
-            </div>
-
-            <div class="line"></div>
-
-            <div class="form-row">
-              <?php echo Form::label('', 'รูปภาพบริษัทหรือร้านค้าของคุณ (สูงสุด 5 รูป)'); ?>
-              <div id="_image_group"></div>
-            </div>
-
-          </div>
-        
-        </div>
-
       </div>
 
       <div class="form-row">
@@ -318,15 +280,6 @@
   <script type="text/javascript">
 
     $(document).ready(function(){
-
-      const logo = new Images('_image_logo','logo',1,'default');
-      logo.load();
-
-      const cover = new Images('_image_cover','cover',1,'default');
-      cover.load();
-
-      const images = new Images('_image_group','images',5,'default');
-      images.load();
       
       const tagging = new Tagging();
       tagging.load();

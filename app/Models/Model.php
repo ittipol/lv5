@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model as _Model;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use App\library\token;
 use App\library\service;
 use Auth;
 use Session;
 use Schema;
 
-class Model extends _Model
+class Model extends BaseModel
 {
   public $modelName;
   public $alias;
@@ -20,6 +20,9 @@ class Model extends _Model
   public $dirPath;
   public $relatedData;
   public $temporaryData;
+
+  // Form
+  public $formTemplate;
 
   // Validation rules
   public $validation = array(
@@ -236,26 +239,11 @@ class Model extends _Model
     return $this->find($id)->exists();
   }
 
-  public function getRalatedDataByModelName($modelName,$options = []) {
+  public function getData($options = array()) {
 
-    $model = Service::loadModel($modelName);
+    $model = $this->where($options['conditions']);
 
-    if(!$model->checkHasFieldModelAndModelId()) {
-      return false;
-    }
-
-    $conditions = [
-      ['model','=',$this->modelName],
-      ['model_id','=',$this->id],
-    ];
-
-    if(!empty($options['conditions'])){
-      $conditions = array_merge($conditions,$options['conditions']);
-    }
-
-    $model = $model->where($conditions);
-
-    if(empty($model->where($conditions)->count())) {
+    if(empty($model->count())) {
       return null;
     }
 
@@ -268,6 +256,28 @@ class Model extends _Model
     }
 
     return $model->get();
+  }
+
+  public function getRalatedDataByModelName($modelName,$options = []) {
+
+    $model = Service::loadModel($modelName);
+
+    if(!$model->checkHasFieldModelAndModelId()) {
+      return false;
+    }
+
+    $conditions = array(
+      ['model','=',$this->modelName],
+      ['model_id','=',$this->id],
+    );
+
+    if(!empty($options['conditions'])){
+      $options['conditions'] = array_merge($options['conditions'],$conditions);
+    }else{
+      $options['conditions'] = $conditions;
+    }
+
+    return $model->getData($options);
 
   }
 
@@ -283,24 +293,6 @@ class Model extends _Model
     ])->delete();
 
   }
-
-  // public function checkRelatedDataExist($modelName,$conditons = []) {
-
-  //   $class = Service::loadModel($modelName);
-
-  //   if(!$class->checkHasFieldModelAndModelId()) {
-  //     return false;
-  //   }
-
-  //   $_conditons = [
-  //     ['model','=',$this->modelName],
-  //     ['model_id','=',$this->id],
-  //   ];
-
-  //   $conditons = array_merge($conditons,$_conditons);
-
-  //   return $class->where($conditons)->count()  ? true : false;
-  // }
 
   public function checkHasFieldModelAndModelId() {
     if(Schema::hasColumn($this->getTable(), 'model') && Schema::hasColumn($this->getTable(), 'model_id')) {
