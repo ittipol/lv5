@@ -91,7 +91,7 @@ class ListController extends Controller
       // Get slug
       $slug = $record->getRalatedDataByModelName('Slug',
         array(
-          'onlyFirst' => true,
+          'first' => true,
           'fields' => array('name')
         )
       );
@@ -104,7 +104,7 @@ class ListController extends Controller
 
       // $logo = $record->getRalatedDataByModelName('Image',
       //   array(
-      //     'onlyFirst' => true,
+      //     'first' => true,
       //     'conditions' => [['type','=','logo']],
       //     'fields' => array('model','model_id','name','type') 
       //   )
@@ -115,7 +115,7 @@ class ListController extends Controller
 
       $cover = $record->getRalatedDataByModelName('Image',
         array(
-          'onlyFirst' => true,
+          'first' => true,
           'conditions' => [['type','=','cover']],
           'fields' => array('model','model_id','name','type')
         )
@@ -126,7 +126,7 @@ class ListController extends Controller
 
       // $images = $record->getRalatedDataByModelName('Image',
       //   array(
-      //     'onlyFirst' => true,
+      //     'first' => true,
       //     'conditions' => [['type','=','images']]
       //     'fields' => array('model','model_id','name','type') 
       //   )

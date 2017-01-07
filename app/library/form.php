@@ -9,22 +9,80 @@ class Form {
 
   public function __construct($model) {
     $this->model = $model;
+    $this->data[lcfirst($this->model->modelName)] = $this->model->getAttributes();
   }
 
-  public function loadData($modelName,$options = array()) {
+  public function loadRequiredFormData($requiredData){
+    foreach ($requiredData as $modelName => $options) {
+      $this->_loadRequiredFormData($modelName,$options);
+    }
+  }
+
+  private function _loadRequiredFormData($modelName,$options = array()){
+    $model = Service::loadModel($modelName);
+
+    $records = array();
+    if(!empty($options['conditions']) && is_array($options['conditions'])) {
+      $records = $model->where($options['conditions']);
+    }else{
+      $records = $model->all();
+    }
+
+    $data = array();
+    foreach ($records as $record) {
+      $data[$record->{$options['key']}] = $record->{$options['field']};
+
+      // if(is_array($format['field'])){
+
+      //   $arr = current($format['field']);
+
+      //   switch (key($format['field'])) {
+      //     case 'relation':
+      //       $_data[$key][$format['key']] = $record->{$arr['with']}->{$arr['field']};
+      //       break;
+          
+      //     case 'fx':
+      //       $_data[$key][$format['key']] = $record->{$arr}();
+      //       break;
+      //   }
+
+      // }else{
+      //   $_data[$key][$format['key']] = $record->{$format['field']};
+      // }
+    }
+
+    $this->data[$options['name']] = $data;
+  
+    return $data;
+  }
+
+  public function loadData($relatedModel = array()) {
+    foreach ($relatedModel as $key => $modelName) {
+
+      if(is_array($modelName)){
+        $modelName = $key;
+      }
+
+      $this->_loadData($modelName);
+
+    }
+  }
+
+
+  private function _loadData($modelName,$options = array()) {
 
     switch ($modelName) {
       case 'Address':
         $address = $this->model->getRalatedDataByModelName('Address',
           array(
-            'onlyFirst' => true,
+            'first' => true,
             'fields' => array('address','district_id','sub_district_id','description','lat','lng')
           )
         );
 
         if(empty($address)) {
           $this->data['address'] = array();
-          $this->data['geographic'] = array();
+          $this->data['geographic'] = json_encode(array());
           break;
         }
 
@@ -47,7 +105,7 @@ class Form {
         );
 
         if(empty($taggings)){
-          $this->data['taggings'] = array();
+          $this->data['taggings'] = json_encode(array());
           break;
         }
 
@@ -66,8 +124,8 @@ class Form {
       case 'OfficeHour':
 
         $officeHour = $this->model->getRalatedDataByModelName('OfficeHour',array(
-          'onlyFirst' => true,
-          'fields' => array('time')
+          'first' => true,
+          'fields' => array('same_time','time')
         ));
 
         if(empty($officeHour)){
@@ -75,22 +133,24 @@ class Form {
           break;
         }
 
+        $this->data['sameTime'] = $officeHour->same_time;
+
         $time = json_decode($officeHour->time,true);
         $officeHour = array();
         foreach ($time as $day => $value) {
 
-          $_startTime = explode(':', $value['start_time']);
-          $_endTime = explode(':', $value['end_time']);
+          $startTime = explode(':', $value['start_time']);
+          $endTime = explode(':', $value['end_time']);
 
-          $_officeHours[$day] = array(
+          $officeHour[$day] = array(
             'open' => $value['open'],
             'start_time' => array(
-              'hour' => (int)$_startTime[0],
-              'min' => (int)$_startTime[1]
+              'hour' => (int)$startTime[0],
+              'min' => (int)$startTime[1]
             ),
             'end_time' => array(
-              'hour' => (int)$_endTime[0],
-              'min' => (int)$_endTime[1]
+              'hour' => (int)$endTime[0],
+              'min' => (int)$endTime[1]
             )
           );
         }
@@ -102,7 +162,7 @@ class Form {
       case 'Contact':
 
         $contact = $this->model->getRalatedDataByModelName('Contact',array(
-          'onlyFirst' => true,
+          'first' => true,
           'fields' => array('phone_number','email','website','facebook','instagram','line')
         ));
 

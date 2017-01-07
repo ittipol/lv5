@@ -3,6 +3,8 @@
   require 'minify/minify-css.php';
 ?>
 
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"></script> -->
+
 <?php
 
   $jsFiles = array(
@@ -10,7 +12,7 @@
     '__js/jquery.validate.min.js',
     '__js/blackbox/blackbox.js',
     '__js/library/token.js',
-    '__js/map/google-map.js',
+    // '__js/map/google-map.js',
     '__js/map/map.js',
     '__js/forms/form.js',
     '__js/forms/images.js',

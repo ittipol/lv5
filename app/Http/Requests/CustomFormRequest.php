@@ -6,14 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\library\service;
 use Auth;
 use Route;
+use Request;
 
 class CustomFormRequest extends FormRequest
 {
   private $model;
 
-  public function __construct(array $attributes = []) { 
-    $this->param = Route::current()->parameters();
-    $this->model = service::loadModel(service::generateModelNameByModelAlias($this->param['modelAlias']));
+  public function __construct() {dd(Request::all());
+    $data = Request::all();
+    $this->model = service::loadModel($data['model']);
   }
 
   /**
@@ -23,7 +24,8 @@ class CustomFormRequest extends FormRequest
    */
   public function authorize()
   {
-    return Auth::check();
+    return true;
+    // return Auth::check();
   }
 
   public function messages()
@@ -33,6 +35,10 @@ class CustomFormRequest extends FormRequest
 
   public function rules()
   {
+
+    // '__token' => 'required',
+    // 'model' => 'required'
+
     return $this->model->validation['rules'];
   }
 }

@@ -45,7 +45,7 @@ class OfficeHour extends Model
 
     $officeHour = $model->getRalatedDataByModelName($this->modelName,
       array(
-        'onlyFirst' => true
+        'first' => true
       )
     );
 

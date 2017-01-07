@@ -27,18 +27,14 @@ class OfficeHour {
 		if (typeof officeHours != 'undefined') {
 			let _officeHours = JSON.parse(officeHours);
 
-			let selects = ['_start_hour','_start_min','_end_hour','_end_min'];
+			this.setLatestTime ('start','hour',_officeHours[1]['start_time']['hour']);
+			this.setLatestTime ('start','min',_officeHours[1]['start_time']['min']);
+			this.setLatestTime ('end','hour',_officeHours[1]['end_time']['hour']);
+			this.setLatestTime ('end','min',_officeHours[1]['end_time']['min']);
 
 			for (let i = 1; i <= Object.keys(_officeHours).length; i++) {
 
 				if(_officeHours[i]['open']){
-					// $('#'+this.code+'_'+i+'_open').prop('checked','checked');
-
-					this.latestStartHour = _officeHours[i]['start_time']['hour'];
-					this.latestStartMin = _officeHours[i]['start_time']['min'];
-					this.latestEndHour = _officeHours[i]['end_time']['hour'];
-					this.latestEndMin = _officeHours[i]['end_time']['min'];
-
 					$('#'+this.code+'_'+i+'_start_hour').val(_officeHours[i]['start_time']['hour']);
 					$('#'+this.code+'_'+i+'_start_min').val(_officeHours[i]['start_time']['min']);
 					$('#'+this.code+'_'+i+'_end_hour').val(_officeHours[i]['end_time']['hour']);
@@ -52,9 +48,9 @@ class OfficeHour {
 			}
 		}
 
-		$('.'+this.code+'-office-switch-btn').each(function(key, value) {
-			_this.disabled(value,$(value).parent());
-		});
+		// $('.'+this.code+'-office-switch-btn').each(function(key, value) {
+		// 	_this.disabled(value,$(value).parent());
+		// });
 
 	}
 
@@ -100,7 +96,7 @@ class OfficeHour {
 
 			_this.setLatestTime(parts[2],parts[3],$(this).val());
 
-			if(_this.sameTime){
+			if(_this.sameTime == 1){
 				_this.setTimes($(this).prop('id'),$(this).val(),_this.code);
 			}
 		});
@@ -111,10 +107,7 @@ class OfficeHour {
 
 		let _this = this;
 
-		if(!$(obj).find('input[type="checkbox"]').is(':checked')){
-			parent.find('select').val(0).prop('disabled','disabled').addClass('disabled');
-			parent.find('.office-status').removeClass('active');
-		}else{
+		if($(obj).find('input[type="checkbox"]').is(':checked')){
 
 			parent.find('select').removeAttr('disabled').removeClass('disabled');
 			parent.find('.office-status').addClass('active');
@@ -126,6 +119,12 @@ class OfficeHour {
 					$(this).val(_this.getLatestTime(parts[2],parts[3]));
 				});
 			}
+			
+		}else{
+
+			parent.find('select').val(0).prop('disabled','disabled').addClass('disabled');
+			parent.find('.office-status').removeClass('active');
+
 		}
 
 	}

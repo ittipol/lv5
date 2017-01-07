@@ -73,7 +73,7 @@ class Lookup extends Model
     // Get releated lookup data
     $lookup = $model->getRalatedDataByModelName($this->modelName,
       array(
-        'onlyFirst' => true
+        'first' => true
       )
     );
 

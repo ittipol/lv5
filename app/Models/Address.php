@@ -24,7 +24,7 @@ class Address extends Model
 
     $address = $model->getRalatedDataByModelName($this->modelName,
       array(
-        'onlyFirst' => true
+        'first' => true
       )
     );
 

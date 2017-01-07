@@ -12,7 +12,7 @@ class Contact extends Model
 
     $contact = $model->getRalatedDataByModelName($this->modelName,
       array(
-        'onlyFirst' => true
+        'first' => true
       )
     );
 

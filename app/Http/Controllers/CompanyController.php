@@ -194,7 +194,7 @@ class CompanyController extends Controller
 
     $company = Company::find($companyId);
     $company->fill($request->all());
-    $company->save();
+    // $company->save();
 
     if($company->save()){
       // delete temp dir & records

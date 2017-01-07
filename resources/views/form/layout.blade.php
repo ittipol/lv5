@@ -1,6 +1,8 @@
 @extends('layouts.blackbox.main')
 @section('content')
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"></script>
+
 <div class="container">
   
   <div class="container-header">
@@ -27,13 +29,13 @@
   <?php endif; ?>
 
   <?php
-    if($type == 'add') {
+    if($action == 'add') {
       echo Form::open(['id' => 'main_form','method' => 'post', 'enctype' => 'multipart/form-data']);
-    }elseif($type == 'edit') {
-      echo  Form::model($model->getAttributes(), [
+    }elseif($action == 'edit') { 
+      echo  Form::model(array(), [
         'id' => 'main_form',
         'method' => 'PATCH',
-        'route' => ['form.edit', $model->id],
+        'route' => ['form.edit', $slugName],
         'enctype' => 'multipart/form-data'
       ]);
     }
@@ -42,6 +44,8 @@
 
   <?php
     echo Form::hidden('__token', $__token);
+    echo Form::hidden('model', $modelName);
+    echo Form::hidden('action', $action);
   ?>
 
   <!-- content here  -->

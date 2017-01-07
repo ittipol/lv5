@@ -26,7 +26,7 @@ class Tagging extends Model
 
       $taggigs = $model->getRalatedDataByModelName($this->modelName,
         array(
-          'onlyFirst' => true,
+          'first' => true,
           'conditions' => [['word_id','=',$wordId]]
         )
       );

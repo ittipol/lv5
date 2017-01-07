@@ -33,7 +33,7 @@ class Wiki extends Model
 
     $wiki = $model->getRalatedDataByModelName($this->modelName,
       array(
-        'onlyFirst' => true
+        'first' => true
       )
     );
 

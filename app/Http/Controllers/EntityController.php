@@ -20,7 +20,7 @@ class EntityController extends Controller
 
     $logo = $this->slugModel->getRalatedDataByModelName('Image',
       array(
-        'onlyFirst' => true,
+        'first' => true,
         'conditions' => [['type','=','logo']]
       )
     );
@@ -30,7 +30,7 @@ class EntityController extends Controller
 
     $cover = $this->slugModel->getRalatedDataByModelName('Image',
       array(
-        'onlyFirst' => true,
+        'first' => true,
         'conditions' => [['type','=','cover']]
       )
     );
@@ -40,7 +40,7 @@ class EntityController extends Controller
 
     $contact = $this->slugModel->getRalatedDataByModelName('Contact',
       array(
-        'onlyFirst' => true,
+        'first' => true,
       )
     );
     if(!empty($contact)) {
@@ -49,7 +49,7 @@ class EntityController extends Controller
 
     $officeHour = $this->slugModel->getRalatedDataByModelName('OfficeHour',
       array(
-        'onlyFirst' => true,
+        'first' => true,
       )
     );
     if(!empty($officeHour)) {

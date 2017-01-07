@@ -24,10 +24,7 @@ class Company extends Model
       )
     ),
     'relatedModel' => array(
-      'Address' => array(
-        'conditions' => array(),
-        'fields' => array()
-      ),
+      'Address',
       'Tagging',
       'OfficeHour',
       'Contact',
@@ -38,9 +35,6 @@ class Company extends Model
       ),
       'footer' => array(
         'textButton' => 'เพิ่ม'
-      ),
-      'components' => array(
-
       )
     ),
     'edit' => array(
@@ -49,8 +43,16 @@ class Company extends Model
       ),
       'footer' => array(
         'textButton' => 'แก้ไข'
+      )
+    ),
+    'validation' => array(
+      'all' => array(
+
       ),
-      'components' => array(
+      'add' => array(
+        
+      ),
+      'edit' => array(
 
       )
     )
@@ -62,7 +64,8 @@ class Company extends Model
       'name' => 'required|max:255',
       'Contact.phone_number' => 'max:255',
       'Contact.website' => 'max:255',
-      'Contact.email' => 'email|unique:contacts,email|max:255',
+      // 'Contact.email' => 'email|unique:contacts,email|max:255',
+      'Contact.email' => 'email|max:255',
       'Contact.facebook' => 'max:255',
       'Contact.instagram' => 'max:255',
       'Contact.line' => 'max:255'
@@ -70,7 +73,7 @@ class Company extends Model
     'messages' => array(
       'name.required' => 'กรุณากรอกชื่อบริษัทหรือร้านค้าของคุณ',
       'Contact.email.email' => 'อีเมลไม่ถูกต้อง',
-      'Contact.email.unique' => 'อีเมลถูกใช้งานแล้ว',
+      // 'Contact.email.unique' => 'อีเมลถูกใช้งานแล้ว',
     )
   );
 

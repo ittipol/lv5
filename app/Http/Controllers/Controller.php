@@ -16,13 +16,15 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected $slug;
+    // protected $primaryModel;
+    // protected $secondaryModel;
+    protected $slugName;
     protected $slugModel;
     protected $model;
-    protected $modelAlias;
-    protected $hasError = false;
+    // protected $modelAlias;
     protected $pagePermission = false;
-    protected $actionBarText;
+    // protected $actionBarText;
+    // protected $hasError = false;
     protected $data = array();
     protected $formData = array();
     protected $ident;
@@ -39,19 +41,27 @@ class Controller extends BaseController
 
         if(!empty($this->param['slug'])) {
 
-          $slug = service::loadModel('Slug')->where('name','like',$this->param['slug'])->first();
+          // $slug = service::loadModel('Slug')->where('name','like',$this->param['slug'])->first();
+          $slug = service::loadModel('Slug')->getData(array(
+            'conditions' => array(
+              array('name','like',$this->param['slug'])
+            ),
+            'first' => true,
+            'fields' => array('name','model','model_id')
+          ));
 
           if(empty($slug)) {
             return response()->view('messages.message');
           }
 
-          $this->slug = $slug->name;
+          $this->slugName = $slug->name;
           $this->slugModel = service::loadModel($slug->model)->find($slug->model_id);
+          // $this->primaryModel = $this->slugModel;
 
           // Get parson has entity
           $personhasEntity = $this->slugModel->getRalatedDataByModelName('PersonHasEntity',
             array(
-              'onlyFirst' => true,
+              'first' => true,
               'conditions' => [['person_id','=',session()->get('Person.id')]]
             )
           );
@@ -60,9 +70,9 @@ class Controller extends BaseController
             $pagePermission = $personhasEntity->role;
 
             $this->pagePermission = array(
-              'add' => $pagePermission['adding_permission'],
-              'edit' => $pagePermission['editing_permission'],
-              'delete' => $pagePermission['deleting_permission'],
+              'add' => $personhasEntity->role->adding_permission,
+              'edit' => $personhasEntity->role->editing_permission,
+              'delete' => $personhasEntity->role->deleting_permission,
             );
           }
 
@@ -77,7 +87,7 @@ class Controller extends BaseController
             return response()->view('messages.message');
           }
 
-          $this->modelAlias = $this->param['modelAlias'];
+          // $this->modelAlias = $this->param['modelAlias'];
           $this->model = $model;
         }
 
@@ -94,7 +104,8 @@ class Controller extends BaseController
       //   return \Redirect::back()->withErrors(['ไม่พบหน้านี้']);
       // }
 
-      $this->data['actionBarText'] = $this->actionBarText;   
+      // $this->data['actionBarText'] = $this->actionBarText;   
+      $this->data['slugName'] = $this->slugName;
       $this->data['pagePermission'] = $this->pagePermission;  
       $this->data['__token'] = $this->formToken;
 

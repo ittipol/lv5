@@ -12,7 +12,7 @@ use Schema;
 class Model extends BaseModel
 {
   public $modelName;
-  public $alias;
+  public $modelAlias;
   public $state = 'create';
   public $formToken;
   public $disk;
@@ -40,7 +40,7 @@ class Model extends BaseModel
     parent::__construct($attributes);
     
     $this->modelName = class_basename(get_class($this));
-    $this->alias = $this->disk = Service::generateModelDirName($this->modelName);
+    $this->modelAlias = $this->disk = Service::generateModelDirName($this->modelName);
     $this->dirPath = $this->storagePath.$this->disk.'/';
 
   }
@@ -259,7 +259,6 @@ class Model extends BaseModel
   }
 
   public function getData($options = array()) {
-
     $model = $this;
 
     if(!empty($options['conditions'])){
@@ -274,7 +273,7 @@ class Model extends BaseModel
       $model = $model->select($options['fields']);
     }
 
-    if(!empty($options['onlyFirst']) && $options['onlyFirst']) {
+    if(!empty($options['first']) && $options['first']) {
       return $model->first();
     }
 

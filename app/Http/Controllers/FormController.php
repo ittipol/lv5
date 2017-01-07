@@ -9,52 +9,81 @@ use App\library\message;
 use App\library\Form;
 use Redirect;
 use Session;
-// use Request;
+use Request;
 
 class FormController extends Controller
 {
 
-  protected $allowedAdd = array('Company','Department','Job','Product'); 
+  // protected $allowed = array('Company','Department','Job','Product');
+  private $form;
+  private $formModel;
 
   public function __construct(array $attributes = []) { 
 
     parent::__construct();
 
-    // $this->middleware(function ($request, $next) {
-    //   // (Request::method() == 'POST')
-    //   return $next($request);
-    // });
+    $this->middleware(function ($request, $next) {
+
+      if(!empty($this->model)) {
+        $this->formModel = $this->model;
+      }else{
+        $this->formModel = $this->slugModel;
+      }
+
+      $this->form = new Form($this->formModel);
+
+      if((strtolower(Request::method()) == 'post') || (strtolower(Request::method()) == 'patch')) {
+        // dd(Session::all());
+      }
+
+      return $next($request);
+    });
 
   }
 
-  private function setFormToken() {
+  private function setFormToken($options = array()) {
     // Generate form token
     $this->formToken = Token::generateformToken(Session::get('Person.id'));
+
+    $options = array_merge($options,array(
+      'time' => time(),
+      'modelName' => $this->formModel->modelName
+    ));
+
     // Add form token to session
-    Session::put($this->formToken,1);
+    Session::put($this->formToken,$options);
   }
 
-  public function formAdd() {
-    $this->setFormToken();
-    $this->loadRequiredFormData($this->model->form['requiredModelData']);
+  public function form($action) {
 
-    $this->data = array(
-      'type' => 'add',
-      'form' => $this->model->form['add'],
-    );
+    $this->setFormToken(array(
+      'action' => $action,
+    ));
 
-    return $this->view('form.add.'.$this->modelAlias);
+    $this->form->loadRequiredFormData($this->formModel->form['requiredModelData']);
+
+    if(!empty($this->formModel->form['relatedModel']) && ($action == 'edit')){
+      $this->form->loadData($this->formModel->form['relatedModel']);
+    }
+    
+    $this->data = array_merge(array(
+      'modelName' => $this->formModel->modelName,
+      'action' => $action,
+      'form' => $this->formModel->form[$action],
+    ),$this->form->get());
+
+    return $this->view('form.'.$action.'.'.$this->formModel->modelAlias);
   }
 
-  public function add(CustomFormRequest $request) {
+  public function formSave($request,$type = null) {
 
-    $this->model->fill($request->all());
+    $this->formModel->fill($request->all());
 
-    if($this->model->save()){
+    if($this->formModel->save()){
       // delete temp dir & records
-      $this->model->deleteTempData();
+      $this->formModel->deleteTempData();
       // reomove form token
-      Session::forget($this->model->formToken);
+      Session::forget($this->formModel->formToken);
 
       $message = new Message;
       $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
@@ -65,39 +94,66 @@ class FormController extends Controller
       return Redirect::back();
     }
 
-    return Redirect::to($this->to($this->model));
+    return Redirect::to($this->to($this->formModel));
+
+  }
+
+  public function formAdd() {
+    return $this->form('add');
+  }
+
+  public function add(CustomFormRequest $request) {
+
+    return $this->formSave($request,'add');
+
+    // $this->formModel->fill($request->all());
+
+    // if($this->formModel->save()){
+    //   // delete temp dir & records
+    //   $this->formModel->deleteTempData();
+    //   // reomove form token
+    //   Session::forget($this->formModel->formToken);
+
+    //   $message = new Message;
+    //   $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
+    // }else{
+    //   $message = new Message;
+    //   // $message->cannotAdd();
+    //   $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
+    //   return Redirect::back();
+    // }
+
+    // return Redirect::to($this->to($this->formModel));
 
   }
 
   public function formEdit() {
-    // $this->setFormToken();
-    $this->loadRequiredFormData($this->slugModel->form['requiredModelData']);
-
-    $form = new Form($this->slugModel);
-
-    foreach ($this->slugModel->allowed['relatedModel'] as $key => $modelName) {
-
-      if(is_array($modelName)){
-        $modelName = $key;
-      }
-
-      $form->loadData($modelName);
-
-    }
-dd($form->get());
-    $data = array();
-
-    $this->data = array(
-      'type' => 'edit',
-      'form' => $this->slugModel->form['edit'],
-    );
-
-    return $this->view('form.edit.'.$this->modelAlias);
-
+    return $this->form('edit');
   }
 
-  // public function edit(CustomFormRequest $request) {
-  // }
+  public function edit(CustomFormRequest $request) {
+
+    // if(!$this->pagePermission['edit']) {}
+    $this->formModel->fill($request->all());
+
+    if($this->formModel->save()){
+      // delete temp dir & records
+      $this->formModel->deleteTempData();
+      // reomove form token
+      Session::forget($this->formModel->formToken);
+
+      $message = new Message;
+      $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
+    }else{
+      $message = new Message;
+      // $message->cannotAdd();
+      $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
+      return Redirect::back();
+    }
+dd('edited');
+    return Redirect::to($this->to($this->formModel));
+
+  }
 
   private function to($model) {
 
@@ -105,47 +161,13 @@ dd($form->get());
     if(($model->modelName == 'Company') || ($model->modelName == 'OnlineShop')) {
       $to = $model->getRalatedDataByModelName('Slug',
         array(
-          'onlyFirst' => true
+          'first' => true
         )
       )->name;
     }
 
     return $to;
 
-  }
-
-  private function loadRequiredFormData($RequiredData){
-    foreach ($RequiredData as $modelName => $options) {
-      $this->loadFormData($modelName,$options);
-    }
-  }
-
-  private function loadFormData($modelName,$options = array()){
-    $model = Service::loadModel($modelName);
-
-    $records = array();
-    if(!empty($options['conditions']) && is_array($options['conditions'])) {
-      // $_conditions = [
-      //   ['model','=',$this->modelName],
-      //   ['model_id','=',$this->id],
-      // ];
-
-      // $conditions = array_merge($conditions,$_conditions);
-
-      $records = $model->where($options['conditions']);
-    }else{
-      // Get all
-      $records = $model->all();
-    }
-
-    $data = array();
-    foreach ($records as $record) {
-      $data[$record->{$options['key']}] = $record->{$options['field']};
-    }
-
-    $this->formData[$options['name']] = $data;
-  
-    return $data;
   }
 
 }
