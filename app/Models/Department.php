@@ -9,6 +9,7 @@ class Department extends Model
   public $table = 'departments';
   protected $fillable = ['name','description','phone_number','email','website','facebook','line','company_address','created_by'];
   public $timestamps  = false;
+  // add to session formtoken
   public $temporaryData = array('company_id');
 
   // allowed Data

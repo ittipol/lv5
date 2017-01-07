@@ -19,10 +19,10 @@ class Model extends BaseModel
   public $storagePath = 'app/public/';
   public $dirPath;
   public $formRelatedData;
-  public $temporaryData;
+  // public $temporaryData;
 
   // Form
-  public $formTemplate;
+  public $form;
 
   // Validation rules
   public $validation = array(
@@ -56,13 +56,13 @@ class Model extends BaseModel
         return false;
       }
 
-      if(!empty($model->requireValue)) {
-        foreach ($model->requireValue as $field) {
-          if(empty($model->{$field})) {
-            return false;
-          }
-        }
-      }
+      // if(!empty($model->requireValue)) {
+      //   foreach ($model->requireValue as $field) {
+      //     if(empty($model->{$field})) {
+      //       return false;
+      //     }
+      //   }
+      // }
 
       if(!$model->exists){ // Create new record
 
@@ -96,17 +96,18 @@ class Model extends BaseModel
 
   public function fill(array $attributes) {
 
-    if(!empty($this->temporaryData)) {
-      $_temporaryData = array();
-      foreach ($this->temporaryData as $key => $value) {
-        if(!empty($attributes[$value])) {
-          $_temporaryData[$value] = $attributes[$value];
-        }
-      } 
-      if(!empty($_temporaryData)) {
-        $this->temporaryData = $_temporaryData;
-      }
-    }
+    // remove code below and use session formtoken collect required data
+    // if(!empty($this->temporaryData)) {
+    //   $_temporaryData = array();
+    //   foreach ($this->temporaryData as $key => $value) {
+    //     if(!empty($attributes[$value])) {
+    //       $_temporaryData[$value] = $attributes[$value];
+    //     }
+    //   } 
+    //   if(!empty($_temporaryData)) {
+    //     $this->temporaryData = $_temporaryData;
+    //   }
+    // }
 
     if(!empty($this->allowed['relatedModel'])){
       foreach ($this->allowed['relatedModel'] as $key => $modelName) {

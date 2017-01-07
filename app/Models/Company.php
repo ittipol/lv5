@@ -11,6 +11,33 @@ class Company extends Model
   public $timestamps  = false;
 
   public $form = array(
+    'title' => 'บริษัทหรือร้านค้าของคุณ',
+    'template' => array(
+      'add' => array(
+        'text' => 'เพิ่มบริษัทหรือร้านค้าของคุณ'
+        'textButton' => 'เพิ่ม'
+      ),
+      'edit' => array(
+        'text' => 'แก้ไขบริษัทหรือร้านค้าของคุณ'
+        'textButton' => 'แก้ไข'
+      )
+    ),
+    'messages' => array(
+      'add' => array(
+        'success' => 'ร้านค้าหรือสถานประกอบการถูกเพิ่มเรียบร้อยแล้ว',
+        'fail' => 'ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง'
+      ),
+      'edit' => array(
+        'success' => '',
+        'fail' => 'ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง'
+      )
+    )
+    'fieldsExceptValidation' => array(
+      'add' => array(),
+      'edit' => array(
+        'name'
+      )
+    ),
     'requiredModelData' => array(
       'District' => array(
         'key' => 'id',
@@ -23,39 +50,7 @@ class Company extends Model
         'name' => 'businessEntities'
       )
     ),
-    'relatedModel' => array(
-      'Address',
-      'Tagging',
-      'OfficeHour',
-      'Contact',
-    ),
-    'add' => array(
-      'header' => array(
-        'text' => 'เพิ่มบริษัทหรือร้านค้าของคุณ'
-      ),
-      'footer' => array(
-        'textButton' => 'เพิ่ม'
-      )
-    ),
-    'edit' => array(
-      'header' => array(
-        'text' => 'แก้ไขบริษัทหรือร้านค้าของคุณ'
-      ),
-      'footer' => array(
-        'textButton' => 'แก้ไข'
-      )
-    ),
-    'validation' => array(
-      'all' => array(
-
-      ),
-      'add' => array(
-        
-      ),
-      'edit' => array(
-
-      )
-    )
+    'relatedModel' => array('Address','Tagging','OfficeHour','Contact')
   );
 
   // Validation rules

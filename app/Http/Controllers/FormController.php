@@ -34,6 +34,8 @@ class FormController extends Controller
 
       if((strtolower(Request::method()) == 'post') || (strtolower(Request::method()) == 'patch')) {
         // dd(Session::all());
+        // check form token
+        dd(Request::all());
       }
 
       return $next($request);
@@ -50,11 +52,14 @@ class FormController extends Controller
       'modelName' => $this->formModel->modelName
     ));
 
+    // can include some data controll form model
+    // etc. company_id
+
     // Add form token to session
     Session::put($this->formToken,$options);
   }
 
-  public function form($action) {
+  private function form($action) {
 
     $this->setFormToken(array(
       'action' => $action,
@@ -75,65 +80,8 @@ class FormController extends Controller
     return $this->view('form.'.$action.'.'.$this->formModel->modelAlias);
   }
 
-  public function formSave($request,$type = null) {
+  private function formSave($request) {
 
-    $this->formModel->fill($request->all());
-
-    if($this->formModel->save()){
-      // delete temp dir & records
-      $this->formModel->deleteTempData();
-      // reomove form token
-      Session::forget($this->formModel->formToken);
-
-      $message = new Message;
-      $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
-    }else{
-      $message = new Message;
-      // $message->cannotAdd();
-      $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
-      return Redirect::back();
-    }
-
-    return Redirect::to($this->to($this->formModel));
-
-  }
-
-  public function formAdd() {
-    return $this->form('add');
-  }
-
-  public function add(CustomFormRequest $request) {
-
-    return $this->formSave($request,'add');
-
-    // $this->formModel->fill($request->all());
-
-    // if($this->formModel->save()){
-    //   // delete temp dir & records
-    //   $this->formModel->deleteTempData();
-    //   // reomove form token
-    //   Session::forget($this->formModel->formToken);
-
-    //   $message = new Message;
-    //   $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
-    // }else{
-    //   $message = new Message;
-    //   // $message->cannotAdd();
-    //   $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
-    //   return Redirect::back();
-    // }
-
-    // return Redirect::to($this->to($this->formModel));
-
-  }
-
-  public function formEdit() {
-    return $this->form('edit');
-  }
-
-  public function edit(CustomFormRequest $request) {
-
-    // if(!$this->pagePermission['edit']) {}
     $this->formModel->fill($request->all());
 
     if($this->formModel->save()){
@@ -152,6 +100,27 @@ class FormController extends Controller
     }
 dd('edited');
     return Redirect::to($this->to($this->formModel));
+
+  }
+
+  public function formAdd() {
+    return $this->form('add');
+  }
+
+  public function add(CustomFormRequest $request) {
+    return $this->formSave($request);
+  }
+
+  public function formEdit() {
+    return $this->form('edit');
+  }
+
+  public function edit(CustomFormRequest $request) {
+
+    // check time out 20 mins
+
+    // dd($request->formTokenData);
+    return $this->formSave($request);
 
   }
 

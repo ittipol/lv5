@@ -44,8 +44,8 @@
 
   <?php
     echo Form::hidden('__token', $__token);
-    echo Form::hidden('model', $modelName);
-    echo Form::hidden('action', $action);
+    // echo Form::hidden('model', $modelName);
+    // echo Form::hidden('action', $action);
   ?>
 
   <!-- content here  -->

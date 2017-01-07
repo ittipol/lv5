@@ -20,7 +20,7 @@ class Tagging extends Model
 
     $word = new Word;
     $word->setFormToken($this->formToken);
-    $wordIds = $word->saveSpecial($$options['value']);
+    $wordIds = $word->saveSpecial($options['value']);
 
     foreach ($wordIds as $wordId) {
 
@@ -34,7 +34,7 @@ class Tagging extends Model
       if(($model->state == 'update') && !empty($taggigs)){
         $taggigs
         ->setFormToken($this->formToken)
-        ->fill($$options['value'])
+        ->fill($options['value'])
         ->save();
       }else{
         $this->_save($model->includeModelAndModelId(array('word_id' => $wordId)));
