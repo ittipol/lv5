@@ -35,7 +35,11 @@ class FormController extends Controller
       if((strtolower(Request::method()) == 'post') || (strtolower(Request::method()) == 'patch')) {
         // dd(Session::all());
         // check form token
-        dd(Request::all());
+        // dd(Request::all());
+
+        // if(empty(Session::get({formToken}))) {
+        //   return false;
+        // }
       }
 
       return $next($request);
@@ -74,13 +78,15 @@ class FormController extends Controller
     $this->data = array_merge(array(
       'modelName' => $this->formModel->modelName,
       'action' => $action,
-      'form' => $this->formModel->form[$action],
+      'form' => $this->formModel->form['template'][$action],
     ),$this->form->get());
 
     return $this->view('form.'.$action.'.'.$this->formModel->modelAlias);
   }
 
-  private function formSave($request) {
+  private function formSubmit($request) {
+
+    $message = new Message;
 
     $this->formModel->fill($request->all());
 
@@ -90,15 +96,15 @@ class FormController extends Controller
       // reomove form token
       Session::forget($this->formModel->formToken);
 
-      $message = new Message;
-      $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
+      $message->display($this->formModel->form['messages'][$request->formTokenData['action']]['success'],'success');
+
+      // $message->addingSuccess('ร้านค้าหรือสถานประกอบการ');
     }else{
-      $message = new Message;
-      // $message->cannotAdd();
-      $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
+      $message->display($this->formModel->form['messages'][$request->formTokenData['action']]['fail'],'error');
+      // $message->error('ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง');
       return Redirect::back();
     }
-dd('edited');
+
     return Redirect::to($this->to($this->formModel));
 
   }
@@ -108,7 +114,7 @@ dd('edited');
   }
 
   public function add(CustomFormRequest $request) {
-    return $this->formSave($request);
+    return $this->formSubmit($request);
   }
 
   public function formEdit() {
@@ -120,7 +126,7 @@ dd('edited');
     // check time out 20 mins
 
     // dd($request->formTokenData);
-    return $this->formSave($request);
+    return $this->formSubmit($request);
 
   }
 
@@ -130,7 +136,8 @@ dd('edited');
     if(($model->modelName == 'Company') || ($model->modelName == 'OnlineShop')) {
       $to = $model->getRalatedDataByModelName('Slug',
         array(
-          'first' => true
+          'first' => true,
+          'fields' => array('name')
         )
       )->name;
     }

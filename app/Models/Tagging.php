@@ -22,24 +22,29 @@ class Tagging extends Model
     $word->setFormToken($this->formToken);
     $wordIds = $word->saveSpecial($options['value']);
 
+    $currentTaggings = $model->getRalatedDataByModelName($this->modelName,array(
+      'fields' => array('id','word_id')
+    ));
+
+    $currentId = array();
+    if(!empty($currentTaggings)){
+      foreach ($currentTaggings as $tagging) {
+      
+        if(in_array($tagging->word_id, $wordIds)) {
+          $currentId[] = $tagging->word_id;
+          continue;
+        }
+
+        // delete
+        $this->find($tagging->id)->delete();
+
+      }
+    }
+
     foreach ($wordIds as $wordId) {
-
-      $taggigs = $model->getRalatedDataByModelName($this->modelName,
-        array(
-          'first' => true,
-          'conditions' => [['word_id','=',$wordId]]
-        )
-      );
-
-      if(($model->state == 'update') && !empty($taggigs)){
-        $taggigs
-        ->setFormToken($this->formToken)
-        ->fill($options['value'])
-        ->save();
-      }else{
+      if(!in_array($wordId, $currentId)) {
         $this->_save($model->includeModelAndModelId(array('word_id' => $wordId)));
       }
-
     }
 
     return true;

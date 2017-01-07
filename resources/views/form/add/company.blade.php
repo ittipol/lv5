@@ -270,12 +270,6 @@
     </div>
 
   </div>
-  
-  <?php
-    echo Form::submit('เพิ่มสถานประกอบการหรือร้านค้าของคุณ', array(
-      'class' => 'button'
-    ));
-  ?>
 
   <script type="text/javascript">
 

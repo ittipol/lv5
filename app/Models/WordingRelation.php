@@ -13,13 +13,15 @@ class WordingRelation extends Model
     $wordingRelationRelate = new WordingRelationRelate;
     $wordingRelationRelate->setFormToken($this->formToken);
 
-    $taggings = $model1->getRalatedDataByModelName('Tagging');
+    $taggings = $model1->getRalatedDataByModelName('Tagging',array(
+      'fields' => array('word_id')
+    ));
 
     if(!empty($taggings)){
 
       foreach ($taggings as $tagging) {
-        $this->checkAndSave($value,$tagging->tag->name);
-        $data = $this->getDataByWordAndRelateToWord($value,$tagging->tag->name);
+        $this->checkAndSave($value,$tagging->word->word);
+        $data = $this->getDataByWordAndRelateToWord($value,$tagging->word->word);
  
         if(!empty($data->id)){
           $wordingRelationRelate->checkAndSave($model2,$data->id);

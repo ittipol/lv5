@@ -16,21 +16,21 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    // protected $primaryModel;
-    // protected $secondaryModel;
+    protected $ident;
+    protected $formToken;
     protected $slugName;
     protected $slugModel;
     protected $model;
-    // protected $modelAlias;
     protected $pagePermission = false;
-    // protected $actionBarText;
-    // protected $hasError = false;
     protected $data = array();
     protected $formData = array();
-    protected $ident;
-    protected $formToken;
     protected $param;
     protected $query;
+
+    // protected $page = array(
+    //   'slugName' => '',
+    //   'pagePermission' => array()
+    // );
 
     public function __construct(array $attributes = []) { 
 

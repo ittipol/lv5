@@ -14,11 +14,11 @@ class Company extends Model
     'title' => 'บริษัทหรือร้านค้าของคุณ',
     'template' => array(
       'add' => array(
-        'text' => 'เพิ่มบริษัทหรือร้านค้าของคุณ'
+        'textHeader' => 'เพิ่มบริษัทหรือร้านค้าของคุณ',
         'textButton' => 'เพิ่ม'
       ),
       'edit' => array(
-        'text' => 'แก้ไขบริษัทหรือร้านค้าของคุณ'
+        'textHeader' => 'แก้ไขบริษัทหรือร้านค้าของคุณ',
         'textButton' => 'แก้ไข'
       )
     ),
@@ -28,10 +28,10 @@ class Company extends Model
         'fail' => 'ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง'
       ),
       'edit' => array(
-        'success' => '',
+        'success' => 'ร้านค้าหรือสถานประกอบการถูกแก้ไขเรียบร้อยแล้ว',
         'fail' => 'ไม่สามารถเพิ่มสถานประกอบการหรือร้านค้า กรุณาลองใหม่อีกครั้ง'
       )
-    )
+    ),
     'fieldsExceptValidation' => array(
       'add' => array(),
       'edit' => array(

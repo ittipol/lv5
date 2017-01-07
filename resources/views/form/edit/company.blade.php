@@ -235,12 +235,6 @@
 
   </div>
 
-  <?php
-    echo Form::submit('เพิ่มร้านค้าหรือสถานประกอบการ', array(
-      'class' => 'button'
-    ));
-  ?>
-
   <script type="text/javascript">
 
     $(document).ready(function(){

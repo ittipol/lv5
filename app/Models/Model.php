@@ -18,21 +18,16 @@ class Model extends BaseModel
   public $disk;
   public $storagePath = 'app/public/';
   public $dirPath;
-  public $formRelatedData;
-  // public $temporaryData;
-
+  public $formModelData;
   // Form
   public $form;
-
   // Validation rules
   public $validation = array(
     'rules' => array(),
     'messages' => array(),
   );
-
   // sorting field
   public $sortingFields;
-
   public $allowed;
   
   public function __construct(array $attributes = []) { 
@@ -120,7 +115,7 @@ class Model extends BaseModel
           continue;
         }
 
-        $this->formRelatedData[$modelName] = $attributes[$modelName];
+        $this->formModelData[$modelName] = $attributes[$modelName];
         unset($attributes[$modelName]);
       }
     }
@@ -183,7 +178,7 @@ class Model extends BaseModel
           $modelName = $key;
         }
 
-        if(empty($this->formRelatedData[$modelName])) {
+        if(empty($this->formModelData[$modelName])) {
           continue;
         }
 
@@ -193,7 +188,7 @@ class Model extends BaseModel
         }
 
         $options = array_merge($options,array(
-          'value' => $this->formRelatedData[$modelName]
+          'value' => $this->formModelData[$modelName]
         ));
 
         $this->_saveRelatedData($modelName,$options);

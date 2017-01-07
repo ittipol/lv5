@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-lg-6 col-sm-12">
         <div class="title">
-          เพิ่มบริษัทหรือร้านค้าของคุณ
+          <?php echo $form['textHeader']; ?>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@
     if($action == 'add') {
       echo Form::open(['id' => 'main_form','method' => 'post', 'enctype' => 'multipart/form-data']);
     }elseif($action == 'edit') { 
-      echo  Form::model(array(), [
+      echo  Form::model([], [
         'id' => 'main_form',
         'method' => 'PATCH',
         'route' => ['form.edit', $slugName],
@@ -44,12 +44,16 @@
 
   <?php
     echo Form::hidden('__token', $__token);
-    // echo Form::hidden('model', $modelName);
-    // echo Form::hidden('action', $action);
   ?>
 
   <!-- content here  -->
   @yield('form_content')
+
+  <?php
+    echo Form::submit($form['textButton'] , array(
+      'class' => 'button'
+    ));
+  ?>
 
   <?php
     echo Form::close();

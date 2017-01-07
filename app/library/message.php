@@ -7,15 +7,15 @@ use Session;
 
 class Message
 {
-  public function print($title = '',$type = 'info') {
+  public function display($title = '',$type = 'info') {
     Session::flash('message.title', $title);
     Session::flash('message.type', $type); 
   }
 
   public function addingSuccess($text = '') {
 
-    if(empty($text) {
-      $text = 'ข้อมูล'
+    if(empty($text)) {
+      $text = 'ข้อมูล';
     }
 
     Session::flash('message.title', $text.'ถูกเพิ่มเรียบร้อยแล้ว');
@@ -24,8 +24,8 @@ class Message
 
   public function editingSuccess($text = '') {
 
-    if(empty($text) {
-      $text = 'ข้อมูล'
+    if(empty($text)) {
+      $text = 'ข้อมูล';
     }
 
     Session::flash('message.title', $text.'ถูกแก้ไขเรียบร้อยแล้ว');
