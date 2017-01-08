@@ -1,4 +1,4 @@
-@extends('form.layout')
+@extends('form.layout.default')
 @section('form_content')
 
   <div class="form-section">
@@ -30,8 +30,8 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('description', 'คำอธิบาย เพื่อให้ผู้คนทราบว่าบริษัทหรือร้านค้าของคุณเกี่ยวกับอะไร หรือ มีสินค้าอะไรบ้างที่ขาย');
-          echo Form::textarea('description', $company['description'], array(
+          echo Form::label('brand_story', 'Brand Story');
+          echo Form::textarea('brand_story', $company['brand_story'], array(
             'class' => 'ckeditor'
           ));
         ?>
@@ -39,8 +39,8 @@
 
       <div class="form-row">
         <?php 
-          echo Form::label('brand_story', 'Brand Story');
-          echo Form::textarea('brand_story', $company['brand_story'], array(
+          echo Form::label('description', 'รายละเอียดเพิ่มเติม');
+          echo Form::textarea('description', $company['description'], array(
             'class' => 'ckeditor'
           ));
         ?>

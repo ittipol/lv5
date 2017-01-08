@@ -2,7 +2,6 @@
 
 namespace App\library;
 
-
 class Date
 {
 

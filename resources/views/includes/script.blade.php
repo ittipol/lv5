@@ -6,6 +6,10 @@
 <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk5a17EumB5aINUjjRhWCvC1AgfxqrDQk&libraries=places"></script> -->
 
 <?php
+  $combine = false;
+?>
+
+<?php
 
   $jsFiles = array(
     '__js/jquery-3.1.1.min.js',
@@ -25,21 +29,35 @@
     '__js/components/filter.js'
   );
 
-  $code = '';
-  foreach ($jsFiles as $js) {
-    $code .= file_get_contents($js);
-  }
+  if($combine){
+    $code = '';
+    foreach ($jsFiles as $js) {
+      $code .= file_get_contents($js);
+    }
 
-  $_js = JSMin::minify($code);
+    $_js = JSMin::minify($code);
 
-  if(!file_exists(public_path().'/js/8fcf1793a14f7d35.js') || (strlen($_js) != filesize(public_path().'/js/8fcf1793a14f7d35.js'))){
-    file_put_contents('js/8fcf1793a14f7d35.js', $_js);
+    if(!file_exists(public_path().'/js/8fcf1793a14f7d35.js') || (strlen($_js) != filesize(public_path().'/js/8fcf1793a14f7d35.js'))){
+      file_put_contents('js/8fcf1793a14f7d35.js', $_js);
+    }
   }
   
 ?>
 
+@if($combine){
 <script type="text/javascript" src="{{ URL::asset('js/8fcf1793a14f7d35.js') }}"></script>
+@endif
 <script type="text/javascript" src="{{ URL::asset('js/ckeditor/ckeditor.js') }}"></script>
+
+<?php if(!$combine): 
+        foreach ($jsFiles as $js) {
+?>
+  <script type="text/javascript" src="<?php echo $js; ?>"></script>
+<?php 
+        }
+    endif; 
+?>
+
 
 <?php
   $cssFiles = array(
@@ -64,20 +82,34 @@
     '__css/blackbox/responsive.css'
   );
 
-  $code = '';
-  foreach ($cssFiles as $css) {
-    $code .= file_get_contents($css);
-  }
+  if($combine){
+    $code = '';
+    foreach ($cssFiles as $css) {
+      $code .= file_get_contents($css);
+    }
 
-  $_css = CSSMin::minify($code);
+    $_css = CSSMin::minify($code);
 
-  if(!file_exists(public_path().'/css/a590bf3e950e330b.css') || (strlen($_css) != filesize(public_path().'/css/a590bf3e950e330b.css'))){
-    file_put_contents('css/a590bf3e950e330b.css', $_css);
+    if(!file_exists(public_path().'/css/a590bf3e950e330b.css') || (strlen($_css) != filesize(public_path().'/css/a590bf3e950e330b.css'))){
+      file_put_contents('css/a590bf3e950e330b.css', $_css);
+    }
   }
 
 ?>
 
+@if($combine){
 <link rel="stylesheet" href="{{ URL::asset('css/a590bf3e950e330b.css') }}" />
+@endif
+
+<?php if(!$combine): 
+        foreach ($cssFiles as $css) {
+?>
+  <link rel="stylesheet" href="<?php echo $css; ?>" />
+<?php 
+        }
+    endif; 
+?>
+
 
 @if (Auth::check())
   @if(Session::has('message.title') && Session::has('message.type'))

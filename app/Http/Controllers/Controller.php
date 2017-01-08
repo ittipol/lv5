@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\library\token;
 use App\library\service;
+use App\library\entity;
 use Session;
 use Route;
 use Request;
@@ -18,19 +19,15 @@ class Controller extends BaseController
 
     protected $ident;
     protected $formToken;
-    protected $slugName;
-    protected $slugModel;
+    // protected $slugName;
+    // protected $slugModel;
     protected $model;
     protected $pagePermission = false;
     protected $data = array();
     protected $formData = array();
     protected $param;
     protected $query;
-
-    // protected $page = array(
-    //   'slugName' => '',
-    //   'pagePermission' => array()
-    // );
+    protected $entity;
 
     public function __construct(array $attributes = []) { 
 
@@ -41,7 +38,6 @@ class Controller extends BaseController
 
         if(!empty($this->param['slug'])) {
 
-          // $slug = service::loadModel('Slug')->where('name','like',$this->param['slug'])->first();
           $slug = service::loadModel('Slug')->getData(array(
             'conditions' => array(
               array('name','like',$this->param['slug'])
@@ -54,27 +50,8 @@ class Controller extends BaseController
             return response()->view('messages.message');
           }
 
-          $this->slugName = $slug->name;
-          $this->slugModel = service::loadModel($slug->model)->find($slug->model_id);
-          // $this->primaryModel = $this->slugModel;
-
-          // Get parson has entity
-          $personhasEntity = $this->slugModel->getRalatedDataByModelName('PersonHasEntity',
-            array(
-              'first' => true,
-              'conditions' => [['person_id','=',session()->get('Person.id')]]
-            )
-          );
-
-          if(!empty($personhasEntity)) {
-            $pagePermission = $personhasEntity->role;
-
-            $this->pagePermission = array(
-              'add' => $personhasEntity->role->adding_permission,
-              'edit' => $personhasEntity->role->editing_permission,
-              'delete' => $personhasEntity->role->deleting_permission,
-            );
-          }
+          $entity = new Entity($slug);
+          $this->entity = $entity->buildData();
 
         }
 
@@ -87,7 +64,6 @@ class Controller extends BaseController
             return response()->view('messages.message');
           }
 
-          // $this->modelAlias = $this->param['modelAlias'];
           $this->model = $model;
         }
 
@@ -104,9 +80,7 @@ class Controller extends BaseController
       //   return \Redirect::back()->withErrors(['ไม่พบหน้านี้']);
       // }
 
-      // $this->data['actionBarText'] = $this->actionBarText;   
-      $this->data['slugName'] = $this->slugName;
-      $this->data['pagePermission'] = $this->pagePermission;  
+      $this->data['entity'] = $this->entity;
       $this->data['__token'] = $this->formToken;
 
       if(!empty($this->formData)){

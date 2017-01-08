@@ -34,8 +34,7 @@ class Tagging extends Model
           $currentId[] = $tagging->word_id;
           continue;
         }
-
-        // delete
+        // delete tagging
         $this->find($tagging->id)->delete();
 
       }
@@ -43,6 +42,7 @@ class Tagging extends Model
 
     foreach ($wordIds as $wordId) {
       if(!in_array($wordId, $currentId)) {
+        // save new tagging
         $this->_save($model->includeModelAndModelId(array('word_id' => $wordId)));
       }
     }
@@ -51,15 +51,15 @@ class Tagging extends Model
     
   }
 
-  public function clearAndSaves($model,$wordIds) {
-    // clear old record
-    $this->deleteByModelNameAndModelId($model->modelName,$model->id);
+  // public function clearAndSaves($model,$wordIds) {
+  //   // remove old record
+  //   $this->deleteByModelNameAndModelId($model->modelName,$model->id);
 
-    foreach ($wordIds as $wordId) {
-      $this->_save($model->includeModelAndModelId(array('word_id' => $wordId)));
-    }
+  //   foreach ($wordIds as $wordId) {
+  //     $this->_save($model->includeModelAndModelId(array('word_id' => $wordId)));
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
 }

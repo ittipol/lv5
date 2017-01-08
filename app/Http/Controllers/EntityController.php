@@ -12,13 +12,13 @@ class EntityController extends Controller
 {
   public function __construct(array $attributes = []) { 
     parent::__construct($attributes);
-
-    // check don't have permission in this page
   }
 
   public function index() {
 
-    $logo = $this->slugModel->getRalatedDataByModelName('Image',
+    $shop = array();
+
+    $logo = $this->entity['model']->getRalatedDataByModelName('Image',
       array(
         'first' => true,
         'conditions' => [['type','=','logo']]
@@ -28,7 +28,7 @@ class EntityController extends Controller
       $logo = $logo->getImageUrl();
     }
 
-    $cover = $this->slugModel->getRalatedDataByModelName('Image',
+    $cover = $this->entity['model']->getRalatedDataByModelName('Image',
       array(
         'first' => true,
         'conditions' => [['type','=','cover']]
@@ -38,35 +38,62 @@ class EntityController extends Controller
       $cover = $cover->getImageUrl();
     }
 
-    $contact = $this->slugModel->getRalatedDataByModelName('Contact',
-      array(
-        'first' => true,
-      )
-    );
-    if(!empty($contact)) {
-      $contact = $contact->getAttributes();
-    }
+    // $contact = $this->entity['model']->getRalatedDataByModelName('Contact',
+    //   array(
+    //     'first' => true,
+    //   )
+    // );
+    // if(!empty($contact)) {
+    //   $contact = $contact->getAttributes();
+    // }
 
-    $officeHour = $this->slugModel->getRalatedDataByModelName('OfficeHour',
-      array(
-        'first' => true,
-      )
-    );
-    if(!empty($officeHour)) {
-      $officeHour = json_decode($officeHour->time,true);
-    }
-    
+    // $officeHour = $this->entity['model']->getRalatedDataByModelName('OfficeHour',
+    //   array(
+    //     'first' => true,
+    //     'fields' => array('time')
+    //   )
+    // );
+    // if(!empty($officeHour)) {
+    //   $officeHour = json_decode($officeHour->time,true);
+    // }
+
+    // $today = date('N');
+    // $shop = array(
+    //   // 'display' => true,
+    //   'status' => 'วันนี้ปิดทำการ',
+    //   'workingTime' => array()
+    // );
+    // $day = Service::loadModel('Day');
+    // foreach ($officeHour as $key => $time) {
+
+    //   $startTime = explode(':', $time['start_time']);
+    //   $endTime = explode(':', $time['end_time']);
+
+    //   $_time = 'ปิด';
+    //   if($time['open']){
+    //     $_time = $startTime[0].':'.$startTime[1].'-'.$endTime[0].':'.$endTime[1];
+    //   }
+
+    //   if(($today == $key) && $time['open']) {
+    //     $shop['status'] = 'วันนี้เปิดทำการ '.$_time ;
+    //   }
+
+    //   $shop['workingTime'][$key] = array(
+    //     'day' => $day->find($key)->name,
+    //     'workingTime' => $_time
+    //   );
+
+    // }
+// dd($this->entity);
     $this->data = array(
-      'name' => $this->slugModel->name,
-      'description' => $this->slugModel->description,
-      'short_description' => String::subString($this->slugModel->description,800),
+      // 'name' => $this->entity['model']->name,
+      // 'description' => $this->entity['model']->description,
+      // 'short_description' => String::subString($this->entity['model']->description,800),
       'logo' => $logo,
       'cover' => $cover,
-      'contact' => $contact,
-      'officeHour' => $officeHour
     );
 
-    return $this->view('pages.entity.index');
+    return $this->view('entity.template.main');
 
   } 
 }

@@ -9,6 +9,7 @@ class Company extends Model
   public $table = 'companies';
   protected $fillable = ['name','description','brand_story','business_entity_id','business_type','ip_address','created_by'];
   public $timestamps  = false;
+  public $relatedModel = array('Address','Tagging','OfficeHour','Contact');
 
   public $form = array(
     'title' => 'บริษัทหรือร้านค้าของคุณ',
@@ -33,7 +34,6 @@ class Company extends Model
       )
     ),
     'fieldsExceptValidation' => array(
-      'add' => array(),
       'edit' => array(
         'name'
       )
@@ -49,8 +49,7 @@ class Company extends Model
         'field' => 'name',
         'name' => 'businessEntities'
       )
-    ),
-    'relatedModel' => array('Address','Tagging','OfficeHour','Contact')
+    )
   );
 
   // Validation rules
@@ -75,18 +74,7 @@ class Company extends Model
   // sorting
   public $sortingFields = array('name','created');
 
-  public $allowed = array(
-    'relatedModel' => array(
-      // 'Address' => array(
-      //   'options' => array(
-      //     'person_id' => 'Session|Person.id'
-      //   )
-      // ),
-      'Address',
-      'Tagging',
-      'OfficeHour',
-      'Contact',
-    ),
+  public $behavior = array(
     'Slug' => array(
       'fields' => 'name'
     ),

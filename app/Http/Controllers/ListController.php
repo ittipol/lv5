@@ -194,10 +194,11 @@ class ListController extends Controller
     $this->data = array(
       'lists' => $lists,
       'title' => $this->getTitle($this->model->modelName),
-      'sortingOptions' => $sortingOptions
+      'sortingOptions' => $sortingOptions,
+      'listTemplate' => 'default'
     );
 
-    return $this->view('list.default_list');
+    return $this->view('list.template.default');
 
   }
 

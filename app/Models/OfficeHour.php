@@ -29,6 +29,15 @@ class OfficeHour extends Model
         $display = true;
 
         $_data['open'] = $value['time'][$day->id]['open'];
+
+        if(strlen($value['time'][$day->id]['start_time']['min']) == 1) {
+          $value['time'][$day->id]['start_time']['min'] = '0'.$value['time'][$day->id]['start_time']['min'];
+        }
+
+        if(strlen($value['time'][$day->id]['end_time']['min']) == 1) {
+          $value['time'][$day->id]['end_time']['min'] = '0'.$value['time'][$day->id]['end_time']['min'];
+        }
+
         $_data['start_time'] = $value['time'][$day->id]['start_time']['hour'].':'.$value['time'][$day->id]['start_time']['min'].':00';
         $_data['end_time'] = $value['time'][$day->id]['end_time']['hour'].':'.$value['time'][$day->id]['end_time']['min'].':00';
 

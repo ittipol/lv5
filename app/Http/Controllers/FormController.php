@@ -14,7 +14,7 @@ use Request;
 class FormController extends Controller
 {
 
-  // protected $allowed = array('Company','Department','Job','Product');
+  private $allowedModel = array('Company','Department','Job','Product');
   private $form;
   private $formModel;
 
@@ -69,19 +69,19 @@ class FormController extends Controller
       'action' => $action,
     ));
 
-    $this->form->loadRequiredFormData($this->formModel->form['requiredModelData']);
+    $this->form->getRequiredFormData($this->formModel->form['requiredModelData']);
 
-    if(!empty($this->formModel->form['relatedModel']) && ($action == 'edit')){
-      $this->form->loadData($this->formModel->form['relatedModel']);
+    if(!empty($this->formModel->$relatedModel) && ($action == 'edit')){
+      $this->form->getRelatedData($this->formModel->$relatedModel);
     }
-    
+
     $this->data = array_merge(array(
       'modelName' => $this->formModel->modelName,
       'action' => $action,
       'form' => $this->formModel->form['template'][$action],
     ),$this->form->get());
 
-    return $this->view('form.'.$action.'.'.$this->formModel->modelAlias);
+    return $this->view('form.template.'.$action.'.'.$this->formModel->modelAlias);
   }
 
   private function formSubmit($request) {

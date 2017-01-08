@@ -19,8 +19,37 @@ class Model extends BaseModel
   public $storagePath = 'app/public/';
   public $dirPath;
   public $formModelData;
+  public $relatedModel;
+
   // Form
-  public $form;
+  public $form = array(
+    // 'title' => '',
+    // 'template' => array(
+    //   'add' => array(
+    //     'textHeader' => '',
+    //     'textButton' => ''
+    //   ),
+    //   'edit' => array(
+    //     'textHeader' => '',
+    //     'textButton' => ''
+    //   )
+    // ),
+    // 'messages' => array(
+    //   'add' => array(
+    //     'success' => '',
+    //     'fail' => ''
+    //   ),
+    //   'edit' => array(
+    //     'success' => '',
+    //     'fail' => ''
+    //   )
+    // ),
+    // 'fieldsExceptValidation' => array(
+    //   'add' => array(),
+    //   'edit' => array()
+    // ),
+    // 'requiredModelData' => array(),
+  );
   // Validation rules
   public $validation = array(
     'rules' => array(),
@@ -28,7 +57,7 @@ class Model extends BaseModel
   );
   // sorting field
   public $sortingFields;
-  public $allowed;
+  public $behavior;
   
   public function __construct(array $attributes = []) { 
 
@@ -104,8 +133,8 @@ class Model extends BaseModel
     //   }
     // }
 
-    if(!empty($this->allowed['relatedModel'])){
-      foreach ($this->allowed['relatedModel'] as $key => $modelName) {
+    if(!empty($relatedModel)){
+      foreach ($relatedModel as $key => $modelName) {
 
         if(is_array($modelName)){
           $modelName = $key;
@@ -147,7 +176,7 @@ class Model extends BaseModel
       return false;
     }
 
-    if(($this->state == 'create') && $this->allowed['Slug']) {
+    if(($this->state == 'create') && $this->behavior['Slug']) {
       $slug = new Slug;
       $slug->setFormToken($this->formToken)->__saveRelatedData($this);
 
@@ -158,20 +187,20 @@ class Model extends BaseModel
       ));
     }
 
-    // if($this->allowedImage) {
+    // if($this->alloxxxwedImage) {
     //   $imageModel = new Image;
     //   $imageModel->setFormToken($this->formToken)->__saveRelatedData($this,array(
     //     'person_id' => Session::get('Person.id')
     //   ));
     // }
 
-    if($this->allowed['Wiki']){
+    if($this->behavior['Wiki']){
       $wiki = new Wiki;
       $wiki->setFormToken($this->formToken)->__saveRelatedData($this);
     }
 
-    if(!empty($this->allowed['relatedModel'])){
-      foreach ($this->allowed['relatedModel'] as $key => $modelName) {
+    if(!empty($relatedModel)){
+      foreach ($relatedModel as $key => $modelName) {
 
         if(is_array($modelName)){
           $data = $modelName;
@@ -217,7 +246,7 @@ class Model extends BaseModel
 
   public function createDir() {
 
-    // if(empty($this->allowedDir)) {
+    // if(empty($this->alloxxxwedDir)) {
     //   return false;
     // }
 
@@ -226,8 +255,8 @@ class Model extends BaseModel
       mkdir($path,0777,true);
     }
 
-    // if(!empty($this->allowedDir['dirNames'])){
-    //   foreach ($this->allowedDir['dirNames'] as $dir) {
+    // if(!empty($this->alloxxxwedDir['dirNames'])){
+    //   foreach ($this->alloxxxwedDir['dirNames'] as $dir) {
     //     $dirName = $path.'/'.$dir;
     //     if(!is_dir($dirName)){
     //       mkdir($dirName,0777,true);
@@ -269,11 +298,19 @@ class Model extends BaseModel
       $model = $model->select($options['fields']);
     }
 
-    if(!empty($options['first']) && $options['first']) {
-      return $model->first();
+    
+
+    if($model->count() > 1) {
+
+      if(!empty($options['first']) && $options['first']) {
+        return $model->first();
+      }
+
+      return $model->get(); 
     }
 
-    return $model->get();
+    return $model->first();
+
   }
 
   public function getRalatedDataByModelName($modelName,$options = array()) {

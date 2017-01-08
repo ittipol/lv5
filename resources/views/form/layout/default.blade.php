@@ -35,7 +35,7 @@
       echo  Form::model([], [
         'id' => 'main_form',
         'method' => 'PATCH',
-        'route' => ['form.edit', $slugName],
+        'route' => ['form.edit', $entity['slugName'],
         'enctype' => 'multipart/form-data'
       ]);
     }
@@ -46,7 +46,6 @@
     echo Form::hidden('__token', $__token);
   ?>
 
-  <!-- content here  -->
   @yield('form_content')
 
   <?php

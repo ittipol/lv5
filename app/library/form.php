@@ -12,13 +12,13 @@ class Form {
     $this->data[lcfirst($this->model->modelName)] = $this->model->getAttributes();
   }
 
-  public function loadRequiredFormData($requiredData){
+  public function getRequiredFormData($requiredData){
     foreach ($requiredData as $modelName => $options) {
-      $this->_loadRequiredFormData($modelName,$options);
+      $this->_getRequiredFormData($modelName,$options);
     }
   }
 
-  private function _loadRequiredFormData($modelName,$options = array()){
+  private function _getRequiredFormData($modelName,$options = array()){
     $model = Service::loadModel($modelName);
 
     $records = array();
@@ -29,26 +29,26 @@ class Form {
     }
 
     $data = array();
-    foreach ($records as $record) {
-      $data[$record->{$options['key']}] = $record->{$options['field']};
+    foreach ($records as $key => $record) {
+      // $data[$record->{$options['key']}] = $record->{$options['field']};
+      if(is_array($options['field'])){
 
-      // if(is_array($format['field'])){
-
-      //   $arr = current($format['field']);
-
-      //   switch (key($format['field'])) {
-      //     case 'relation':
-      //       $_data[$key][$format['key']] = $record->{$arr['with']}->{$arr['field']};
-      //       break;
+        $arr = current($options['field']);
+        
+        switch (key($options['field'])) {
+          case 'relation':
+            $_data[$record->{$options['key']}] = $record->{$arr['with']}->{$arr['field']};
+            break;
           
-      //     case 'fx':
-      //       $_data[$key][$format['key']] = $record->{$arr}();
-      //       break;
-      //   }
+          case 'fx':
+            $_data[$record->{$options['key']}] = $record->{$arr}();
+            break;
+        }
 
-      // }else{
-      //   $_data[$key][$format['key']] = $record->{$format['field']};
-      // }
+      }else{
+        $data[$record->{$options['key']}] = $record->{$options['field']};
+      }
+
     }
 
     $this->data[$options['name']] = $data;
@@ -56,20 +56,20 @@ class Form {
     return $data;
   }
 
-  public function loadData($relatedModel = array()) {
+  public function getRelatedData($relatedModel = array()) {
     foreach ($relatedModel as $key => $modelName) {
 
       if(is_array($modelName)){
         $modelName = $key;
       }
 
-      $this->_loadData($modelName);
+      $this->_getRelatedData($modelName);
 
     }
   }
 
 
-  private function _loadData($modelName,$options = array()) {
+  private function _getRelatedData($modelName,$options = array()) {
 
     switch ($modelName) {
       case 'Address':
@@ -172,8 +172,6 @@ class Form {
         }
 
         $this->data['contact'] = $contact->getAttributes();
-
-      case 'Contact':
 
         break;
 
